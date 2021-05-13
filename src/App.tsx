@@ -1,7 +1,7 @@
     import React from 'react';
     import logo from './logo.svg';
     import './App.css';
-    import RegisterForm from './registerUser';
+    import RegisterForm from './RegisterUser';
 
     function App() {
       return (
