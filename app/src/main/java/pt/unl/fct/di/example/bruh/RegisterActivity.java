@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
+
                 fYear = year;
                 fMonth = monthOfYear + 1;
                 fDay = dayOfMonth;
@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 new DatePickerDialog(RegisterActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -119,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     private void updateLabel() {
-        String myFormat = "yy/dd/MM"; //In which you need put here
+        String myFormat = "yyyy/dd/MM"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
         bday.setText(sdf.format(myCalendar.getTime()));

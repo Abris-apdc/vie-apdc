@@ -18,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"
-        app:itemIconTint="#57eb6f"
-        app:itemTextColor="#57eb6f"
-        android:background="#EB5D57"/>
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        android:background="@color/logo"/>
 
 
 
