@@ -32,6 +32,7 @@ public class LoginResource {
 	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
+	private KeyFactory orgKeyFactory = datastore.newKeyFactory().setKind("Organisation");
 	
 	private final Gson g = new Gson();
 
@@ -45,10 +46,16 @@ public class LoginResource {
 	public Response doLogin(LoginData data) {
 		LOG.fine("Attempt to log in user: " + data.getUsername());
 
-		Key userKey = userKeyFactory.newKey(data.getUsername());
+		boolean isUser = !data.getUsername().contains("@");
+		Key key;
+		if(!isUser)
+			key = orgKeyFactory.newKey(data.getUsername());
+		else
+			key = userKeyFactory.newKey(data.getUsername());
+		
 		Transaction txn = datastore.newTransaction();
 		try {
-			Entity user = txn.get(userKey);
+			Entity user = txn.get(key);
 			if(user == null) {
 				//user does not exit
 				txn.rollback();
@@ -56,9 +63,15 @@ public class LoginResource {
 				return Response.status(Status.FORBIDDEN).entity("Invalid username").build();
 			}
 			//creates token
-			AuthToken authToken = new AuthToken(data.getUsername(), user.getString("user_tokenID"));
-			authToken.setRole((String) user.getString("user_role"));
-			
+			AuthToken authToken;
+			if(isUser) {
+				authToken = new AuthToken(data.getUsername(), user.getString("user_tokenID"));
+				authToken.setRole((String) user.getString("user_role"));
+			}
+			else {
+				authToken = new AuthToken(data.getUsername(), user.getString("org_tokenID"));
+				authToken.setRole((String) user.getString("org_role"));
+			}
 			Key tokenKey = datastore.newKeyFactory()
 					.setKind("Token")
 					.newKey(authToken.getTokenID());
@@ -69,13 +82,24 @@ public class LoginResource {
 				return Response.status(Status.FORBIDDEN).entity("You are already logged in.").build();
 			}
 			//count disabled
-			if(user.getString("user_state").equals("DISABLED") && ! user.getString("user_role").equals("GA")) { 
+			if(isUser && user.getString("user_state").equals("DISABLED") && ! user.getString("user_role").equals("GA")) { 
 				txn.rollback();
-				LOG.warning(data.getUsername() + " tryed to login while his account is disabled.");
+				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
+				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
+			}
+			//count disabled
+			if(!isUser && user.getString("org_state").equals("DISABLED")) { 
+				txn.rollback();
+				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
 			}
 			
-			String hashedPWD = (String) user.getString("user_pwd");
+			String hashedPWD;
+			if(isUser)
+				hashedPWD = (String) user.getString("user_pwd");
+			else
+				hashedPWD = (String) user.getString("org_pwd");
+			
 			if(hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
 				 token = Entity.newBuilder(tokenKey)
 						.set("token_id", authToken.getTokenID())
