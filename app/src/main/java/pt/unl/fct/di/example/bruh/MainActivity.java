@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
+                login();
                 Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.maps:
@@ -98,10 +99,14 @@ public class MainActivity extends AppCompatActivity {
        clientAPI = clientAPI.getInstance();
 
 
+
       Logout l = new Logout(
                username ,token
         );
-
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Authentication_Id", "null");
+        editor.putString("Authentication_username", "null");
+        editor.apply();
         Toast.makeText(getApplicationContext(), l.getUsername() + "  " + l.getToken(), Toast.LENGTH_SHORT).show();
         clientAPI.getRegisterService().doLogout(l).enqueue(new Callback<String>() {
             @Override
