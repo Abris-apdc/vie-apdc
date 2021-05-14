@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 //import com.google.gson.Gson;
+import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.OrgRegisterData;
 import pt.unl.fct.di.apdc.vie.util.RegisterData;
@@ -30,13 +31,15 @@ public class RegisterResource {
 	private static final Logger LOG = Logger.getLogger(RegisterData.class.getName());
 
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+	
+	private final Gson g = new Gson();
 
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doRegistration(RegisterData data) throws EntityNotFoundException {
-		//isto e um teste
+		
 		if (data.getFirstName() == "")
 			return Response.status(Status.FORBIDDEN).entity("Invalid first name.").build();
 		
@@ -184,7 +187,7 @@ public class RegisterResource {
 
 				LOG.info("Organisation " + data.getName() + "successfully registered.");
 				txn.commit();
-				return Response.ok("Organisation resgistered").build();
+				return Response.ok(g.toJson("Organisation resgistered.")).build();
 			}
 		} finally {
 

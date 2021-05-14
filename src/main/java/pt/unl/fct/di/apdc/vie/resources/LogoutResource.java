@@ -60,7 +60,7 @@ public class LogoutResource {
 				txn.commit();
 				
 				LOG.info("User '" + data.getUsername() + "' logged out sucessefully.");
-				return Response.ok(g.toJson("oof")).build();
+				return Response.ok(g.toJson("User logged out.")).build();
 			}
 		} finally {
 			if(txn.isActive()) {
