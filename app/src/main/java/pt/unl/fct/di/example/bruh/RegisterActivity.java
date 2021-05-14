@@ -91,13 +91,13 @@ public class RegisterActivity extends AppCompatActivity {
                         fDay
                 );
 
-                clientAPI.getRegisterService().createRegister(r).enqueue(new Callback<Register>() {
+                clientAPI.getRegisterService().createRegister(r).enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<Register> call, Response<Register> r) {
+                    public void onResponse(Call<String> call, Response<String> r) {
 
 
                         if (r.isSuccessful()){
-                            Toast.makeText(getApplicationContext(), "User " + r.body().getUsername() + " created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), r.body(), Toast.LENGTH_SHORT).show();
                             changeScreen();
                         }
                         else
@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Register> call, Throwable t) {
+                    public void onFailure(Call<String> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), "Error Creating User: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void changeScreen(){
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
 
         startActivity(intent);
     }

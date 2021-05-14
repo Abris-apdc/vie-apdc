@@ -12,7 +12,7 @@ import retrofit2.http.Path;
 
 public interface RegisterService {
     @POST("/rest/register")
-    Call<Register> createRegister(@Body Register register);
+    Call<String> createRegister(@Body Register register);
 
     @POST("/rest/login")
     Call<AuthToken> createLogin(@Body Login login);
