@@ -36,7 +36,7 @@ public class RegisterResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doRegistration(RegisterData data) throws EntityNotFoundException {
-		
+		//isto e um teste
 		if (data.getFirstName() == "")
 			return Response.status(Status.FORBIDDEN).entity("Invalid first name.").build();
 		
