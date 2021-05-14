@@ -24,17 +24,17 @@ public class Register {
     private String email;
 
     @SerializedName("year")
-    private int year;
+    private String year;
     @SerializedName("month")
-    private int month;
+    private String month;
 
     @SerializedName("day")
-    private int day;
+    private String day;
 
 
 
 
-    public Register(String firstname, String lastName,String username, String password, String confirmation, String email, int year, int month, int day) {
+    public Register(String firstname, String lastName,String username, String password, String confirmation, String email, String year,String month, String day) {
 
         this.firstname = firstname;
        this.lastName = lastName;

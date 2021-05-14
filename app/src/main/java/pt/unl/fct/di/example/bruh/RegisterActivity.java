@@ -21,7 +21,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText firstName, lastName, username, password, confirmation, email, bday;
-    private int fYear, fMonth, fDay;
+    private String fYear, fMonth, fDay;
     private Button send;
     private Calendar myCalendar;
 
@@ -52,9 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
 
-                fYear = year;
-                fMonth = monthOfYear + 1;
-                fDay = dayOfMonth;
+                fYear = String.valueOf(year);
+                fMonth = String.valueOf(monthOfYear + 1);
+                fDay = String.valueOf(dayOfMonth);
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
