@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#57eb6f"
     tools:context=".LoginActivity">
 
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="304dp"
+        android:layout_marginTop="368dp"
         android:layout_marginEnd="8dp"
         android:hint="Username"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,10 +60,11 @@
 
     <ImageView
         android:id="@+id/activity_login_imageView"
-        android:layout_width="113dp"
-        android:layout_height="121dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="211dp"
+        android:layout_height="211dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_login_textView"
         app:srcCompat="@drawable/ic_finall" />

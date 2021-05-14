@@ -95,7 +95,13 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Register> call, Response<Register> r) {
 
-                        Toast.makeText(getApplicationContext(), "User " + r.body().getUsername() + " created", Toast.LENGTH_SHORT).show();
+
+                        if (r.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "User " + r.body().getUsername() + " created", Toast.LENGTH_SHORT).show();
+                            changeScreen();
+                        }
+                        else
+                            Toast.makeText(getApplicationContext(), "Error Creating User", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -106,9 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 });
 
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-                startActivity(intent);
 
             }
         });
@@ -119,5 +123,11 @@ public class RegisterActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
         bday.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    private void changeScreen(){
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+
+        startActivity(intent);
     }
 }

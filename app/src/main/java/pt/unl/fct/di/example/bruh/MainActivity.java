@@ -2,6 +2,7 @@ package pt.unl.fct.di.example.bruh;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +32,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListner =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selected = null;
+                    switch (item.getItemId()) {
+                        case R.id.nav_home:
+                            selected = new HomeFragment();
+                            break;
+                        case R.id.nav_favorites:
+                            selected = new FavoritesFragment();
+                            break;
+                        case R.id.nav_places:
+                            selected = new PlacesFragment();
+                            break;
+                        case R.id.nav_perfil:
+                            selected = new PerfilFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected).commit();
+                    return true;
+                }
+            };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.search:
                 Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
-            case R.id.help:
-                Toast.makeText(this, "Helping", Toast.LENGTH_LONG).show();
-                return true;
             case R.id.maps:
                 maps();
                 Toast.makeText(this, "Maping", Toast.LENGTH_LONG).show();
@@ -54,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.logout:
                 logout();
                 Toast.makeText(this, "Bye!", Toast.LENGTH_LONG).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -72,32 +102,34 @@ public class MainActivity extends AppCompatActivity {
                username ,token
         );
 
-      String s = "99d2e95e-38d3-468b-a8fa-1084328b09da";
         Toast.makeText(getApplicationContext(), l.getUsername() + "  " + l.getToken(), Toast.LENGTH_SHORT).show();
         clientAPI.getRegisterService().doLogout(l).enqueue(new Callback<String>() {
             @Override
            public void onResponse(Call<String> call, Response<String> r) {
-                Toast.makeText(getApplicationContext(), "User logout", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-
-                startActivity(intent);
+                if(r.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "User logout", Toast.LENGTH_SHORT).show();
+                    login();
+                }else
+                    Toast.makeText(getApplicationContext(), "Failed to logout", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //  Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
-
-                // startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Error Creating User: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Failed to logout", Toast.LENGTH_SHORT).show();
             }
         });
 
 
 
     }
+    protected void login(){
+        Intent intent = new Intent(this, LoginActivity.class);
+
+        startActivity(intent);
+    }
 
     protected void maps(){
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        Intent intent = new Intent(this, MapsActivity.class);
 
         startActivity(intent);
     }

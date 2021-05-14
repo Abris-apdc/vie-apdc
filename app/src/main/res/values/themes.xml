@@ -17,6 +17,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent="@style/TextAppearance.AppCompat">
+
+        <item name="android:textSize">25dp</item>
+        <item name="android:textColor">@color/whitee</item>
+
+    </style>
+
     <style name="Theme.Bruh.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.Bruh.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -7,8 +7,6 @@
         android:title="Search"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/help"
-        android:title="Help" />
     <item android:id="@+id/maps"
         android:title="Map" />
 

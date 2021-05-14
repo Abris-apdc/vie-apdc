@@ -24,9 +24,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ClientAPI clientAPI;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,24 +47,25 @@ public class LoginActivity extends AppCompatActivity {
                 clientAPI.getRegisterService().createLogin(l).enqueue(new Callback<AuthToken>() {
                     @Override
                    public void onResponse(Call<AuthToken> call, Response<AuthToken> r) {
-                        Toast.makeText(getApplicationContext(), "User  created", Toast.LENGTH_SHORT).show();
+                        if(r.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "User logged", Toast.LENGTH_SHORT).show();
 
-                        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("Authentication_Id",r.body().getTokenID());
-                        editor.putString("Authentication_username",r.body().getUsername());
-                        editor.apply();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("Authentication_Id", r.body().getTokenID());
+                            editor.putString("Authentication_username", r.body().getUsername());
+                            editor.apply();
 
-                        startActivity(intent);
+                            changeScreen();
+                        }
+                        else
+                            Toast.makeText(getApplicationContext(), "User not logged", Toast.LENGTH_SHORT).show();
                    }
 
                     @Override
                     public void onFailure(Call<AuthToken> call, Throwable t) {
-                        Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
 
-                        startActivity(intent);
-                        Toast.makeText(getApplicationContext(), "Error Creating User: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "User not logged", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -81,5 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    private void changeScreen(){
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+        startActivity(intent);
     }
 }
