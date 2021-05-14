@@ -20,6 +20,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 //import com.google.gson.Gson;
 
+import pt.unl.fct.di.apdc.vie.util.OrgRegisterData;
 import pt.unl.fct.di.apdc.vie.util.RegisterData;
 
 @Path("/register")
@@ -91,6 +92,99 @@ public class RegisterResource {
 				LOG.info("User " + data.getUsername() + "successfully registered.");
 				txn.commit();
 				return Response.ok("User resgistered").build();
+			}
+		} finally {
+
+			if (txn.isActive())
+				txn.rollback();
+		}
+	}
+	
+	@POST
+	@Path("/organisation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response doOrganisationRegistration(OrgRegisterData data) throws EntityNotFoundException {
+		
+		if (data.getName() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid organisation name.").build();
+		
+		if (data.getInfo() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid organisation info.").build();
+		
+		if(data.getSecondName() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid organisation second name.").build();
+		
+		if (data.getOwner() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid owner name.").build();
+		
+		if (data.getId() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid ID.").build();
+
+		if (data.getPassword().length() < 9)
+			return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
+
+		if (data.getPassword() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid password.").build();
+
+		if (data.getEmail() == "" || !data.getEmail().contains("@"))
+			return Response.status(Status.FORBIDDEN).entity("Invalid email.").build();
+
+		if (!data.getPassword().equals(data.getConfirmation()))
+			return Response.status(Status.FORBIDDEN).entity("Password dont match.").build();
+		
+		if(data.getAddress() == "") 
+			return Response.status(Status.FORBIDDEN).entity("Invalid address.").build();
+		
+		if(data.getCP() == "") 
+			return Response.status(Status.FORBIDDEN).entity("Invalid CP.").build();
+		
+		if(data.getLocation() == "") 
+			return Response.status(Status.FORBIDDEN).entity("Invalid location.").build();
+		
+		if(data.getCountry() == "") 
+			return Response.status(Status.FORBIDDEN).entity("Invalid country.").build();
+		
+		if(data.getPhone() == "" && data.getPhone().length() < 9) 
+			return Response.status(Status.FORBIDDEN).entity("Invalid phone.").build();
+		
+		if(data.getMobile() == "" && data.getMobile().length() < 9) 
+			return Response.status(Status.FORBIDDEN).entity("Invalid mobile.").build();
+		
+		if(data.getServiceType() == "")
+			return Response.status(Status.FORBIDDEN).entity("Invalid service.").build();
+		
+		Transaction txn = datastore.newTransaction();
+		LOG.fine("Attempt to register organisation: " + data.getName());
+		Key orgKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getEmail());
+
+		try {
+			Entity org = txn.get(orgKey);
+			if (org != null)
+				return Response.status(Status.BAD_REQUEST).entity("Organization alredy exists").build();
+			else {
+				
+				
+				org = Entity.newBuilder(orgKey).set("org_name", data.getName())
+						.set("org_info", data.getInfo())
+						.set("org_second_name", data.getSecondName())
+						.set("org_owner", data.getOwner())
+						.set("org_cardID", data.getId())
+						.set("org_address", data.getAddress())
+						.set("org_cp", data.getCP())
+						.set("org_location", data.getLocation())
+						.set("org_country", data.getCountry())
+						.set("org_phone", data.getPhone())
+						.set("org_mobile", data.getMobile())
+						.set("org_pwd", DigestUtils.sha512Hex(data.getPassword())).set("org_email", data.getEmail())
+						.set("org_service", data.getServiceType()).set("org_role", "ORG").set("org_state", "ENABLE").set("org_creation_time", Timestamp.now())
+						.set("org_tokenID", UUID.randomUUID().toString())
+						.build();
+				txn.add(org);
+
+				LOG.info("Organisation " + data.getName() + "successfully registered.");
+				txn.commit();
+				return Response.ok("Organisation resgistered").build();
 			}
 		} finally {
 
