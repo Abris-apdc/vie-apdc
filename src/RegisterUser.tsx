@@ -37,9 +37,27 @@ function RegisterForm(){
     }
 
     function handleChangeDate(e:ChangeEvent<HTMLInputElement>){
-        setDate(e.target.value)
+        setDay("1");
+        setMonth("1");
+        setYear("2000");
+       // if(e.target.valueAsDate != null){
+           // setDay(e.target.valueAsDate.getDay.toString)
+            //setMonth(e.target.valueAsDate.getMonth.toString)
+            //setYear(e.target.valueAsDate.getFullYear.toString)
+        //}
     }
 
+    function registerUser(){
+        console.log("Registering User");
+        fetch("https://amazing-office-313314.appspot.com/rest/register",
+            {method:"POST", 
+            headers:{ accept: "application/json"},
+            body: JSON.stringify({fisrtName:firstName, lastName:lastName, 
+                username:username, email:email, password:password, 
+                confirmation:confirmation, year:1999, month:1, day:29 })
+            })
+        .then(data=> {console.log(data)});
+     }
    
     return <div>
         <form onSubmit={(e:any) => {e.preventDefault()}}>
@@ -49,8 +67,9 @@ function RegisterForm(){
             <div>Email: <input type={"text"} value={email} onChange={handleChangeEmail}/></div>
             <div>Password: <input type={"password"} value={password} onChange={handleChangePassword}/></div>
             <div>Confirm Password: <input type={"password"} value={confirmation} onChange={handleChangeConfirmation}/></div>
-            <div>Birthday: <input type={"date"} value={date} onChange={handleChangeDate} placeholder="YYYY-MM-DD"/></div>
+            <div>Birthday: <input type={"date"} value={date} onChange={handleChangeDate} /></div>
         </form>
+        <button type="button" onClick={registerUser}>Register</button>
     </div>
 
 
