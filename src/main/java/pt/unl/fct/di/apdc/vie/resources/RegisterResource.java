@@ -57,7 +57,7 @@ public class RegisterResource {
 
 		if (!data.getPassword().equals(data.getConfirmation()))
 			return Response.status(Status.FORBIDDEN).entity("Password dont match.").build();
-		if((LocalDate.now().getYear() - data.getYear()) < 15) {
+		if((LocalDate.now().getYear() - Integer.parseInt(data.getYear())) < 15) {
 			return Response.status(Status.FORBIDDEN).entity("You must be over 15 years old.").build();
 		}
 		Transaction txn = datastore.newTransaction();
@@ -69,7 +69,7 @@ public class RegisterResource {
 			if (user != null)
 				return Response.status(Status.BAD_REQUEST).entity("User alredy exists").build();
 			else {
-				LocalDate date = LocalDate.of(data.getYear(), data.getMonth(), data.getDay());
+				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
 				
 				
 				user = Entity.newBuilder(userKey)

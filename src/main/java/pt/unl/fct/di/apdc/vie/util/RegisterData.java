@@ -9,16 +9,16 @@ public class RegisterData {
 	private String email;
 	private String password;
 	private String confirmation;
-	private int year;
-	private int month;
-	private int day;
+	private String year;
+	private String month;
+	private String day;
 
 	public RegisterData() {
 
 	}
 
 	public RegisterData(String firstName, String lastName, String username, String email, String password,
-			String confirmation,int year, int month, int day) {
+			String confirmation,String year, String month, String day) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
@@ -78,13 +78,13 @@ public class RegisterData {
 		this.confirmation = confirmation;
 	}
 
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
-	public int getMonth() {
+	public String getMonth() {
 		return month;
 	}
-	public int getDay() {
+	public String getDay() {
 		return day;
 	}
 
