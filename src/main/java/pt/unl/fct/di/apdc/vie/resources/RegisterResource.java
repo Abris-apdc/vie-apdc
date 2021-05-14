@@ -94,7 +94,7 @@ public class RegisterResource {
 
 				LOG.info("User " + data.getUsername() + "successfully registered.");
 				txn.commit();
-				return Response.ok("User resgistered").build();
+				return Response.ok(g.toJson("User resgistered.")).build();
 			}
 		} finally {
 
