@@ -1,4 +1,5 @@
 import { ChangeEvent, ChangeEventHandler, useState} from "react"
+import './RegisterUser.css';
 
 function RegisterForm(){
     const [firstName, setFirstName] = useState("")
@@ -59,15 +60,22 @@ function RegisterForm(){
         .then(data=> {console.log(data)});
      }
    
-    return <div>
+    return <div className="container">
         <form onSubmit={(e:any) => {e.preventDefault()}}>
-            <div>First Name: <input type={"text"} value={firstName} onChange={handleChangeFirstName}/>
-            Last Name: <input type={"text"} value={lastName} onChange={handleChangeLastName}/></div>
-            <div>Username: <input type={"text"} value={username} onChange={handleChangeUsername}/></div>
-            <div>Email: <input type={"text"} value={email} onChange={handleChangeEmail}/></div>
-            <div>Password: <input type={"password"} value={password} onChange={handleChangePassword}/></div>
-            <div>Confirm Password: <input type={"password"} value={confirmation} onChange={handleChangeConfirmation}/></div>
-            <div>Birthday: <input type={"date"} value={date} onChange={handleChangeDate} /></div>
+            <label>First Name:</label>
+            <input type={"text"} value={firstName} onChange={handleChangeFirstName}/>
+            <label>Last Name:</label>
+            <input type={"text"} value={lastName} onChange={handleChangeLastName}/>
+            <label>Username:</label> 
+            <input type={"text"} value={username} onChange={handleChangeUsername}/>
+            <label>Email:</label>
+            <input type={"text"} value={email} onChange={handleChangeEmail}/>
+            <label>Password:</label>
+            <input type={"password"} value={password} onChange={handleChangePassword}/>
+            <label>Confirm Password:</label>
+            <input type={"password"} value={confirmation} onChange={handleChangeConfirmation}/>
+            <label>Birthday:</label>
+            <input type={"date"} value={date} onChange={handleChangeDate} />
         </form>
         <button type="button" onClick={registerUser}>Register</button>
     </div>
