@@ -2,6 +2,7 @@ package pt.unl.fct.di.example.bruh;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button send;
     private Calendar myCalendar;
 
-
+    public static final String SHARED_PREFS = "sharedPrefs";
     private ClientAPI clientAPI;
 
     @Override
@@ -98,6 +99,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                         if (r.isSuccessful()){
                             Toast.makeText(getApplicationContext(), r.body(), Toast.LENGTH_SHORT).show();
+                            SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+
+                            editor.putString("Authentication_firstName", firstName.getText().toString());
+                            editor.putString("Authentication_lastName",  lastName.getText().toString());
+                            editor.putString("Authentication_role", "Voluntário");
+                            editor.putString("Authentication_username",  username.getText().toString());
+                            editor.apply();
                             changeScreen();
                         }
                         else
@@ -126,7 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void changeScreen(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeScreenActivity.class);
 
         startActivity(intent);
     }
