@@ -3,6 +3,7 @@ package pt.unl.fct.di.example.bruh;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
-
+    private Fragment perfil = new PerfilFragment();
 
     private ClientAPI clientAPI;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     Fragment selected = null;
                     switch (item.getItemId()) {
                         case R.id.nav_home:
+
                             selected = new HomeFragment();
                             break;
                         case R.id.nav_favorites:
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                             selected = new PlacesFragment();
                             break;
                         case R.id.nav_perfil:
-                            selected = new PerfilFragment();
+                            selected = perfil;
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected).commit();
@@ -138,4 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+
 }

@@ -20,7 +20,7 @@ public interface RegisterService {
     @POST("/rest/logout")
     Call<String> doLogout(@Body Logout login);
 
-    @GET("/rest/user/{username}")
-    Call<String> getUser (@Path("username") String username);
+    @GET("/rest/info/{username}")
+    Call<UserInfo> getUserInfo (@Path("username") String username);
 
 }
