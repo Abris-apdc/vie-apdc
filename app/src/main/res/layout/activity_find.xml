@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".FindActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -21,10 +21,13 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         android:background="@color/logo"/>
+
     <ListView
+        android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listview"/>
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:translationZ="90dp" />
 
 
 

@@ -4,18 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,60 +21,58 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class FindActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     private Fragment perfil = new PerfilFragment();
-
+    ListView listView;
+    String[] name = {"Ramiro", "Ines", "Salvador", "Antonio", "Pedro"};
+    ArrayAdapter<String> arrayAdapter;
     private ClientAPI clientAPI;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_find);
+        listView = findViewById(R.id.listview);
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
+        listView.setAdapter(arrayAdapter);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListner =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selected = null;
-                    switch (item.getItemId()) {
-                        case R.id.nav_home:
 
-                            selected = new HomeFragment();
-                            break;
-                        case R.id.nav_favorites:
-                            selected = new FavoritesFragment();
-                            break;
-                        case R.id.nav_places:
-                            selected = new PlacesFragment();
-                            break;
-                        case R.id.nav_perfil:
-                            selected = perfil;
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected).commit();
-                    return true;
-                }
-            };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Type here to Search.");
+        searchView.setTranslationZ(1);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                arrayAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search_bruh:
-                login();
+            case R.id.search:
+                //login();
                 Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.maps:
@@ -99,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
         String token = preferences.getString("Authentication_Id", "");
         String username = preferences.getString("Authentication_username", "");
 
-       clientAPI = clientAPI.getInstance();
+        clientAPI = clientAPI.getInstance();
 
 
 
-      Logout l = new Logout(
-               username ,token
+        Logout l = new Logout(
+                username ,token
         );
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Authentication_Id", "null");
@@ -113,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), l.getUsername() + "  " + l.getToken(), Toast.LENGTH_SHORT).show();
         clientAPI.getRegisterService().doLogout(l).enqueue(new Callback<String>() {
             @Override
-           public void onResponse(Call<String> call, Response<String> r) {
+            public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "User logout", Toast.LENGTH_SHORT).show();
                     login();
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     protected void login(){
-        Intent intent = new Intent(this, FindActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
 
         startActivity(intent);
     }
