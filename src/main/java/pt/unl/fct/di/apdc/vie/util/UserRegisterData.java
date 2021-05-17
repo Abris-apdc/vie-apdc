@@ -1,7 +1,7 @@
 package pt.unl.fct.di.apdc.vie.util;
 
 
-public class RegisterData {
+public class UserRegisterData {
 
 	private String firstName;
 	private String lastName;
@@ -13,13 +13,12 @@ public class RegisterData {
 	private String month;
 	private String day;
 
-	public RegisterData() {
+	public UserRegisterData() {
 
 	}
 
-	public RegisterData(String firstName, String lastName, String username, String email, String password,
+	public UserRegisterData(String firstName, String lastName, String username, String email, String password,
 			String confirmation,String year, String month, String day) {
-		//teste
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;

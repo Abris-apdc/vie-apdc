@@ -22,13 +22,13 @@ import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.OrgRegisterData;
-import pt.unl.fct.di.apdc.vie.util.RegisterData;
+import pt.unl.fct.di.apdc.vie.util.UserRegisterData;
 
 @Path("/register")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class RegisterResource {
 
-	private static final Logger LOG = Logger.getLogger(RegisterData.class.getName());
+	private static final Logger LOG = Logger.getLogger(UserRegisterData.class.getName());
 
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	
@@ -38,7 +38,7 @@ public class RegisterResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response doRegistration(RegisterData data) throws EntityNotFoundException {
+	public Response doRegistration(UserRegisterData data) throws EntityNotFoundException {
 		
 		if (data.getFirstName() == "")
 			return Response.status(Status.FORBIDDEN).entity("Invalid first name.").build();
