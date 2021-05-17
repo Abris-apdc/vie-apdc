@@ -26,6 +26,7 @@ public class DeleteResource {
 
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private static final String USER = "USER";
+	private static final String ORG = "ORG";
 	public DeleteResource() {
 	}
 	
@@ -37,7 +38,14 @@ public class DeleteResource {
 	public Response removeSelf(DeleteData data) throws EntityNotFoundException {
 		Transaction txn = datastore.newTransaction();
 		try {
-			Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
+			boolean isUser = true;
+			if(data.getUsername().contains("@"))
+				isUser = false;
+			Key userKey;
+			if(isUser)
+				userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
+			else
+				userKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getUsername());
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
 			Entity logged = txn.get(tokenKey);
 			long end = logged.getLong("token_end_time");
@@ -49,7 +57,15 @@ public class DeleteResource {
 				txn.delete(userKey);
 				txn.commit();
 				return Response.ok().entity("User deleted").build();
-			} else {
+				
+			} 
+			else if (logged.getString("token_role").equals(ORG) && logged.getString("token_username").equals(data.getUsername())) {
+				txn.delete(tokenKey);
+				txn.delete(userKey);
+				txn.commit();
+				return Response.ok().entity("Organization deleted").build();
+			}
+			else {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Attempt to remove user failed.").build();
 			}
