@@ -3,6 +3,7 @@ package pt.unl.fct.di.example.bruh;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +11,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -42,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.activity_register_email);
         send = findViewById(R.id.activity_register_send);
 
-        clientAPI = clientAPI.getInstance();
+        clientAPI = ClientAPI.getInstance();
 
         myCalendar = Calendar.getInstance();
 
@@ -78,8 +81,49 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         send.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+
+                if (firstName.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (lastName.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(username.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(), "Invalid username.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.getText().toString().length() < 9){
+                    Toast.makeText(getApplicationContext(), "Password to short.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(!password.getText().toString().equals(confirmation.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "Password don't match.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (email.getText().toString() == "" || !email.getText().toString().contains("@")){
+                    Toast.makeText(getApplicationContext(), "Invalid email.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(fYear == null){
+                    Toast.makeText(getApplicationContext(), "Invalid date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if((LocalDate.now().getYear() - Integer.parseInt(fYear))<15){
+                    Toast.makeText(getApplicationContext(), "You must be over 15 years old.", Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+
+
                 Register r = new Register(
                         firstName.getText().toString(),
                         lastName.getText().toString(),
@@ -97,36 +141,35 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(Call<String> call, Response<String> r) {
 
 
-                        if (r.isSuccessful()){
+                        if (r.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), r.body(), Toast.LENGTH_SHORT).show();
                             SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
 
                             editor.putString("Authentication_firstName", firstName.getText().toString());
-                            editor.putString("Authentication_lastName",  lastName.getText().toString());
+                            editor.putString("Authentication_lastName", lastName.getText().toString());
                             editor.putString("Authentication_role", "Voluntário");
-                            editor.putString("Authentication_username",  username.getText().toString());
+                            editor.putString("Authentication_username", username.getText().toString());
                             editor.apply();
                             changeScreen();
-                        }
-                        else
-                            Toast.makeText(getApplicationContext(), "Error Creating User", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(getApplicationContext(), "Username already taken.", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Error Creating User: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error Creating user, try again", Toast.LENGTH_SHORT).show();
                     }
 
 
                 });
 
 
-
             }
         });
 
     }
+
     private void updateLabel() {
         String myFormat = "yyyy/dd/MM"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
@@ -134,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity {
         bday.setText(sdf.format(myCalendar.getTime()));
     }
 
-    private void changeScreen(){
+    private void changeScreen() {
         Intent intent = new Intent(this, HomeScreenActivity.class);
 
         startActivity(intent);

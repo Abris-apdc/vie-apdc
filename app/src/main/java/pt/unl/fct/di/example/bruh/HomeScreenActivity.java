@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
+import android.widget.Toast;
 
 public class HomeScreenActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -26,8 +27,11 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     private void jumpLogin(){
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = preferences.edit();
+
         String token = preferences.getString("Authentication_Id", "");
-        if (token.equals("null")){
+        if (token.equals("null") || token == null){
             Intent intent = new Intent((Context)HomeScreenActivity.this, LoginActivity.class);
             HomeScreenActivity.this.startActivity(intent);
         }else {
