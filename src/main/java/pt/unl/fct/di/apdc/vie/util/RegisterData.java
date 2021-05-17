@@ -19,6 +19,7 @@ public class RegisterData {
 
 	public RegisterData(String firstName, String lastName, String username, String email, String password,
 			String confirmation,String year, String month, String day) {
+		//teste
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
