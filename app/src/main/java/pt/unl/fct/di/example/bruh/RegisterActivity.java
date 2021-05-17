@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
     private EditText firstName, lastName, username, password, confirmation, email, bday;
     private String fYear, fMonth, fDay;
-    private Button send;
+    private Button send, organization;
     private Calendar myCalendar;
 
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmation = findViewById(R.id.activity_register_confirmation);
         email = findViewById(R.id.activity_register_email);
         send = findViewById(R.id.activity_register_send);
+        organization = findViewById(R.id.activity_register_institucion);
 
         clientAPI = ClientAPI.getInstance();
 
@@ -167,8 +168,15 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
-
+        organization.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerOrganisation();
+            }
+        });
     }
+
+
 
     private void updateLabel() {
         String myFormat = "yyyy/dd/MM"; //In which you need put here
@@ -176,7 +184,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         bday.setText(sdf.format(myCalendar.getTime()));
     }
+    private void registerOrganisation(){
+        Intent intent = new Intent(this, RegisterOrganisationActivity.class);
 
+        startActivity(intent);
+    }
     private void changeScreen() {
         Intent intent = new Intent(this, HomeScreenActivity.class);
 

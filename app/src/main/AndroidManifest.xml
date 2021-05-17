@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bruh">
-        <activity android:name=".FindActivity"></activity>
+        <activity android:name=".RegisterOrganisationActivity"  android:theme="@style/Theme.AppCompat.Light.NoActionBar"> </activity>
+        <activity android:name=".FindActivity" />
         <activity
             android:name=".HomeScreenActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search_bruh:
-                login();
+                find();
                 Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.maps:
@@ -131,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
     protected void login(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    protected void find(){
         Intent intent = new Intent(this, FindActivity.class);
 
         startActivity(intent);

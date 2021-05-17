@@ -9,22 +9,22 @@
 
 
     <EditText
-        android:id="@+id/activity_register_username"
+        android:id="@+id/activity_register_orgid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="5dp"
-        android:hint="Username"
+        android:hint="Organisation Username"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/activity_register_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_lastName" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgowner" />
 
     <EditText
-        android:id="@+id/activity_register_confirmation"
+        android:id="@+id/activity_register_orgconfirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -32,11 +32,11 @@
         android:layout_marginEnd="50dp"
         android:textColor="@color/white"
         android:ems="10"
-        android:hint="Confirmation"
+        android:hint="Password Confirmation"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_password" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgpassword" />
 
 
 
@@ -64,7 +64,7 @@
         app:srcCompat="@drawable/ic_finall" />
 
     <EditText
-        android:id="@+id/activity_register_password"
+        android:id="@+id/activity_register_orgpassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -76,10 +76,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_email" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgemail" />
 
     <EditText
-        android:id="@+id/activity_register_email"
+        android:id="@+id/activity_register_orgemail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -90,17 +90,17 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_username" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgid" />
 
     <EditText
-        android:id="@+id/activity_register_firstName"
+        android:id="@+id/activity_register_orgname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
-        android:hint="First name"
+        android:hint="Organisation Name"
         android:textColor="@color/white"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,63 +109,58 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
-        android:id="@+id/activity_register_lastName"
+        android:id="@+id/activity_register_orgowner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
-        android:hint="Last name"
+        android:hint="Owner Name"
         android:textColor="@color/white"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_firstName" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgname" />
 
     <EditText
-        android:id="@+id/activity_register_birthday"
+        android:id="@+id/activity_register_orgadress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="50dp"
-        android:clickable="false"
-        android:cursorVisible="false"
+        android:ems="10"
+        android:hint="Organisation adress"
         android:textColor="@color/white"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Birthday"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_confirmation" />
-
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgconfirmation" />
+    <EditText
+        android:id="@+id/activity_register_orgservice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:hint="Organisation Service Type"
+        android:textColor="@color/white"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgadress" />
     <Button
-        android:id="@+id/activity_register_send"
+        android:id="@+id/activity_register_orgsend"
         android:layout_width="105dp"
         android:layout_height="55dp"
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.274"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_birthday" />
-
-    <Button
-        android:id="@+id/activity_register_institucion"
-        android:layout_width="105dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/white"
-        android:text="Register Organisation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.341"
-        app:layout_constraintStart_toEndOf="@+id/activity_register_send"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_birthday"
-        tools:ignore="DuplicateIds" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgservice" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
