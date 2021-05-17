@@ -39,32 +39,8 @@ public class RegisterResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doRegistration(UserRegisterData data) throws EntityNotFoundException {
-		
-		if (data.getFirstName() == "")
-			return Response.status(Status.FORBIDDEN).entity("Invalid first name.").build();
-		
-		if (data.getLastName() == "")
-			return Response.status(Status.FORBIDDEN).entity("Invalid last name.").build();
-		
-		if (data.getUsername() == "")
-			return Response.status(Status.FORBIDDEN).entity("Invalid username.").build();
-
-		if (data.getPassword().length() < 9)
-			return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
-
-		if (data.getPassword() == "")
-			return Response.status(Status.FORBIDDEN).entity("Invalid password.").build();
-
-		if (data.getEmail() == "" || !data.getEmail().contains("@"))
-			return Response.status(Status.FORBIDDEN).entity("Invalid email.").build();
-
-		if (!data.getPassword().equals(data.getConfirmation()))
-			return Response.status(Status.FORBIDDEN).entity("Password dont match.").build();
-		if((LocalDate.now().getYear() - Integer.parseInt(data.getYear())) < 15) {
-			return Response.status(Status.FORBIDDEN).entity("You must be over 15 years old.").build();
-		}
+		LOG.fine("Attempt to register user: " + data.getUsername());		
 		Transaction txn = datastore.newTransaction();
-		LOG.fine("Attempt to register user: " + data.getUsername());
 		Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
 
 		try {
@@ -87,8 +63,8 @@ public class RegisterResource {
 						.set("user_state", "ENABLE")
 						.set("user_creation_time", Timestamp.now())
 						.set("user_tokenID", UUID.randomUUID().toString())
-						.set("user_following", 0)
-						.set("user_followers", 0)
+						.set("user_following", "0")
+						.set("user_followers", "0")
 						.build();
 				txn.add(user);
 
@@ -98,8 +74,10 @@ public class RegisterResource {
 			}
 		} finally {
 
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 	
@@ -191,8 +169,10 @@ public class RegisterResource {
 			}
 		} finally {
 
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 

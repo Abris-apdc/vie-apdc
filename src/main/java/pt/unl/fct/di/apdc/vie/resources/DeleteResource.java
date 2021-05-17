@@ -49,8 +49,10 @@ public class DeleteResource {
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
 			Entity logged = txn.get(tokenKey);
 			long end = logged.getLong("token_end_time");
-			if(end <  System.currentTimeMillis())
+			if(end <  System.currentTimeMillis()) { //o token expirou
+				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("token expired").build();
+			}
 			if (logged.getString("token_role").equals(USER) && logged.getString("token_username").equals(data.getUsername())) {
 
 				txn.delete(tokenKey);
@@ -75,8 +77,10 @@ public class DeleteResource {
 			return Response.status(Status.FORBIDDEN).entity("Attempt to remove user failed.").build();
 		} finally {
 
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 }

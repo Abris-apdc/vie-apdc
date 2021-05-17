@@ -73,8 +73,10 @@ public class FindUserResource {
 			return Response.status(Status.FORBIDDEN).entity("Attempt to see users by first name failed.").build();
 		} finally {
 
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 

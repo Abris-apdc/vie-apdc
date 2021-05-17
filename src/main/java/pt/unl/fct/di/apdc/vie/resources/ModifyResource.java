@@ -122,8 +122,10 @@ public class ModifyResource {
 			}
 			return Response.status(Status.NOT_FOUND).build();
 		} finally {
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 }

@@ -61,8 +61,10 @@ public class FindOrganisationResource {
 			return Response.status(Status.FORBIDDEN).entity("Attempt to see organisations by name failed.").build();
 		} finally {
 
-			if (txn.isActive())
+			if (txn.isActive()) {
 				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 
