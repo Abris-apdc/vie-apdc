@@ -2,6 +2,8 @@ package pt.unl.fct.di.apdc.vie.resources;
 
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -49,7 +51,8 @@ public class RegisterResource {
 				return Response.status(Status.BAD_REQUEST).entity("User alredy exists").build();
 			else {
 				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
-				
+				List<Value<String>> followers = new LinkedList<Value<String>>();
+				List<Value<String>> follows = new LinkedList<Value<String>>();
 				
 				user = Entity.newBuilder(userKey)
 						.set("user_name", data.getUsername())
@@ -63,8 +66,10 @@ public class RegisterResource {
 						.set("user_state", "ENABLE")
 						.set("user_creation_time", Timestamp.now())
 						.set("user_tokenID", UUID.randomUUID().toString())
-						.set("user_following", "0")
-						.set("user_followers", "0")
+						.set("user_following_list", ListValue.of(follows))
+						.set("user_following", 0)
+						.set("user_followers_list", ListValue.of(followers))
+						.set("user_followers", 0)
 						.build();
 				txn.add(user);
 
@@ -144,6 +149,8 @@ public class RegisterResource {
 			if (org != null)
 				return Response.status(Status.BAD_REQUEST).entity("Organization alredy exists").build();
 			else {
+				List<Value<String>> followers = new LinkedList<Value<String>>();
+				List<Value<String>> follows = new LinkedList<Value<String>>();
 				
 				
 				org = Entity.newBuilder(orgKey).set("org_name", data.getName())
@@ -159,6 +166,10 @@ public class RegisterResource {
 						.set("org_mobile", data.getMobile())
 						.set("org_pwd", DigestUtils.sha512Hex(data.getPassword())).set("org_email", data.getEmail())
 						.set("org_service", data.getServiceType()).set("org_role", "ORG").set("org_state", "ENABLE").set("org_creation_time", Timestamp.now())
+						.set("org_following_list", ListValue.of(follows))
+						.set("org_following", 0)
+						.set("org_followers_list", ListValue.of(followers))
+						.set("org_followers", 0)
 						.set("org_tokenID", UUID.randomUUID().toString())
 						.build();
 				txn.add(org);
