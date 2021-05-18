@@ -2,6 +2,7 @@ package pt.unl.fct.di.apdc.vie.resources;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -51,8 +52,10 @@ public class RegisterResource {
 				return Response.status(Status.BAD_REQUEST).entity("User alredy exists").build();
 			else {
 				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
-				List<Value<String>> followers = new LinkedList<Value<String>>();
-				List<Value<String>> follows = new LinkedList<Value<String>>();
+				List<StringValue> followers = new ArrayList<StringValue>();
+				followers.add( StringValue.of("test"));
+				List<StringValue> following = new ArrayList<StringValue>();
+				following.add(StringValue.of("test"));
 				
 				user = Entity.newBuilder(userKey)
 						.set("user_name", data.getUsername())
@@ -66,9 +69,9 @@ public class RegisterResource {
 						.set("user_state", "ENABLE")
 						.set("user_creation_time", Timestamp.now())
 						.set("user_tokenID", UUID.randomUUID().toString())
-						.set("user_following_list", ListValue.of(follows))
+						.set("user_following_list", following)
 						.set("user_following", 0)
-						.set("user_followers_list", ListValue.of(followers))
+						.set("user_followers_list", followers)
 						.set("user_followers", 0)
 						.build();
 				txn.add(user);

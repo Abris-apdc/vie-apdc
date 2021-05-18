@@ -50,7 +50,8 @@ public class DeleteResource {
 			Entity logged = txn.get(tokenKey);
 			long end = logged.getLong("token_end_time");
 			if(end <  System.currentTimeMillis()) { //o token expirou
-				txn.rollback();
+				txn.delete(tokenKey);
+				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("token expired").build();
 			}
 			if (logged.getString("token_role").equals(USER) && logged.getString("token_username").equals(data.getUsername())) {
