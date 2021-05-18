@@ -49,6 +49,10 @@ public class UserProfileResource {
 				Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
 				Entity logged = txn.get(userKey);
 				// add orgs
+				if(logged == null){
+					txn.rollback();
+					return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
+				}
 				if ((logged.getString("user_role").equals("USER") )
 						&& logged.getString("user_name").equals(username)) {
 					UserInfoData ui = new UserInfoData(
