@@ -14,7 +14,7 @@ public interface RegisterService {
     @POST("/rest/register")
     Call<String> createRegister(@Body Register register);
 
-    @POST("/rest/register/organization")
+    @POST("/rest/register/organisation")
     Call<String> createRegister(@Body RegisterOrg register);
 
     @POST("/rest/login")
