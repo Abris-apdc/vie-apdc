@@ -7,7 +7,6 @@ public class ModifyData {
 	private String lastName;
 	private String newEmail;
 	private String password;
-	private String confirmation;
 	private String newPassword;
 	private String newConfirmation;
 	private String gender;
@@ -34,7 +33,6 @@ public class ModifyData {
 	 String lastName,
 	 String newEmail,
 	 String password,
-	 String confirmation,
 	 String newPassword,
 	 String newConfirmation,
 	 String gender,
@@ -56,7 +54,6 @@ public class ModifyData {
 		this.lastName = lastName;
 		this.newEmail = newEmail;
 		this.password = password;
-		this.confirmation = confirmation;
 		this.newPassword = newPassword;
 		this.newConfirmation = newConfirmation;
 		this.gender = gender;
@@ -100,12 +97,6 @@ public class ModifyData {
 	}
 	public void setPassword (String password){
 		this.password = password;
-	}
-	public String getConfirmation() {
-		return confirmation;
-	}
-	public void setConfirmation(String confirmation) {
-		this.confirmation = confirmation;
 	}
 	public String getNewPass() {
 		return newPassword;

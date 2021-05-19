@@ -16,6 +16,7 @@ import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.ModifyData;
+import pt.unl.fct.di.apdc.vie.util.ModifyOrgData;
 
 @Path("/update")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -112,7 +113,7 @@ public class ModifyResource {
 				if (data.getAddress() != null)
 					user = Entity.newBuilder(user).set("user_address", data.getAddress()).build();
 
-				if (data.getAddress() != null)
+				if (data.getSecondAddress() != null)
 					user = Entity.newBuilder(user).set("user_secondAddress", data.getAddress()).build();
 
 				if (data.getCity() != null)
@@ -132,7 +133,7 @@ public class ModifyResource {
 						txn.rollback();
 						return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
 					}
-					else if (data.getPassword().equals(data.getConfirmation()) && user.getString("user_pwd")
+					else if (user.getString("user_pwd")
 									.equals(DigestUtils.sha512Hex(data.getPassword()).toString()))
 						user = Entity.newBuilder(user).set("user_pwd", DigestUtils.sha512Hex(data.getNewPass()))
 						.build();
@@ -147,12 +148,113 @@ public class ModifyResource {
 				txn.commit();
 				return Response.ok(g.toJson("User modified.")).build();
 			}
-			else if (token.getString("token_role").equals(ORG)) {
-				//caso seja uma org
-				
-				
+			else {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("You are an org and we didn't implement it yet :D ").build();
+				return Response.status(Status.FORBIDDEN).entity("You don't have access to this operation.").build();
+			}
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
+	@PUT
+	@Path("/organisation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response modify(ModifyOrgData data) {
+
+		Transaction txn = datastore.newTransaction();
+		Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+
+		try {
+			
+			Entity token = datastore.get(tokenKey);
+			
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
+			if (token.getString("token_role").equals(ORG)) {
+
+				Key userKey = datastore.newKeyFactory().setKind("Organisation").newKey(token.getString("token_username"));
+				Entity user = datastore.get(userKey);
+
+				if (data.getCP() != null)
+					user = Entity.newBuilder(user).set("org_zip_code", data.getCP()).build();
+
+				if (data.getCountry() != null)
+					user = Entity.newBuilder(user).set("org_country", data.getCountry()).build();
+
+				if (data.getDescription() != null)
+					user = Entity.newBuilder(user).set("org_description", data.getDescription()).build();
+
+				if (data.getPhoneNumber() != null) {
+					if (data.getPhoneNumber().length() == 9)
+
+						user = Entity.newBuilder(user).set("org_phone", data.getPhoneNumber()).build();
+					else {
+						txn.rollback();
+						return Response.status(Status.FORBIDDEN).entity("Insert valid phone number.").build();
+					}
+				}
+				
+				if (data.getMobilePhone() != null) {
+					if (data.getMobilePhone().length() == 9)
+
+						user = Entity.newBuilder(user).set("org_phone", data.getMobilePhone()).build();
+					else {
+						txn.rollback();
+						return Response.status(Status.FORBIDDEN).entity("Insert valid phone number.").build();
+					}
+				}
+
+				if (data.getAddress() != null)
+					user = Entity.newBuilder(user).set("org_address", data.getAddress()).build();
+
+				if (data.getSecondName() != null)
+					user = Entity.newBuilder(user).set("org_second_name", data.getSecondName()).build();
+
+				if (data.getCity() != null)
+					user = Entity.newBuilder(user).set("org_city", data.getCity()).build();
+				
+				if (data.getCardID() != null)
+					user = Entity.newBuilder(user).set("org_cardID", data.getCardID()).build();
+				
+				if (data.getOwner() != null)
+					user = Entity.newBuilder(user).set("org_owner", data.getOwner()).build();
+				
+				if (data.getServiceType() != null)
+					user = Entity.newBuilder(user).set("org_serviceType", data.getServiceType()).build();
+				
+				if (data.getName() != null)
+					user = Entity.newBuilder(user).set("org_name", data.getName()).build();
+
+				if (data.getNewPass() != null && data.getNewPass().equals(data.getNewConfirmation())) {
+					if (data.getNewPass().length() < 9) {
+						txn.rollback();
+						return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
+					}
+					else if (user.getString("org_pwd")
+									.equals(DigestUtils.sha512Hex(data.getPassword()).toString()))
+						user = Entity.newBuilder(user).set("org_pwd", DigestUtils.sha512Hex(data.getNewPass()))
+						.build();
+
+					else {
+						txn.rollback();
+						return Response.status(Status.FORBIDDEN).entity("Password dont match").build();
+					}
+
+				}
+				txn.update(user);
+				txn.commit();
+				return Response.ok(g.toJson("Organisation modified.")).build();
 			}
 			else {
 				txn.rollback();
