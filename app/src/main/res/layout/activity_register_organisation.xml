@@ -8,39 +8,6 @@
     android:orientation="vertical">
 
 
-    <EditText
-        android:id="@+id/activity_register_orgid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="5dp"
-        android:hint="Organisation Username"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/activity_register_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgowner" />
-
-    <EditText
-        android:id="@+id/activity_register_orgconfirmation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:textColor="@color/white"
-        android:ems="10"
-        android:hint="Password Confirmation"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgpassword" />
-
-
-
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -63,34 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:srcCompat="@drawable/ic_finall" />
 
-    <EditText
-        android:id="@+id/activity_register_orgpassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:hint="Password"
-        android:textColor="@color/white"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgemail" />
-
-    <EditText
-        android:id="@+id/activity_register_orgemail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:hint="Email"
-        android:textColor="@color/white"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgid" />
 
     <EditText
         android:id="@+id/activity_register_orgname"
@@ -101,8 +40,8 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Organisation Name"
-        android:textColor="@color/white"
         android:inputType="textPersonName"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,12 +55,69 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Owner Name"
-        android:textColor="@color/white"
         android:inputType="textPersonName"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_register_orgname" />
+
+    <EditText
+        android:id="@+id/activity_register_orgemail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgowner" />
+
+    <EditText
+        android:id="@+id/activity_register_orgpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgemail" />
+
+    <EditText
+        android:id="@+id/activity_register_orgconfirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:hint="Password Confirmation"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgpassword" />
+    <EditText
+        android:id="@+id/activity_register_orgid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Organisation id"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgconfirmation" />
+
 
     <EditText
         android:id="@+id/activity_register_orgadress"
@@ -131,12 +127,13 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Organisation adress"
-        android:textColor="@color/white"
         android:inputType="textPersonName"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgconfirmation" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_register_orgid" />
+
     <EditText
         android:id="@+id/activity_register_orgservice"
         android:layout_width="match_parent"
@@ -145,12 +142,13 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Organisation Service Type"
-        android:textColor="@color/white"
         android:inputType="textPersonName"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_register_orgadress" />
+
     <Button
         android:id="@+id/activity_register_orgsend"
         android:layout_width="105dp"

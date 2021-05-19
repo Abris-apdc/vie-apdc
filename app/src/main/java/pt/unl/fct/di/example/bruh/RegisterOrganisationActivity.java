@@ -90,9 +90,6 @@ public class RegisterOrganisationActivity extends AppCompatActivity {
                 }
 
 
-
-
-
                 RegisterOrg r = new RegisterOrg(
                        name.getText().toString(),
                         owner.getText().toString(),
@@ -114,10 +111,11 @@ public class RegisterOrganisationActivity extends AppCompatActivity {
                             SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
 
-                            editor.putString("Authentication_name", name.getText().toString());
                             editor.putString("Authentication_owner", owner.getText().toString());
+                            editor.putString("Authentication_firstName", name.getText().toString());
+                            editor.putString("Authentication_lastName", "");
                             editor.putString("Authentication_role", "Organisation");
-                            editor.putString("Authentication_email", email.getText().toString());
+                            editor.putString("Authentication_username", email.getText().toString());
                             editor.putString("Authentication_address", address.getText().toString());
                             editor.apply();
                             changeScreen();
