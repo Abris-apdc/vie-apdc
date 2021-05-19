@@ -25,29 +25,27 @@ public class FindActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     private Fragment perfil = new PerfilFragment();
     ListView listView;
-    String[] name = {"Ramiro", "Ines", "Salvador", "Antonio", "Pedro"};
+    String[] teste;
     ArrayAdapter<String> arrayAdapter;
     private ClientAPI clientAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
         listView = findViewById(R.id.listview);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
-        listView.setAdapter(arrayAdapter);
+        search("all");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.home_menu, menu);
+        inflater.inflate(R.menu.search_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) menuItem.getActionView();
@@ -56,12 +54,13 @@ public class FindActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                search(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                arrayAdapter.getFilter().filter(newText);
+                search(newText);
                 return false;
             }
         });
@@ -72,14 +71,12 @@ public class FindActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
-                //login();
-                Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
-            case R.id.maps:
+            case R.id.maps_search:
                 maps();
                 Toast.makeText(this, "Maping", Toast.LENGTH_LONG).show();
                 return true;
-            case R.id.logout:
+            case R.id.logout_search:
                 logout();
                 Toast.makeText(this, "Bye!", Toast.LENGTH_LONG).show();
                 return true;
@@ -97,9 +94,8 @@ public class FindActivity extends AppCompatActivity {
         clientAPI = clientAPI.getInstance();
 
 
-
         Logout l = new Logout(
-                username ,token
+                username, token
         );
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Authentication_Id", "null");
@@ -109,10 +105,10 @@ public class FindActivity extends AppCompatActivity {
         clientAPI.getRegisterService().doLogout(l).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> r) {
-                if(r.isSuccessful()) {
+                if (r.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "User logout", Toast.LENGTH_SHORT).show();
                     login();
-                }else
+                } else
                     Toast.makeText(getApplicationContext(), "Failed to logout", Toast.LENGTH_SHORT).show();
             }
 
@@ -123,18 +119,41 @@ public class FindActivity extends AppCompatActivity {
         });
 
 
-
     }
-    protected void login(){
+
+    protected void login() {
         Intent intent = new Intent(this, LoginActivity.class);
 
         startActivity(intent);
     }
 
-    protected void maps(){
+    protected void maps() {
         Intent intent = new Intent(this, MapsActivity.class);
 
         startActivity(intent);
+    }
+
+    private void search(String pattern) {
+        clientAPI = clientAPI.getInstance();
+        clientAPI.getRegisterService().getUserInfo(pattern).enqueue(new Callback<String[]>() {
+            @Override
+            public void onResponse(Call<String[]> call, Response<String[]> r) {
+
+
+                if (r.isSuccessful()) {
+                    teste = r.body();
+                    arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, teste);
+                    listView.setAdapter(arrayAdapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String[]> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Error during search, try again", Toast.LENGTH_SHORT).show();
+            }
+            
+        });
     }
 
 
