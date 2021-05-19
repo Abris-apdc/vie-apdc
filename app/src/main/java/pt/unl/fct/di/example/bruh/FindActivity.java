@@ -143,6 +143,12 @@ public class FindActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    protected void profile() {
+        Intent intent = new Intent(this, OtherProfileActivity.class);
+
+        startActivity(intent);
+    }
+
     private void search(String pattern) {
         clientAPI = clientAPI.getInstance();
         clientAPI.getRegisterService().getUserInfo(pattern).enqueue(new Callback<String[]>() {
@@ -159,6 +165,7 @@ public class FindActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String item = (String) listView.getItemAtPosition(position);
                             Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
+                            profile();
                         }
                     });
 
