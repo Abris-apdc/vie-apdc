@@ -26,11 +26,18 @@ public class OtherProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent local = getIntent();
+        String profile = local.getStringExtra("profileToLoad");
+
         setContentView(R.layout.activity_other_profile);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OtherProfileFragment()).commit();
+        OtherProfileFragment p = new OtherProfileFragment();
+        p.setValues(profile);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, p).commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListner =
@@ -70,7 +77,6 @@ public class OtherProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.search_bruh:
                 find();
-                Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.maps:
                 maps();

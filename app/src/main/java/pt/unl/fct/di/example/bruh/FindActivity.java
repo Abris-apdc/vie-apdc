@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,6 +37,7 @@ public class FindActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
         listView = findViewById(R.id.listview);
+
         search("all");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -143,8 +145,9 @@ public class FindActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void profile() {
+    protected void profile(String item) {
         Intent intent = new Intent(this, OtherProfileActivity.class);
+        intent.putExtra("profileToLoad", item);
 
         startActivity(intent);
     }
@@ -165,7 +168,7 @@ public class FindActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String item = (String) listView.getItemAtPosition(position);
                             Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
-                            profile();
+                            profile(item);
                         }
                     });
 
