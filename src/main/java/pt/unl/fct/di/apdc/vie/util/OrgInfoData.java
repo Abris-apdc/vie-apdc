@@ -3,15 +3,15 @@ package pt.unl.fct.di.apdc.vie.util;
 public class OrgInfoData {
 
 	
-	public String name, phone, service, email;
+	private String name, address, service, email;
 
     public OrgInfoData() {
     	
     }
     
-    public OrgInfoData(String name, String phone, String service, String email) {
+    public OrgInfoData(String name, String address, String service, String email) {
         this.name = name;
-        this.phone = phone;
+        this.address = address;
         this.service = service;
         this.email = email;
     }

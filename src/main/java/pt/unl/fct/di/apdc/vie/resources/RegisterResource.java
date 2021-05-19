@@ -31,10 +31,8 @@ import pt.unl.fct.di.apdc.vie.util.UserRegisterData;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class RegisterResource {
 
-	private static final Logger LOG = Logger.getLogger(UserRegisterData.class.getName());
-
+	private static final Logger LOG = Logger.getLogger(RegisterResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-	
 	private final Gson g = new Gson();
 
 	@POST
@@ -48,8 +46,11 @@ public class RegisterResource {
 
 		try {
 			Entity user = txn.get(userKey);
-			if (user != null)
-				return Response.status(Status.BAD_REQUEST).entity("User alredy exists").build();
+			if (user != null) {
+				//ja existe um user com o mesmo username
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("User alredy exists.").build();
+			}
 			else {
 				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
 				List<StringValue> followers = new ArrayList<StringValue>();
@@ -149,8 +150,11 @@ public class RegisterResource {
 
 		try {
 			Entity org = txn.get(orgKey);
-			if (org != null)
-				return Response.status(Status.BAD_REQUEST).entity("Organization alredy exists").build();
+			if (org != null) {
+				//ja existe uma org com o mesmo username (mail)
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Organization alredy exists.").build();
+			}
 			else {
 				List<Value<String>> followers = new LinkedList<Value<String>>();
 				List<Value<String>> follows = new LinkedList<Value<String>>();

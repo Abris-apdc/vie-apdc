@@ -26,9 +26,10 @@ import pt.unl.fct.di.apdc.vie.util.LogoutData;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class LogoutResource {
 
-	private static final Logger LOG = Logger.getLogger(RegisterResource.class.getName());
+	private static final Logger LOG = Logger.getLogger(LogoutResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
+	
 	public LogoutResource() {
 	}
 	
@@ -47,21 +48,20 @@ public class LogoutResource {
 				LOG.warning(data.getUsername() + " is not logged in.");
 				return Response.status(Status.BAD_REQUEST).entity("Not loggedin.").build();
 			}
-			else {
-				//esta logged in e existe token
-				String tokenUsername = (String) token.getString("token_username");
-				if(!tokenUsername.equals(data.getUsername()))	// token nao e do user q tenta dar logout
-				{
-					txn.rollback();
-					LOG.warning( data.getUsername() + " tryed to log out.");
-					return Response.status(Status.BAD_REQUEST).entity("Not your token.").build();
-				}
-				txn.delete(tokenKey);
-				txn.commit();
-				
-				LOG.info("User '" + data.getUsername() + "' logged out sucessefully.");
-				return Response.ok(g.toJson("User logged out.")).build();
+			//esta logged in
+			
+			String tokenUsername = token.getString("token_username");
+			if(!tokenUsername.equals(data.getUsername())) {	// token nao e do user q tenta dar logout
+				txn.rollback();
+				LOG.warning( data.getUsername() + " tryed to log out.");
+				return Response.status(Status.BAD_REQUEST).entity("Not your token.").build();
 			}
+			
+			txn.delete(tokenKey);
+			txn.commit();
+
+			LOG.info("User '" + data.getUsername() + "' logged out sucessefully.");
+			return Response.ok(g.toJson("User logged out.")).build();
 		} finally {
 			if(txn.isActive()) {
 				txn.rollback();

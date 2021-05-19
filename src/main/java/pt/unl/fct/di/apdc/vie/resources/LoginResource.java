@@ -31,10 +31,10 @@ public class LoginResource {
 
 	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+	private final Gson g = new Gson();
+	
 	private KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
 	private KeyFactory orgKeyFactory = datastore.newKeyFactory().setKind("Organisation");
-	
-	private final Gson g = new Gson();
 
 	public LoginResource() {
 	}
@@ -59,18 +59,32 @@ public class LoginResource {
 			if(user == null) {
 				//user does not exit
 				txn.rollback();
-				LOG.warning("Failed login attempt for username: " + data.getUsername());
-				return Response.status(Status.FORBIDDEN).entity("Invalid username").build();
+				LOG.warning("Failed login attempt. Username '" + data.getUsername() + "' doesn't exist in datastore.");
+				return Response.status(Status.NOT_FOUND).entity("Wrong pass or username.").build();
 			}
+			
+			//pass errada
+			String hashedPWD;
+			if(isUser)
+				hashedPWD = user.getString("user_pwd");
+			else
+				hashedPWD = user.getString("org_pwd");
+			
+			if(!hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
+				txn.rollback();
+				LOG.warning("Failed login attempt. Wrong password for username: " + data.getUsername());
+				return Response.status(Status.FORBIDDEN).entity("Wrong pass or username.").build();
+			}
+			
 			//creates token
 			AuthToken authToken;
 			if(isUser) {
 				authToken = new AuthToken(data.getUsername(), user.getString("user_tokenID"));
-				authToken.setRole((String) user.getString("user_role"));
+				authToken.setRole(user.getString("user_role"));
 			}
 			else {
 				authToken = new AuthToken(data.getUsername(), user.getString("org_tokenID"));
-				authToken.setRole((String) user.getString("org_role"));
+				authToken.setRole(user.getString("org_role"));
 			}
 			Key tokenKey = datastore.newKeyFactory()
 					.setKind("Token")
@@ -81,44 +95,32 @@ public class LoginResource {
 				LOG.warning(data.getUsername() + " tryed to login while loged in.");
 				return Response.status(Status.FORBIDDEN).entity("You are already logged in.").build();
 			}
-			//count disabled
-			if(isUser && user.getString("user_state").equals("DISABLED") && ! user.getString("user_role").equals("GA")) { 
+			
+			//account disabled
+			if(isUser && user.getString("user_state").equals("DISABLED")) { 
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
 			}
-			//count disabled
-			if(!isUser && user.getString("org_state").equals("DISABLED")) { 
+			else if(!isUser && user.getString("org_state").equals("DISABLED")) { 
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
 			}
 			
-			String hashedPWD;
-			if(isUser)
-				hashedPWD = (String) user.getString("user_pwd");
-			else
-				hashedPWD = (String) user.getString("org_pwd");
+			token = Entity.newBuilder(tokenKey)
+					.set("token_id", authToken.getTokenID())
+					.set("token_role", authToken.getRole())
+					.set("token_username", authToken.getUsername())
+					.set("token_start_time", authToken.getCreationData())
+					.set("token_end_time", authToken.getExpirationData())
+					.build();
+			txn.put(token);
+			txn.commit();
+
+			LOG.info("'" + data.getUsername() + "' logged in sucessefully.");
+			return Response.ok(g.toJson(authToken)).build();
 			
-			if(hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
-				 token = Entity.newBuilder(tokenKey)
-						.set("token_id", authToken.getTokenID())
-						.set("token_role", authToken.getRole())
-						.set("token_username", authToken.getUsername())
-						.set("token_start_time", authToken.getCreationData())
-						.set("token_end_time", authToken.getExpirationData())
-						.build();
-				txn.put(token);
-				txn.commit();
-				
-				LOG.info("User '" + data.getUsername() + "' logged in sucessefully.");
-				return Response.ok(g.toJson(authToken)).build();
-			}
-			else {//wrong password
-				txn.rollback();
-				LOG.warning("Wrong password for username: " + data.getUsername());
-				return Response.status(Status.FORBIDDEN).build();
-			}
 		} finally {
 			if(txn.isActive()) {
 				txn.rollback();

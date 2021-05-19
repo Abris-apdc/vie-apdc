@@ -15,7 +15,7 @@ public class UserInfoData {
         this.username = username;
     }
     
-    public String getUsername() {
+    /*public String getUsername() {
 		return username;
 	}
 
@@ -45,6 +45,6 @@ public class UserInfoData {
 
 	public void setRole(String role) {
 		this.role = role;
-	}
+	}*/
 
 }

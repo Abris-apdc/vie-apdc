@@ -13,8 +13,8 @@ public class ModifyData {
 	private String gender;
 	private String phoneNumber;
 	private String landLine;
-	private String adress;
-	private String secondAdress;
+	private String address;
+	private String secondAddress;
 	private String city;
 	private String country;
 	private String cp;
@@ -40,8 +40,8 @@ public class ModifyData {
 	 String gender,
 	 String phoneNumber,
 	 String landLine,
-	 String adress,
-	 String secondAdress,
+	 String address,
+	 String secondAddress,
 	 String city,
 	 String country,
 	 String cp,
@@ -62,8 +62,8 @@ public class ModifyData {
 		this.gender = gender;
 		this.phoneNumber = phoneNumber;
 		this.landLine = landLine;
-		this.adress = adress;
-		this.secondAdress = secondAdress;
+		this.address = address;
+		this.secondAddress = secondAddress;
 		this.city = city;
 		this.country = country;
 		this.cp = cp;
@@ -137,17 +137,17 @@ public class ModifyData {
 	public void setLandLine(String landLine) {
 		this.landLine = landLine;
 	}
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-	public String getSecondAdress() {
-		return secondAdress;
+	public String getSecondAddress() {
+		return secondAddress;
 	}
-	public void setSecondAdress(String secondAdress) {
-		this.secondAdress = secondAdress;
+	public void setSecondAddress(String secondAddress) {
+		this.secondAddress = secondAddress;
 	}
 	public String getCity() {
 		return city;

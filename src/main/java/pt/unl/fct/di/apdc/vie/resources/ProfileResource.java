@@ -30,8 +30,9 @@ import pt.unl.fct.di.apdc.vie.util.UserInfoData;
 
 @Path("/profile")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-public class UserProfileResource {
+public class ProfileResource {
 	
+	private static final Logger LOG = Logger.getLogger(ProfileResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
 	
@@ -40,52 +41,42 @@ public class UserProfileResource {
 	//@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response getRole(@PathParam("username") String username) {
-		boolean isUser = true;
-		if(username.contains("@"))
-			isUser = false;
+		
 		Transaction txn = datastore.newTransaction();
+		
 		try {
-			if(isUser) {
-				Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-				Entity logged = txn.get(userKey);
-				// add orgs
-				if(logged == null){
-					txn.rollback();
-					return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
-				}
-				if ((logged.getString("user_role").equals("USER") )
-						&& logged.getString("user_name").equals(username)) {
-					UserInfoData ui = new UserInfoData(
-							logged.getString("user_firstName"),
-							logged.getString("user_lastName"),
-							logged.getString("user_role"),
-							logged.getString("user_name"));
-					txn.commit();
-					return Response.ok(g.toJson(ui)).build();
-
-				} else {
-					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("You do not have access to this operation.").build();
-				}
+				
+			Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+			Key orgKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
+			
+			Entity userAccount = txn.get(userKey);
+			Entity orgAccount = txn.get(orgKey);
+			
+			//a conta nao existe nem nos users nem nas orgs
+			if(userAccount == null && orgAccount == null){
+				txn.rollback();
+				return Response.status(Status.NOT_FOUND).entity("Account doesn't exist.").build();
 			}
-			else {
-				Key userKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
-				Entity logged = txn.get(userKey);
-				// add orginfodata
-				if (logged != null) {
-					OrgInfoData ui = new OrgInfoData(
-							logged.getString("org_name"),
-							logged.getString("org_phone"),
-							logged.getString("org_service"),
-							username);
-					txn.commit();
-					return Response.ok(g.toJson(ui)).build();
-
-				} else {
-					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("You do not have access to this operation.").build();
-				}
+			if(userAccount == null) {
+				//uma org
+				
+				OrgInfoData oi = new OrgInfoData(
+						orgAccount.getString("org_name"),
+						orgAccount.getString("org_address"),
+						orgAccount.getString("org_service"),
+						orgAccount.getString("org_email"));	
+				txn.commit();
+				return Response.ok(g.toJson(oi)).build();
 			}
+			
+			//um user
+			UserInfoData ui = new UserInfoData(
+					userAccount.getString("user_firstName"),
+					userAccount.getString("user_lastName"),
+					userAccount.getString("user_role"),
+					userAccount.getString("user_name"));
+			txn.commit();
+			return Response.ok(g.toJson(ui)).build();
 
 		} finally {
 			if(txn.isActive()) {

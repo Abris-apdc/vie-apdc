@@ -2,6 +2,7 @@ package pt.unl.fct.di.apdc.vie.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,10 +26,11 @@ import com.google.gson.Gson;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class FindResource {
 	
+	private static final Logger LOG = Logger.getLogger(FindResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-	//private final KeyFactory orgKeyFactory = datastore.newKeyFactory().setKind("Organisation");
-
 	private final Gson g = new Gson();
+	
+	//private final KeyFactory orgKeyFactory = datastore.newKeyFactory().setKind("Organisation");
 
 	public FindResource() {
 	}
@@ -39,59 +41,42 @@ public class FindResource {
 	public Response getOrgs(@PathParam("pattern") String pattern )  {
 		Transaction txn = datastore.newTransaction();
 		try {
-
-			Query<Entity> query = Query.newEntityQueryBuilder()
+			boolean all = false;
+			if(pattern.equals("all"))
+				all = true;
+			Query<Entity> orgsQuery = Query.newEntityQueryBuilder()
 					.setKind("Organisation")
 					.build();
-			QueryResults<Entity> results = txn.run(query);
-
-			List<String> orgs = new ArrayList<>();
-			results.forEachRemaining(e -> {
-				if(e.getString("org_name").toLowerCase().contains(pattern.toLowerCase()))
-					orgs.add(e.getString("org_email"));
-			});
+			QueryResults<Entity> orgsResults = txn.run(orgsQuery);
 			
-			
-			txn.commit();
-			return Response.ok(g.toJson(orgs)).build();
-
-		} catch (Exception e) {
-
-			txn.rollback();
-			return Response.status(Status.FORBIDDEN).entity("Attempt to see organisations by name failed.").build();
-		} finally {
-			if (txn.isActive()) {
-				txn.rollback();
-				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-			}
-		}
-	}
-
-	@GET
-	@Path("/user/{pattern}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response getUsers(@PathParam("pattern") String pattern )  {
-		Transaction txn = datastore.newTransaction();
-		try {
-
-			Query<Entity> query = Query.newEntityQueryBuilder()
+			Query<Entity> usersQuery = Query.newEntityQueryBuilder()
 					.setKind("User")
 					.build();
-			QueryResults<Entity> results = txn.run(query);
-
-			List<String> users = new ArrayList<>();
-			results.forEachRemaining(e -> {
-				if(e.getString("user_name").toLowerCase().contains(pattern.toLowerCase()))
-					users.add(e.getString("user_name"));
-			});
+			QueryResults<Entity> usersResults = txn.run(usersQuery);
 			
+			List<String> allResults = new ArrayList<>();
+			//List<String> users = new ArrayList<>();
+			if(!all) {
+			orgsResults.forEachRemaining(e -> {
+				if(e.getString("org_name").toLowerCase().contains(pattern.toLowerCase()))
+					allResults.add(e.getString("org_name"));
+			});
+			usersResults.forEachRemaining(e -> {
+				if(e.getString("user_name").toLowerCase().contains(pattern.toLowerCase()))
+					allResults.add(e.getString("user_name"));
+			});
+			}
+			else {
+				//all
+				usersResults.forEachRemaining(e -> {allResults.add(e.getString("user_name"));});
+				//possivelmente adicionar tb as organizacoes
+			}
 			txn.commit();
-			return Response.ok(g.toJson(users)).build();
+			return Response.ok(g.toJson(allResults)).build();
 
 		} catch (Exception e) {
-
 			txn.rollback();
-			return Response.status(Status.FORBIDDEN).entity("Attempt to see users by name failed.").build();
+			return Response.status(Status.FORBIDDEN).entity("Attempt to see organisations by name failed.").build();
 		} finally {
 			if (txn.isActive()) {
 				txn.rollback();
