@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -39,6 +41,8 @@ public class FindActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+
     }
 
 
@@ -65,6 +69,12 @@ public class FindActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    public void onItemClick(ArrayAdapter<String> adapter, View v, int position, long id) {
+        String item = (String) adapter.getItem(position);
+        Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -144,6 +154,13 @@ public class FindActivity extends AppCompatActivity {
                     teste = r.body();
                     arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, teste);
                     listView.setAdapter(arrayAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String item = (String) listView.getItemAtPosition(position);
+                            Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 }
             }
@@ -152,7 +169,7 @@ public class FindActivity extends AppCompatActivity {
             public void onFailure(Call<String[]> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error during search, try again", Toast.LENGTH_SHORT).show();
             }
-            
+
         });
     }
 
