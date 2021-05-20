@@ -60,81 +60,44 @@ public class ModifyResource {
 
 				Key userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
 				Entity user = datastore.get(userKey);
-
-				if (data.getCP() != null)
-					user = Entity.newBuilder(user).set("user_zip_code", data.getCP()).build();
-
-				if (data.getNationality() != null)
-					user = Entity.newBuilder(user).set("user_nationality", data.getNationality()).build();
-
-				if (data.getFirstLanguage() != null)
-					user = Entity.newBuilder(user).set("user_first_language", data.getFirstLanguage()).build();
-
-				if (data.getSecondLanguage() != null)
-					user = Entity.newBuilder(user).set("user_second_language", data.getSecondLanguage()).build();
-
+				if(data.getFirstName() != null)
+					user = Entity.newBuilder(user).set("user_firstName", data.getFirstName()).build();
+				if(data.getLastName() != null)
+					user = Entity.newBuilder(user).set("user_lastName", data.getLastName()).build();
+				if (data.getEmail() != null)
+					user = Entity.newBuilder(user).set("user_email", data.getEmail()).build();
 				if (data.getGender() != null)
 					user = Entity.newBuilder(user).set("user_gender", data.getGender()).build();
-
-				if (data.getCountry() != null)
-					user = Entity.newBuilder(user).set("user_country", data.getCountry()).build();
-
-				if (data.getDescription() != null)
-					user = Entity.newBuilder(user).set("user_description", data.getDescription()).build();
-
-				if (data.getSecondAddress() != null)
-					user = Entity.newBuilder(user).set("user_second_address", data.getSecondAddress()).build();
-
-				if (data.getEducationLevel() != null)
-					user = Entity.newBuilder(user).set("user_education_level", data.getEducationLevel()).build();
-
-				if (data.getEmail() != null) {
-					if (data.getEmail().contains("@"))
-						user = Entity.newBuilder(user).set("user_email", data.getEmail()).build();
-					else {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Insert valid email.").build();
-					}
-				}
-
-				if (data.getLandLine() != null) {
-					if (data.getLandLine().length() == 9)
-						user = Entity.newBuilder(user).set("user_landline", data.getLandLine()).build();
-					else {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Insert valid landline number.").build();
-					}
-				}
-
-				if (data.getPhoneNumber() != null) {
-					if (data.getPhoneNumber().length() == 9)
-
-						user = Entity.newBuilder(user).set("user_phone", data.getPhoneNumber()).build();
-					else {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Insert valid phone number.").build();
-					}
-				}
-
+				if (data.getPhoneNumber() != null)
+					user = Entity.newBuilder(user).set("user_phone", data.getPhoneNumber()).build();
+				if (data.getLandLine() != null) 
+					user = Entity.newBuilder(user).set("user_landline", data.getLandLine()).build();
 				if (data.getAddress() != null)
 					user = Entity.newBuilder(user).set("user_address", data.getAddress()).build();
-
 				if (data.getSecondAddress() != null)
-					user = Entity.newBuilder(user).set("user_secondAddress", data.getAddress()).build();
-
+					user = Entity.newBuilder(user).set("user_second_address", data.getSecondAddress()).build();
 				if (data.getCity() != null)
 					user = Entity.newBuilder(user).set("user_city", data.getCity()).build();
+				if (data.getCountry() != null)
+					user = Entity.newBuilder(user).set("user_country", data.getCountry()).build();
+				if (data.getCP() != null)
+					user = Entity.newBuilder(user).set("user_cp", data.getCP()).build();
+				if (data.getNationality() != null)
+					user = Entity.newBuilder(user).set("user_nationality", data.getNationality()).build();
+				if (data.getFirstLanguage() != null)
+					user = Entity.newBuilder(user).set("user_first_language", data.getFirstLanguage()).build();
+				if (data.getSecondLanguage() != null)
+					user = Entity.newBuilder(user).set("user_second_language", data.getSecondLanguage()).build();
+				if (data.getDescription() != null)
+					user = Entity.newBuilder(user).set("user_description", data.getDescription()).build();
+				if (data.getEducationLevel() != null)
+					user = Entity.newBuilder(user).set("user_education_level", data.getEducationLevel()).build();
+				if (data.getPerfil() != null) 
+					user = Entity.newBuilder(user).set("user_perfil", data.getPerfil()).build();
 
-				if (data.getPerfil() != null) {
-					if (data.getPerfil() != "Publico" || data.getPerfil() != "Privado") {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Not a type of perfil.").build();
-					}
-					else
-						user = Entity.newBuilder(user).set("user_perfil", data.getPerfil()).build();
-				}
+				
 
-				if (data.getNewPass() != null && data.getNewPass().equals(data.getNewConfirmation())) {
+				/*if (data.getNewPass() != null && data.getNewPass().equals(data.getNewConfirmation())) {
 					if (data.getNewPass().length() < 9) {
 						txn.rollback();
 						return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
@@ -149,7 +112,7 @@ public class ModifyResource {
 						return Response.status(Status.FORBIDDEN).entity("Password dont match").build();
 					}
 
-				}
+				}*/
 				txn.update(user);
 				txn.commit();
 				return Response.ok(g.toJson("User modified.")).build();

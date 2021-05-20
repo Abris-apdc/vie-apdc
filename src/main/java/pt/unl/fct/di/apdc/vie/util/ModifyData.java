@@ -6,9 +6,9 @@ public class ModifyData {
 	private String firstName;
 	private String lastName;
 	private String newEmail;
-	private String password;
-	private String newPassword;
-	private String newConfirmation;
+	//private String password;
+	//private String newPassword;
+	//private String newConfirmation;
 	private String gender;
 	private String phoneNumber;
 	private String landLine;
@@ -31,10 +31,10 @@ public class ModifyData {
 	
 	public ModifyData( String firstName,
 	 String lastName,
-	 String newEmail,
-	 String password,
-	 String newPassword,
-	 String newConfirmation,
+	 String email,
+	 //String password,
+	 //String newPassword,
+	 //String newConfirmation,
 	 String gender,
 	 String phoneNumber,
 	 String landLine,
@@ -52,10 +52,10 @@ public class ModifyData {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.newEmail = newEmail;
-		this.password = password;
-		this.newPassword = newPassword;
-		this.newConfirmation = newConfirmation;
+		this.newEmail = email;
+		//this.password = password;
+		//this.newPassword = newPassword;
+		//this.newConfirmation = newConfirmation;
 		this.gender = gender;
 		this.phoneNumber = phoneNumber;
 		this.landLine = landLine;
@@ -92,7 +92,7 @@ public class ModifyData {
 	public void setEmail(String email) {
 		this.newEmail = email;
 	}
-	public String getPassword (){
+	/*public String getPassword (){
 		return password;
 	}
 	public void setPassword (String password){
@@ -109,7 +109,7 @@ public class ModifyData {
 	}
 	public void setNewConfirmation(String newConfirmation) {
 		this.newConfirmation = newConfirmation;
-	}
+	}*/
 	public String getGender() {
 		return gender;
 	}
