@@ -8,6 +8,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RegisterService {
@@ -26,4 +27,6 @@ public interface RegisterService {
     @GET("/rest/find/{pattern}")
     Call<String[]> getUserInfo (@Path("pattern") String username);
 
+    @PUT("/rest/update/")
+    Call<String> updateUser(@Body ModifyUser userInfo);
 }
