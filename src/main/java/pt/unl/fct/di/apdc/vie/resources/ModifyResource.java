@@ -178,6 +178,12 @@ public class ModifyResource {
 			
 			Entity token = datastore.get(tokenKey);
 			
+			if(token == null) {
+				//não está logged in
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			
 			long end = token.getLong("token_end_time");
 			
 			//o token expirou
