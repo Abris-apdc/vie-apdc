@@ -1,5 +1,6 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
@@ -79,11 +80,11 @@ public class LoginResource {
 			//creates token
 			AuthToken authToken;
 			if(isUser) {
-				authToken = new AuthToken(data.getUsername(), user.getString("user_tokenID"));
+				authToken = new AuthToken(data.getUsername(), UUID.randomUUID().toString());
 				authToken.setRole(user.getString("user_role"));
 			}
 			else {
-				authToken = new AuthToken(data.getUsername(), user.getString("org_tokenID"));
+				authToken = new AuthToken(data.getUsername(), UUID.randomUUID().toString());
 				authToken.setRole(user.getString("org_role"));
 			}
 			Key tokenKey = datastore.newKeyFactory()

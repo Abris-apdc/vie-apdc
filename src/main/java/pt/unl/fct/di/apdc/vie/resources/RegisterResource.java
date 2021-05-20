@@ -69,7 +69,7 @@ public class RegisterResource {
 						.set("user_role", "USER")
 						.set("user_state", "ENABLE")
 						.set("user_creation_time", Timestamp.now())
-						.set("user_tokenID", UUID.randomUUID().toString())
+						//.set("user_tokenID", UUID.randomUUID().toString())
 						.set("user_following_list", following)
 						.set("user_following", 0)
 						.set("user_followers_list", followers)
