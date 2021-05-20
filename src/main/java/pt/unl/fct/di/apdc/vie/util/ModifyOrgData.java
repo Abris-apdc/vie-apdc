@@ -4,9 +4,6 @@ public class ModifyOrgData {
 
 	private String name;
 	private String secondName;
-	private String password;
-	private String newPassword;
-	private String newConfirmation;
 	private String phoneNumber;
 	private String mobilePhone;
 	private String address;
@@ -25,9 +22,6 @@ public class ModifyOrgData {
 	
 	public ModifyOrgData( String name,
 	 String secondName,
-	 String password,
-	 String newPassword,
-	 String newConfirmation,
 	 String phoneNumber,
 	 String mobilePhone,
 	 String address,
@@ -42,9 +36,6 @@ public class ModifyOrgData {
 		
 		this.name = name;
 		this.secondName = secondName;
-		this.password = password;
-		this.newPassword = newPassword;
-		this.newConfirmation = newConfirmation;
 		this.phoneNumber = phoneNumber;
 		this.mobilePhone = mobilePhone;
 		this.address = address;
@@ -65,7 +56,7 @@ public class ModifyOrgData {
 	public String getSecondName() {
 		return secondName;
 	}
-	public String getPassword (){
+/*	public String getPassword (){
 		return password;
 	}
 	public String getNewPass() {
@@ -73,7 +64,7 @@ public class ModifyOrgData {
 	}
 	public String getNewConfirmation() {
 		return newConfirmation;
-	}
+	}*/
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

@@ -10,13 +10,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.ModifyData;
 import pt.unl.fct.di.apdc.vie.util.ModifyOrgData;
+import pt.unl.fct.di.apdc.vie.util.ModifyPassData;
 
 @Path("/update")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -113,7 +113,7 @@ public class ModifyResource {
 	@PUT
 	@Path("/organisation")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response modify(ModifyOrgData data) {
+	public Response modifyOrg(ModifyOrgData data) {
 
 		Transaction txn = datastore.newTransaction();
 		Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
@@ -142,16 +142,16 @@ public class ModifyResource {
 				Key userKey = datastore.newKeyFactory().setKind("Organisation").newKey(token.getString("token_username"));
 				Entity user = datastore.get(userKey);
 
-				if (data.getCP() != null)
+				if (data.getCP() != null && !data.getCP().equals(""))
 					user = Entity.newBuilder(user).set("org_zip_code", data.getCP()).build();
 
-				if (data.getCountry() != null)
+				if (data.getCountry() != null && !data.getCountry().equals(""))
 					user = Entity.newBuilder(user).set("org_country", data.getCountry()).build();
 
-				if (data.getDescription() != null)
+				if (data.getDescription() != null && !data.getDescription().equals(""))
 					user = Entity.newBuilder(user).set("org_description", data.getDescription()).build();
 
-				if (data.getPhoneNumber() != null) {
+				if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals("")) {
 					if (data.getPhoneNumber().length() == 9)
 
 						user = Entity.newBuilder(user).set("org_phone", data.getPhoneNumber()).build();
@@ -161,7 +161,7 @@ public class ModifyResource {
 					}
 				}
 				
-				if (data.getMobilePhone() != null) {
+				if (data.getMobilePhone() != null && !data.getMobilePhone().equals("")) {
 					if (data.getMobilePhone().length() == 9)
 
 						user = Entity.newBuilder(user).set("org_phone", data.getMobilePhone()).build();
@@ -171,43 +171,27 @@ public class ModifyResource {
 					}
 				}
 
-				if (data.getAddress() != null)
+				if (data.getAddress() != null && !data.getAddress().equals(""))
 					user = Entity.newBuilder(user).set("org_address", data.getAddress()).build();
 
-				if (data.getSecondName() != null)
+				if (data.getSecondName() != null && !data.getSecondName().equals(""))
 					user = Entity.newBuilder(user).set("org_second_name", data.getSecondName()).build();
 
-				if (data.getCity() != null)
+				if (data.getCity() != null && !data.getCity().equals(""))
 					user = Entity.newBuilder(user).set("org_city", data.getCity()).build();
 				
-				if (data.getCardID() != null)
+				if (data.getCardID() != null && !data.getCardID().equals(""))
 					user = Entity.newBuilder(user).set("org_cardID", data.getCardID()).build();
 				
-				if (data.getOwner() != null)
+				if (data.getOwner() != null && !data.getOwner().equals(""))
 					user = Entity.newBuilder(user).set("org_owner", data.getOwner()).build();
 				
-				if (data.getServiceType() != null)
+				if (data.getServiceType() != null && !data.getServiceType().equals(""))
 					user = Entity.newBuilder(user).set("org_serviceType", data.getServiceType()).build();
 				
-				if (data.getName() != null)
+				if (data.getName() != null && !data.getName().equals(""))
 					user = Entity.newBuilder(user).set("org_name", data.getName()).build();
 
-				if (data.getNewPass() != null && data.getNewPass().equals(data.getNewConfirmation())) {
-					if (data.getNewPass().length() < 9) {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
-					}
-					else if (user.getString("org_pwd")
-									.equals(DigestUtils.sha512Hex(data.getPassword()).toString()))
-						user = Entity.newBuilder(user).set("org_pwd", DigestUtils.sha512Hex(data.getNewPass()))
-						.build();
-
-					else {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Password dont match").build();
-					}
-
-				}
 				txn.update(user);
 				txn.commit();
 				return Response.ok(g.toJson("Organisation modified.")).build();
@@ -222,5 +206,79 @@ public class ModifyResource {
 				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}
+	}
+	
+	@PUT
+	@Path("/pass")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response modifyPass(ModifyPassData data) {
+
+
+		Transaction txn = datastore.newTransaction();
+		Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+
+		try {
+
+			Entity token = datastore.get(tokenKey);
+
+			if(token == null) {
+				//não está logged in
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+
+			long end = token.getLong("token_end_time");
+
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+
+			String role;
+			Key userKey;
+			if (token.getString("token_role").equals(USER)) {
+				role = USER;
+				userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
+
+			}
+			else if (token.getString("token_role").equals(ORG)) {
+				role = ORG;
+				userKey = datastore.newKeyFactory().setKind("Organisation").newKey(token.getString("token_username"));
+
+			}
+			else {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You don't have access to this operation.").build();
+			}
+			Entity user = datastore.get(userKey);
+			if(!data.getOldPassword().equals(user.getString(role + "_pwd"))) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
+			}
+			if(!data.getNewPassword().equals(data.getConfirmation())) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Passwords dont match.").build();
+			}
+			if(data.getNewPassword().length() < 9) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Invalid password.").build();
+			}
+			
+			
+			user = Entity.newBuilder(user).set(role + "_pwd", data.getNewPassword()).build();
+
+			txn.update(user);
+			txn.commit();
+			return Response.ok(g.toJson("User modified.")).build();
+
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+
 	}
 }
