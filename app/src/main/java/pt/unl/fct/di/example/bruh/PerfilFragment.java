@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +30,7 @@ public class PerfilFragment extends Fragment {
 
     public static final String SHARED_PREFS = "sharedPrefs";
     private TextView firstName, lastName, role, username;
-    private String firstNameS;
+    private Button edit;
     private ClientAPI clientAPI;
 
     @Nullable
@@ -40,7 +42,17 @@ public class PerfilFragment extends Fragment {
         role = (TextView) view.findViewById(R.id.activity_perfil_role);
         username = (TextView) view.findViewById(R.id.activity_perfil_username);
 
+        edit = (Button) view.findViewById(R.id.activity_perfil_edit);
+
         getUserInfo();
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
+            }
+        });
 
         return view;
     }
