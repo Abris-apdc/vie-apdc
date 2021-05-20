@@ -60,59 +60,40 @@ public class ModifyResource {
 
 				Key userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
 				Entity user = datastore.get(userKey);
-				if(data.getFirstName() != null)
+				if(data.getFirstName() != null && !data.getFirstName().equals(""))
 					user = Entity.newBuilder(user).set("user_firstName", data.getFirstName()).build();
-				if(data.getLastName() != null)
+				if(data.getLastName() != null && !data.getLastName().equals(""))
 					user = Entity.newBuilder(user).set("user_lastName", data.getLastName()).build();
-				if (data.getEmail() != null)
+				if (data.getEmail() != null && !data.getEmail().equals(""))
 					user = Entity.newBuilder(user).set("user_email", data.getEmail()).build();
-				if (data.getGender() != null)
+				if (data.getGender() != null && !data.getGender().equals(""))
 					user = Entity.newBuilder(user).set("user_gender", data.getGender()).build();
-				if (data.getPhoneNumber() != null)
+				if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals(""))
 					user = Entity.newBuilder(user).set("user_phone", data.getPhoneNumber()).build();
-				if (data.getLandLine() != null) 
+				if (data.getLandLine() != null && !data.getLandLine().equals("")) 
 					user = Entity.newBuilder(user).set("user_landline", data.getLandLine()).build();
-				if (data.getAddress() != null)
+				if (data.getAddress() != null && !data.getAddress().equals(""))
 					user = Entity.newBuilder(user).set("user_address", data.getAddress()).build();
-				if (data.getSecondAddress() != null)
+				if (data.getSecondAddress() != null && !data.getSecondAddress().equals(""))
 					user = Entity.newBuilder(user).set("user_second_address", data.getSecondAddress()).build();
-				if (data.getCity() != null)
+				if (data.getCity() != null && !data.getCity().equals(""))
 					user = Entity.newBuilder(user).set("user_city", data.getCity()).build();
-				if (data.getCountry() != null)
+				if (data.getCountry() != null && !data.getCountry().equals(""))
 					user = Entity.newBuilder(user).set("user_country", data.getCountry()).build();
-				if (data.getCP() != null)
+				if (data.getCP() != null && !data.getCP().equals(""))
 					user = Entity.newBuilder(user).set("user_cp", data.getCP()).build();
-				if (data.getNationality() != null)
+				if (data.getNationality() != null && !data.getNationality().equals(""))
 					user = Entity.newBuilder(user).set("user_nationality", data.getNationality()).build();
-				if (data.getFirstLanguage() != null)
+				if (data.getFirstLanguage() != null && !data.getFirstLanguage().equals(""))
 					user = Entity.newBuilder(user).set("user_first_language", data.getFirstLanguage()).build();
-				if (data.getSecondLanguage() != null)
+				if (data.getSecondLanguage() != null && !data.getSecondLanguage().equals(""))
 					user = Entity.newBuilder(user).set("user_second_language", data.getSecondLanguage()).build();
-				if (data.getDescription() != null)
+				if (data.getDescription() != null && !data.getDescription().equals(""))
 					user = Entity.newBuilder(user).set("user_description", data.getDescription()).build();
-				if (data.getEducationLevel() != null)
+				if (data.getEducationLevel() != null && !data.getEducationLevel().equals(""))
 					user = Entity.newBuilder(user).set("user_education_level", data.getEducationLevel()).build();
-				if (data.getPerfil() != null) 
+				if (data.getPerfil() != null && !data.getPerfil().equals("")) 
 					user = Entity.newBuilder(user).set("user_perfil", data.getPerfil()).build();
-
-				
-
-				/*if (data.getNewPass() != null && data.getNewPass().equals(data.getNewConfirmation())) {
-					if (data.getNewPass().length() < 9) {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Password too short.").build();
-					}
-					else if (user.getString("user_pwd")
-									.equals(DigestUtils.sha512Hex(data.getPassword()).toString()))
-						user = Entity.newBuilder(user).set("user_pwd", DigestUtils.sha512Hex(data.getNewPass()))
-						.build();
-
-					else {
-						txn.rollback();
-						return Response.status(Status.FORBIDDEN).entity("Password dont match").build();
-					}
-
-				}*/
 				txn.update(user);
 				txn.commit();
 				return Response.ok(g.toJson("User modified.")).build();
