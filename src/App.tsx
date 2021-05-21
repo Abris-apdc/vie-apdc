@@ -23,7 +23,6 @@ import Profile from './interface/Profile';
             {!isLoggedIn && <PersistentDrawerRightNotLoggedIn/>}
             <Route path="/Home" component={HomePage}/>
             <Route path="/About" component={AboutUsPage}/>
-            <Route path="/LoggedIn/About" component={AboutUsPage}/>
             <Route path="/Register_User" component={RegisterUser}/>
             <Route path="/Register_Organization" component={RegisterOrg}/>
             <Route path="/Register" component={RegisterSelect}/>
@@ -31,7 +30,8 @@ import Profile from './interface/Profile';
             <Route path="/LoggedIn/Profile" component={Profile}/>
             <Route path="/LoggedIn/Update" component={UpdateForm}/>
             <Route path="/LoggedIn/Delete" component={DeleteForm}/>
-            <Route path="/loggedIn/Logout" component={Logout}/>
+            <Route path="/LoggedIn/About" component={AboutUsPage}/>
+            <Route path="/LoggedIn/Logout" component={Logout}/>
           </div>
         </Router>
       );
@@ -64,7 +64,13 @@ import Profile from './interface/Profile';
       localStorage.removeItem('tokenID');
       localStorage.removeItem('username');
 
-      return <Redirect to="../Home"/>
-    }
+      window.location.href="../Home";
+
+      if(localStorage.getItem('hasReloaded') == "nop"){
+        window.location.reload();
+        localStorage.removeItem('hasReloaded');
+      }
+      return <div/>
+    } 
 
     export default App; 

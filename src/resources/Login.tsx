@@ -44,6 +44,7 @@ function LoginForm(){
             response.json().then(function(parsedData){
                 localStorage.setItem("tokenID", parsedData.tokenID);
                 localStorage.setItem("username", parsedData.username);
+                localStorage.setItem('hasReloaded', "nop");
                 window.location.href = "/loggedIn/Feed";
             });
         }});
