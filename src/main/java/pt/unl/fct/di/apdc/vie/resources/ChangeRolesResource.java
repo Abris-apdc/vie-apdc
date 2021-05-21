@@ -106,6 +106,11 @@ public class ChangeRolesResource {
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
 			}
 			
+			if(userQueMudaRole.equals(ADMIN) && !userAMudar.getString("user_role").equals(USER)) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
+			}
+			
 			userAMudar = Entity.newBuilder(userAMudar)
 					.set("user_role",data.getNewRole())
 					.build();
