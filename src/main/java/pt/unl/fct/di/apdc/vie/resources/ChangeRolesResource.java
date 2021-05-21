@@ -80,7 +80,7 @@ public class ChangeRolesResource {
 			//tentar meter alguem org
 			if(data.getNewRole().equals(ORG)) {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("You can't change someones role to ORG.").build();
+				return Response.status(Status.FORBIDDEN).entity("You can't change someone's role to ORG.").build();
 			}
 			
 			Key userQueMudaKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
@@ -95,8 +95,7 @@ public class ChangeRolesResource {
 			String userQueMudaRole = userQueMuda.getString("user_role");
 			
 			//orgs users e mods nao podem mudar roles
-			if (userQueMudaRole.equals(ORG)
-					|| userQueMudaRole.equals(USER)
+			if (userQueMudaRole.equals(USER)
 					|| userQueMudaRole.equals(MOD)) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
