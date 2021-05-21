@@ -66,7 +66,7 @@ public class ChangeRolesResource {
 			//user a mudar nao existe
 			if(userAMudar == null) {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("The use you are trying to change doesn't exist.").build();
+				return Response.status(Status.FORBIDDEN).entity("The user you are trying to change doesn't exist.").build();
 			}
 			
 			if(!data.getNewRole().equals(USER)
