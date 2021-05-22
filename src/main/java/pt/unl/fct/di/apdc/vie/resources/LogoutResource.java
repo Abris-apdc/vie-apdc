@@ -37,7 +37,7 @@ public class LogoutResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response logout(LogoutData data) {
-		LOG.fine("Attempt to logout user: " + data.getUsername());
+		LOG.fine("Attempt to logout user with token: " + data.getTokenID());
 		Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
 		Transaction txn = datastore.newTransaction();
 		try {
@@ -45,22 +45,22 @@ public class LogoutResource {
 			if(token == null) {
 				//not logged in
 				txn.rollback();
-				LOG.warning(data.getUsername() + " is not logged in.");
+				LOG.warning("user with this tokenID '" + data.getTokenID() + "' is not logged in.");
 				return Response.status(Status.BAD_REQUEST).entity("Not loggedin.").build();
 			}
 			//esta logged in
 			
 			String tokenUsername = token.getString("token_username");
-			if(!tokenUsername.equals(data.getUsername())) {	// token nao e do user q tenta dar logout
+			/*if(!tokenUsername.equals(data.getUsername())) {	// token nao e do user q tenta dar logout
 				txn.rollback();
 				LOG.warning( data.getUsername() + " tryed to log out.");
 				return Response.status(Status.BAD_REQUEST).entity("Not your token.").build();
-			}
+			}*/
 			
 			txn.delete(tokenKey);
 			txn.commit();
 
-			LOG.info("User '" + data.getUsername() + "' logged out sucessefully.");
+			LOG.info("User '" + tokenUsername + "' logged out sucessefully.");
 			return Response.ok(g.toJson("User logged out.")).build();
 		} finally {
 			if(txn.isActive()) {

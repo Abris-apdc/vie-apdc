@@ -2,21 +2,16 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class LogoutData {
 
-	private String username;
 	private String tokenID;
 	
 	public LogoutData() {
 	}
 	
-	public LogoutData(String username, String tokenID) {
+	public LogoutData(String tokenID) {
 		this.tokenID = tokenID;
-		this.username = username;
 	}
 	
 	public String getTokenID() {
 		return tokenID;
-	}
-	public String getUsername() {
-		return username;
 	}
 }
