@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,7 +25,9 @@ public class ModifyFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private ClientAPI clientAPI;
     private EditText firstName, lastName, email, gender, phone, landline, address, secondAddress, city, country, zipCode, nacionality, fLanguage, sLanguage, bio, level;
+    String perfil;
     private Button update;
+    private Spinner spinner;
 
     @Nullable
     @Override
@@ -46,6 +51,8 @@ public class ModifyFragment extends Fragment {
         level = (EditText) view.findViewById(R.id.activity_modify_level);
 
         update = (Button) view.findViewById(R.id.activity_modify_update);
+        perfilMode(view);
+
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +89,8 @@ public class ModifyFragment extends Fragment {
                 sLanguage.getText().toString(),
                 bio.getText().toString(),
                 level.getText().toString(),
-                "Private"
-                ,token
+                perfil,
+                token
         );
 
         clientAPI.getRegisterService().updateUser(u).enqueue(new Callback<String>() {
@@ -99,6 +106,30 @@ public class ModifyFragment extends Fragment {
             public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to Update", Toast.LENGTH_SHORT).show();
             }
+        });
+    }
+
+    private void perfilMode(View view){
+        spinner = view.findViewById(R.id.spinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource( getActivity(),
+                R.array.perfil_mode, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                perfil = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+
         });
     }
 }
