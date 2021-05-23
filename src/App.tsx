@@ -41,9 +41,13 @@ import UpdatePassForm from './resources/UpdatePassword';
 
     function RedirectHome(){
       var redirect;
+      var isLoggedIn = localStorage.getItem('tokenID') != null;
       const inRawPath = window.location.pathname == "/";
       if(inRawPath)
-        redirect = <Redirect to="/Home"/>
+        if(!isLoggedIn)
+          redirect = <Redirect to="/Home"/>
+        else
+          redirect = <Redirect to="/LoggedIn/Feed"/>
       return(
         <div>
           {redirect}
