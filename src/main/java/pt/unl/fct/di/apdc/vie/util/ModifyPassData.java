@@ -24,11 +24,11 @@ public class ModifyPassData {
 	}
 	
 	
-	public String getOldPassword() {
+	public String getOldPass() {
 		return oldPass;
 	}
 	
-	public String getNewPassword() {
+	public String getNewPass() {
 		return newPass;
 	}
 	

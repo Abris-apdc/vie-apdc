@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
@@ -239,12 +240,12 @@ public class ModifyResource {
 			String role;
 			Key userKey;
 			if (token.getString("token_role").equals(USER)) {
-				role = USER;
+				role = "user";
 				userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
 
 			}
 			else if (token.getString("token_role").equals(ORG)) {
-				role = ORG;
+				role = "org";
 				userKey = datastore.newKeyFactory().setKind("Organisation").newKey(token.getString("token_username"));
 
 			}
@@ -253,21 +254,25 @@ public class ModifyResource {
 				return Response.status(Status.FORBIDDEN).entity("You don't have access to this operation.").build();
 			}
 			Entity user = datastore.get(userKey);
-			if(!data.getOldPassword().equals(user.getString(role + "_pwd"))) {
+			
+			String hashedPWD =(String) user.getString(role + "_pwd");
+
+			if(!hashedPWD.equals(DigestUtils.sha512Hex(data.getOldPass())))  {
+			//if(!data.getOldPassword().equals(user.getString(role + "_pwd"))) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
 			}
-			if(!data.getNewPassword().equals(data.getConfirmation())) {
+			if(!data.getNewPass().equals(data.getConfirmation())) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Passwords dont match.").build();
 			}
-			if(data.getNewPassword().length() < 9) {
+			if(data.getNewPass().length() < 9) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Invalid password.").build();
 			}
 			
-			
-			user = Entity.newBuilder(user).set(role + "_pwd", data.getNewPassword()).build();
+			String newHashed = (String) DigestUtils.sha512Hex(data.getNewPass());
+			user = Entity.newBuilder(user).set(role + "_pwd", newHashed).build();
 
 			txn.update(user);
 			txn.commit();

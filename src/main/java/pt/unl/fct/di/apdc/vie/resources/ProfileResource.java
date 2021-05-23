@@ -92,6 +92,8 @@ public class ProfileResource {
 	public Response follow(@PathParam("username") String username, FollowData data)  {
 		//Transaction txn = datastore.newTransaction();
 
+		Transaction txn = datastore.newTransaction();
+		try {
 		String role = "user";
 		if(username.contains("@")) 
 			role = "org";
@@ -109,7 +111,7 @@ public class ProfileResource {
 
 		int nFollowers = (int) userFollowed.getLong(role.concat( "_followers"));
 		//List<Value<String>> followers = userFollowed.getList(role.concat("_followers_list"));
-		List<StringValue> followers = userFollowed.getList(role.concat("_followers_list"));
+		List<Value<String>> followers = userFollowed.getList(role.concat("_followers_list"));
 		
 		
 		nFollowers++;
@@ -137,15 +139,15 @@ public class ProfileResource {
 		Entity userFollowing = datastore.get(followingKey);
 		int nFollowing = (int) userFollowing.getLong(role2.concat("_following"));
 		//List<Value<String>> following =  userFollowing.getList(role2.concat("_following_list"));
-		List<StringValue> following = userFollowing.getList(role2.concat("_following_list"));
+		List<Value<String>> following = userFollowing.getList(role2.concat("_following_list"));
 
 		nFollowing++;
 
 		//userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
 		
 		
-		followers.add( StringValue.of( token.getString("token_username")));
-		following.add( StringValue.of( username));
+		followers.add( (Value<String>) StringValue.of( token.getString("token_username")));
+		following.add( (Value<String>) StringValue.of( username));
 		
 		userFollowed = Entity.newBuilder(userFollowed).set(role.concat("_followers_list"), followers).set(role.concat("_followers"), String.valueOf(nFollowers)).build();
 
@@ -153,8 +155,7 @@ public class ProfileResource {
 		
 		userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following_list"), following).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
 		//userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
-		Transaction txn = datastore.newTransaction();
-		try {	
+			
 
 			//txn.update(userFollowed);
 			//txn.update(userFollowing);

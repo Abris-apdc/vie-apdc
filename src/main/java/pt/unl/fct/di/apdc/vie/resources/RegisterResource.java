@@ -53,9 +53,9 @@ public class RegisterResource {
 			}
 			else {
 				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
-				List<StringValue> followers = new ArrayList<StringValue>();
+				List<Value<String>> followers = new ArrayList<Value<String>>();
 				followers.add( StringValue.of("test"));
-				List<StringValue> following = new ArrayList<StringValue>();
+				List<Value<String>> following = new ArrayList<Value<String>>();
 				following.add(StringValue.of("test"));
 				
 				user = Entity.newBuilder(userKey)
