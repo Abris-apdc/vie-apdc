@@ -12,6 +12,7 @@ import AboutUsPage from './interface/AboutUsPage';
 import UpdateForm from './resources/UpdateUser';
 import PersistenDrawerLoggedIn from './interface/DrawerLoggedIn';
 import Profile from './interface/Profile';
+import UpdatePassForm from './resources/UpdatePassword';
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
@@ -32,6 +33,7 @@ import Profile from './interface/Profile';
             <Route path="/LoggedIn/Delete" component={DeleteForm}/>
             <Route path="/LoggedIn/About" component={AboutUsPage}/>
             <Route path="/LoggedIn/Logout" component={Logout}/>
+            <Route path="/LoggedIn/Password" component={UpdatePassForm}/>
           </div>
         </Router>
       );
