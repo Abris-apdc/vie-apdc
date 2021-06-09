@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
@@ -57,13 +59,29 @@ public class DeleteResource {
 			
 			Entity logged = txn.get(tokenKey);
 			long end = logged.getLong("token_end_time");
-			if(end <  System.currentTimeMillis()) { //o token expirou
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
 				txn.delete(tokenKey);
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
+			
+			Entity account = txn.get(userKey);
+			
+			String hashedPWD;
+			if(isUser)
+				hashedPWD = account.getString("user_pwd");
+			else
+				hashedPWD = account.getString("org_pwd");
+			
+			//pass errada
+			if(!hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Wrong pass.").build();
+			}
+			
 			if (logged.getString("token_role").equals(USER) && logged.getString("token_username").equals(data.getUsername())) {
-
 				txn.delete(tokenKey);
 				txn.delete(userKey);
 				txn.commit();
