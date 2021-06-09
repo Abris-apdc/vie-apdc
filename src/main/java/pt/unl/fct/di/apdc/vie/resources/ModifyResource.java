@@ -262,10 +262,10 @@ public class ModifyResource {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
 			}
-			if(!data.getNewPass().equals(data.getConfirmation())) {
+			/*if(!data.getNewPass().equals(data.getConfirmation())) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Passwords dont match.").build();
-			}
+			}*/
 			if(data.getNewPass().length() < 9) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Invalid password.").build();
