@@ -8,7 +8,6 @@ public class UserRegisterData {
 	private String username;
 	private String email;
 	private String password;
-	private String confirmation;
 	private String year;
 	private String month;
 	private String day;
@@ -18,13 +17,12 @@ public class UserRegisterData {
 	}
 
 	public UserRegisterData(String firstName, String lastName, String username, String email, String password,
-			String confirmation,String year, String month, String day) {
+			String year, String month, String day) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.confirmation = confirmation;
 		this.year = year;
 		this.month = month;
 		this.day = day;
@@ -68,14 +66,6 @@ public class UserRegisterData {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getConfirmation() {
-		return confirmation;
-	}
-
-	public void setConfirmation(String confirmation) {
-		this.confirmation = confirmation;
 	}
 
 	public String getYear() {

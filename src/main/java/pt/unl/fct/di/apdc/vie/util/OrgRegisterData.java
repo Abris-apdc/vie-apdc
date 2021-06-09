@@ -7,7 +7,6 @@ public class OrgRegisterData {
 	private String owner;
 	private String email;
 	private String password;
-	private String confirmation;
 	private String id;
 	private String address;
 	private String serviceType;
@@ -18,12 +17,11 @@ public class OrgRegisterData {
 	}
 
 	public OrgRegisterData(String name, String owner, String email, String password,
-			String confirmation, String id, String address, String serviceType) {
+			String id, String address, String serviceType) {
 		this.name = name;
 		this.owner = owner;
 		this.email = email;
 		this.password = password;
-		this.confirmation = confirmation;
 		this.id = id;
 		this.address = address;
 		this.serviceType = serviceType;
@@ -46,11 +44,6 @@ public class OrgRegisterData {
 
 	public String getPassword() {
 		return password;
-	}
-
-
-	public String getConfirmation() {
-		return confirmation;
 	}
 	
 	

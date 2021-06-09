@@ -120,8 +120,8 @@ public class RegisterResource {
 		if (data.getEmail() == "" || !data.getEmail().contains("@"))
 			return Response.status(Status.FORBIDDEN).entity("Invalid email.").build();
 
-		if (!data.getPassword().equals(data.getConfirmation()))
-			return Response.status(Status.FORBIDDEN).entity("Password dont match.").build();
+		//if (!data.getPassword().equals(data.getConfirmation()))
+			//return Response.status(Status.FORBIDDEN).entity("Password dont match.").build();
 		
 		if(data.getAddress() == "") 
 			return Response.status(Status.FORBIDDEN).entity("Invalid address.").build();
