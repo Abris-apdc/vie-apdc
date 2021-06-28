@@ -1,5 +1,6 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -94,77 +95,91 @@ public class ProfileResource {
 
 		Transaction txn = datastore.newTransaction();
 		try {
-		String role = "user";
-		if(username.contains("@")) 
-			role = "org";
-		Key followedKey;
-		if(role.equals("user")) 
-			followedKey = datastore.newKeyFactory().setKind("User").newKey(username);
-		else
-			followedKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
-
-		Entity userFollowed = datastore.get(followedKey);
-		if(userFollowed == null) {
-
-			return Response.status(Status.FORBIDDEN).entity("The user you are trying to follow doesn't exists.").build();
-		}
-
-		int nFollowers = (int) userFollowed.getLong(role.concat( "_followers"));
-		//List<Value<String>> followers = userFollowed.getList(role.concat("_followers_list"));
-		List<Value<String>> followers = userFollowed.getList(role.concat("_followers_list"));
-		
-		
-		nFollowers++;
-
-		//userFollowed = Entity.newBuilder(userFollowed).set(role.concat("_followers"), String.valueOf(nFollowers)).build();
-
-
-		Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
-		Entity token = datastore.get(tokenKey);
-
-		if(token == null) {
-
-			return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
-		}
-		Key followingKey;
-		String role2;
-		if(token.getString("token_role").equals("USER")) {
-			followingKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));	
-			role2 = "user";
-		}
-		else {
-			followingKey = datastore.newKeyFactory().setKind("Organisation").newKey(token.getString("token_username"));
-			role2 = "org";
-		}
-		Entity userFollowing = datastore.get(followingKey);
-		int nFollowing = (int) userFollowing.getLong(role2.concat("_following"));
-		//List<Value<String>> following =  userFollowing.getList(role2.concat("_following_list"));
-		List<Value<String>> following = userFollowing.getList(role2.concat("_following_list"));
-
-		nFollowing++;
-
-		//userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
-		
-		
-		followers.add( (Value<String>) StringValue.of( token.getString("token_username")));
-		following.add( (Value<String>) StringValue.of( username));
-		
-		userFollowed = Entity.newBuilder(userFollowed).set(role.concat("_followers_list"), followers).set(role.concat("_followers"), String.valueOf(nFollowers)).build();
-
-		//userFollowed = Entity.newBuilder(userFollowed).set(role.concat("_followers"), String.valueOf(nFollowers)).build();
-		
-		userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following_list"), following).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
-		//userFollowing = Entity.newBuilder(userFollowing).set(role2.concat("_following"), String.valueOf(nFollowing)).build();
 			
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+			Entity token = txn.get(tokenKey);
 
-			//txn.update(userFollowed);
-			//txn.update(userFollowing);
-			txn.update(userFollowed);
-			txn.update(userFollowing);
+			if(token == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			Key followingKey;
+			
+			String followingUsername = token.getString("token_username");
+
+			String roleFollowing = "user";
+			if(followingUsername.contains("@"))
+				roleFollowing = "org";
+
+			if(roleFollowing.equals("user")) 
+				followingKey = datastore.newKeyFactory().setKind("User").newKey(followingUsername);
+			else
+				followingKey = datastore.newKeyFactory().setKind("Organisation").newKey(followingUsername);
+			
+			Entity userFollowing = txn.get(followingKey);	
+			
+			long nFollowing = userFollowing.getLong(roleFollowing.concat("_following"));
+			List<Value<String>> following = new LinkedList<Value<String>>();
+			List<Value<String>> following1 = userFollowing.getList(roleFollowing.concat("_following_list"));
+			for(int i = 0;i<following1.size();i++) {
+				following.add(following1.get(i));
+			}
+			
+			
+			String roleFollowed = "user";
+			if(username.contains("@")) 
+				roleFollowed = "org";
+			
+			Key followedKey;
+			if(roleFollowed.equals("user")) 
+				followedKey = datastore.newKeyFactory().setKind("User").newKey(username);
+			else
+				followedKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
+
+			Entity userFollowed = txn.get(followedKey);
+			if(userFollowed == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("The user you are trying to follow doesn't exists.").build();
+			}
+
+			String followedPerfil = userFollowed.getString(roleFollowed.concat("_perfil"));
+			
+			if(followedPerfil.equals("Public")) {
+				long nFollowers = userFollowed.getLong(roleFollowed.concat( "_followers"));
+				List<Value<String>> followers = new LinkedList<Value<String>>();
+				List<Value<String>> followers1 = userFollowed.getList(roleFollowed.concat("_followers_list"));
+				for(int i = 0;i<followers1.size();i++) {
+					followers.add(followers1.get(i));
+				}
+				followers.add(StringValue.of(followingUsername));
+				nFollowers++;
+				
+				userFollowed = Entity.newBuilder(userFollowed)
+						.set(roleFollowed.concat("_followers"), nFollowers)
+						.set(roleFollowed.concat("_followers_list"), ListValue.of(followers))
+						.build();
+				
+				txn.update(userFollowed);
+				
+				//gajo que segue:
+				following.add(StringValue.of(username));
+				nFollowing++;
+				
+				userFollowing = Entity.newBuilder(userFollowing)
+						.set(roleFollowing.concat("_following"), nFollowing)
+						.set(roleFollowing.concat("_following_list"), ListValue.of(following))
+						.build();
+				txn.update(userFollowing);
+			}
+			else {		//Private
+				List<Value<String>> requests = userFollowed.getList(roleFollowed.concat("_requests_list"));
+				requests.add(StringValue.of(username));
+				userFollowed = Entity.newBuilder(userFollowed).set(roleFollowed.concat("_requests_list"), requests).build();
+				txn.update(userFollowed);
+			}
+
 			txn.commit();
-
 			return Response.ok("Number of followers updated.").build();
-
 
 		} finally {
 			if(txn.isActive()) {
