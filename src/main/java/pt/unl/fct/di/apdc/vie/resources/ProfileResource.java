@@ -172,7 +172,11 @@ public class ProfileResource {
 				txn.update(userFollowing);
 			}
 			else {		//Private
-				List<Value<String>> requests = userFollowed.getList(roleFollowed.concat("_requests_list"));
+				List<Value<String>> requests = new LinkedList<Value<String>>();
+				List<Value<String>> requests1 = userFollowed.getList(roleFollowed.concat("_requests_list"));
+				for(int i = 0;i<requests1.size();i++) {
+					requests.add(requests1.get(i));
+				}
 				requests.add(StringValue.of(username));
 				userFollowed = Entity.newBuilder(userFollowed).set(roleFollowed.concat("_requests_list"), requests).build();
 				txn.update(userFollowed);
