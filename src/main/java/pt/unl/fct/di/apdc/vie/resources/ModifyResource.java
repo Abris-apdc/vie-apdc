@@ -25,6 +25,9 @@ public class ModifyResource {
 
 	private static final String USER = "USER";
 	private static final String ORG = "ORG";
+	private static final String ADMIN = "ADMIN";
+	private static final String SU = "SU";
+	private static final String MOD = "MOD";
 	
 	private static final Logger LOG = Logger.getLogger(ModifyResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
@@ -57,7 +60,10 @@ public class ModifyResource {
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
 			
-			if (token.getString("token_role").equals(USER)) {
+			if (token.getString("token_role").equals(USER) 
+					|| token.getString("token_role").equals(ADMIN) 
+					|| token.getString("token_role").equals(SU)
+					|| token.getString("token_role").equals(MOD)) {
 
 				Key userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
 				Entity user = datastore.get(userKey);
@@ -71,28 +77,14 @@ public class ModifyResource {
 					user = Entity.newBuilder(user).set("user_gender", data.getGender()).build();
 				if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals(""))
 					user = Entity.newBuilder(user).set("user_phone", data.getPhoneNumber()).build();
-				if (data.getLandLine() != null && !data.getLandLine().equals("")) 
-					user = Entity.newBuilder(user).set("user_landline", data.getLandLine()).build();
 				if (data.getAddress() != null && !data.getAddress().equals(""))
 					user = Entity.newBuilder(user).set("user_address", data.getAddress()).build();
-				if (data.getSecondAddress() != null && !data.getSecondAddress().equals(""))
-					user = Entity.newBuilder(user).set("user_second_address", data.getSecondAddress()).build();
-				if (data.getCity() != null && !data.getCity().equals(""))
-					user = Entity.newBuilder(user).set("user_city", data.getCity()).build();
-				if (data.getCountry() != null && !data.getCountry().equals(""))
-					user = Entity.newBuilder(user).set("user_country", data.getCountry()).build();
-				if (data.getCP() != null && !data.getCP().equals(""))
-					user = Entity.newBuilder(user).set("user_cp", data.getCP()).build();
 				if (data.getNationality() != null && !data.getNationality().equals(""))
 					user = Entity.newBuilder(user).set("user_nationality", data.getNationality()).build();
 				if (data.getFirstLanguage() != null && !data.getFirstLanguage().equals(""))
 					user = Entity.newBuilder(user).set("user_first_language", data.getFirstLanguage()).build();
-				if (data.getSecondLanguage() != null && !data.getSecondLanguage().equals(""))
-					user = Entity.newBuilder(user).set("user_second_language", data.getSecondLanguage()).build();
 				if (data.getDescription() != null && !data.getDescription().equals(""))
 					user = Entity.newBuilder(user).set("user_description", data.getDescription()).build();
-				if (data.getEducationLevel() != null && !data.getEducationLevel().equals(""))
-					user = Entity.newBuilder(user).set("user_education_level", data.getEducationLevel()).build();
 				if (data.getPerfil() != null && !data.getPerfil().equals("")) 
 					user = Entity.newBuilder(user).set("user_perfil", data.getPerfil()).build();
 				txn.update(user);
@@ -101,7 +93,7 @@ public class ModifyResource {
 			}
 			else {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("You don't have access to this operation.").build();
+				return Response.status(Status.FORBIDDEN).entity("You don't have access to this operation. If you are an organisation user /organisation after.").build();
 			}
 		} finally {
 			if (txn.isActive()) {
