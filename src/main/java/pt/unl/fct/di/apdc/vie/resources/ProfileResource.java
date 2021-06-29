@@ -58,6 +58,9 @@ public class ProfileResource {
 				txn.rollback();
 				return Response.status(Status.NOT_FOUND).entity("Account doesn't exist.").build();
 			}
+			if(userAccount != null && userAccount.getString("user_perfil").equals("Private")) {
+				return Response.status(Status.FORBIDDEN).entity("Account is Private.").build();
+			}
 			if(userAccount == null) {
 				//uma org
 				
@@ -65,6 +68,7 @@ public class ProfileResource {
 						orgAccount.getString("org_name"),
 						orgAccount.getString("org_address"),
 						orgAccount.getString("org_service"),
+						orgAccount.getString("org_role"),
 						orgAccount.getString("org_email"));	
 				txn.commit();
 				return Response.ok(g.toJson(oi)).build();
