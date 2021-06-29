@@ -50,7 +50,9 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                SettingsFragment st = new SettingsFragment();
+                st.setRole(role.getText().toString());
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
             }
         });
 

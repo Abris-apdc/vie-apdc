@@ -54,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("Authentication_Id", r.body().getTokenID());
                             editor.putString("Authentication_username", r.body().getUsername());
+                            editor.putString("Authentication_role", r.body().getRole());
                             editor.apply();
+
 
                             changeScreen();
                         }

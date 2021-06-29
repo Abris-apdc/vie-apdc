@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class SettingsFragment extends Fragment {
-
+    public String role;
     private Button edit, password, delete;
     @Nullable
     @Override
@@ -48,7 +48,10 @@ public class SettingsFragment extends Fragment {
 
     private void edit(){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
+        if (role.equals("ORG")) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
+        } else
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
     }
 
     private void password(){
@@ -59,5 +62,9 @@ public class SettingsFragment extends Fragment {
     private void delete(){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new DeleteFragment()).commit();
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
