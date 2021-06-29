@@ -62,7 +62,7 @@ public class RegisterOrganisationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Invalid owner name.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (email.getText().toString() == "" || !email.getText().toString().contains("@")) {
+                if (email.getText().toString() == "" || !email.getText().toString().contains("@") || email.getText().toString().contains(" ") ) {
                     Toast.makeText(getApplicationContext(), "Invalid email.", Toast.LENGTH_SHORT).show();
                     return;
                 }

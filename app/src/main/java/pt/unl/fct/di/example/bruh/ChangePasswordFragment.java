@@ -1,7 +1,5 @@
 package pt.unl.fct.di.example.bruh;
 
-import androidx.fragment.app.Fragment;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import retrofit2.Call;
@@ -20,20 +19,22 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DeleteFragment  extends Fragment {
+public class ChangePasswordFragment  extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private ClientAPI clientAPI;
-    private EditText password;
+    private EditText oldPass, newPass, confirmation;
     private Button send;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_delete,container,false);
+        View view = inflater.inflate(R.layout.fragment_password,container,false);
 
-        password = (EditText) view.findViewById(R.id.fragment_delete_password);
-        send = (Button) view.findViewById(R.id.fragment_delete_button);
+        oldPass = (EditText) view.findViewById(R.id.fragment_password_old);
+        newPass = (EditText) view.findViewById(R.id.fragment_password_new);
+        confirmation = (EditText) view.findViewById(R.id.fragment_password_confirmation);
+        send = (Button) view.findViewById(R.id.fragment_password_send);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,33 +47,45 @@ public class DeleteFragment  extends Fragment {
 
     private void delete(View v){
         SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String username = preferences.getString("Authentication_username", "");
+
         String token = preferences.getString("Authentication_Id", "");
+
+        if (newPass.getText().toString().length() < 9){
+            Toast.makeText(getActivity(), "New password is  to short.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!newPass.getText().toString().equals(confirmation.getText().toString())){
+            Toast.makeText(getActivity(), "Password don't match.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         clientAPI = clientAPI.getInstance();
 
-        Delete delete = new Delete(
-                username,
-                //password.getText().toString(),
+        ChangePassword cp = new ChangePassword(
+                oldPass.getText().toString(),
+                newPass.getText().toString(),
+                confirmation.getText().toString(),
                 token
         );
 
-        clientAPI.getRegisterService().deleteUser(delete).enqueue(new Callback<String>() {
+        clientAPI.getRegisterService().updatePassword(cp).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
-                    Toast.makeText(getActivity(), "User deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Password was changed", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, new PerfilFragment()).commit();
                 }else
-                    Toast.makeText(getActivity(), "Failed to delete user", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Failed to change password", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(getActivity(), "Failed to delete user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to change password", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 }

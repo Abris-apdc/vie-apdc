@@ -52,7 +52,8 @@ public class SettingsFragment extends Fragment {
     }
 
     private void password(){
-
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ChangePasswordFragment()).commit();
     }
 
     private void delete(){

@@ -95,10 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(username.getText().toString().equals("")){
+                if(username.getText().toString().equals("") || username.getText().toString().contains(" ")){
                     Toast.makeText(getApplicationContext(), "Invalid username.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 if (password.getText().toString().length() < 9){
                     Toast.makeText(getApplicationContext(), "Password to short.", Toast.LENGTH_SHORT).show();
                     return;

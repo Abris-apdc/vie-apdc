@@ -12,7 +12,8 @@ public class Delete {
     @SerializedName("tokenID")
     private String tokenID;
 
-    public Delete(String username, String password, String tokenID) {
+    public Delete(String username, //String password,
+                  String tokenID) {
         this.username = username;
         this.password = password;
         this.tokenID = tokenID;
@@ -22,9 +23,9 @@ public class Delete {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
+   // public String getPassword() {
+  //      return password;
+  //  }
 
     public String getTokenID(){
         return tokenID;

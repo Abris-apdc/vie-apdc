@@ -33,4 +33,7 @@ public interface RegisterService {
 
     @HTTP(method = "DELETE", path = "/rest/delete", hasBody = true)
     Call<String> deleteUser(@Body Delete userInfo);
+
+    @PUT("/rest/update/pass")
+    Call<String> updatePassword(@Body ChangePassword userInfo);
 }
