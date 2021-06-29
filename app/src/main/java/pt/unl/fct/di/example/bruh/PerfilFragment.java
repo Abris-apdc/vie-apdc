@@ -23,7 +23,7 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class PerfilFragment extends Fragment {
-    private static final String FIRST_NAME = "PILA";
+    private static final String FIRST_NAME = "username";
     private static final String LAST_NAME = "lastName";
     private static final String ROLE = "role";
     private static final String USERNAME = "username";
@@ -50,7 +50,7 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
             }
         });
 

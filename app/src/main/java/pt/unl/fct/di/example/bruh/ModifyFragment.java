@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,10 +25,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class ModifyFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private ClientAPI clientAPI;
-    private EditText firstName, lastName, email, gender, phone, landline, address, secondAddress, city, country, zipCode, nacionality, fLanguage, sLanguage, bio, level;
-    String perfil;
+    private EditText firstName, lastName, email, phone,  address,  nacionality, fLanguage, bio;
+    private String gender,perfil;
     private Button update;
-    private Spinner spinner;
+    private Spinner spinner, genders;
 
     @Nullable
     @Override
@@ -36,22 +37,16 @@ public class ModifyFragment extends Fragment {
         firstName = (EditText) view.findViewById(R.id.activity_modify_first_name);
         lastName = (EditText) view.findViewById(R.id.activity_modify_last_name);
         email = (EditText) view.findViewById(R.id.activity_modify_email);
-        gender = (EditText) view.findViewById(R.id.activity_modify_gender);
+        genders(view);
         phone = (EditText) view.findViewById(R.id.activity_modify_phone);
-        landline = (EditText) view.findViewById(R.id.activity_modify_land_line);
         address = (EditText) view.findViewById(R.id.activity_modify_address);
-        secondAddress = (EditText) view.findViewById(R.id.activity_modify_second_address);
-        city = (EditText) view.findViewById(R.id.activity_modify_city);
-        country = (EditText) view.findViewById(R.id.activity_modify_coutry);
-        zipCode = (EditText) view.findViewById(R.id.activity_modify_zip_code);
         nacionality = (EditText) view.findViewById(R.id.activity_modify_nacionality);
         fLanguage = (EditText) view.findViewById(R.id.activity_modify_first_language);
-        sLanguage = (EditText) view.findViewById(R.id.activity_modify_second_language);
         bio = (EditText) view.findViewById(R.id.activity_modify_description);
-        level = (EditText) view.findViewById(R.id.activity_modify_level);
 
         update = (Button) view.findViewById(R.id.activity_modify_update);
         perfilMode(view);
+        genders(view);
 
 
         update.setOnClickListener(new View.OnClickListener() {
@@ -76,19 +71,12 @@ public class ModifyFragment extends Fragment {
              firstName.getText().toString(),
                 lastName.getText().toString(),
                 email.getText().toString(),
-                gender.getText().toString(),
+                gender,
                 phone.getText().toString(),
-                landline.getText().toString(),
                 address.getText().toString(),
-                secondAddress.getText().toString(),
-                city.getText().toString(),
-                country.getText().toString(),
-                zipCode.getText().toString(),
                 nacionality.getText().toString(),
                 fLanguage.getText().toString(),
-                sLanguage.getText().toString(),
                 bio.getText().toString(),
-                level.getText().toString(),
                 perfil,
                 token
         );
@@ -98,6 +86,8 @@ public class ModifyFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     Toast.makeText(getActivity(), "User Update", Toast.LENGTH_SHORT).show();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new PerfilFragment()).commit();
                 }else
                     Toast.makeText(getActivity(), "Failed to Update", Toast.LENGTH_SHORT).show();
             }
@@ -128,8 +118,26 @@ public class ModifyFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+    }
 
+    private void genders(View view){
+        genders = view.findViewById(R.id.activity_modify_gender);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource( getActivity(),
+                R.array.genders, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        genders.setAdapter(adapter);
+        genders.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                gender = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 }

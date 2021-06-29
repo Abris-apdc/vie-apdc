@@ -6,6 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -29,4 +30,7 @@ public interface RegisterService {
 
     @PUT("/rest/update/")
     Call<String> updateUser(@Body ModifyUser userInfo);
+
+    @HTTP(method = "DELETE", path = "/rest/delete", hasBody = true)
+    Call<String> deleteUser(@Body Delete userInfo);
 }
