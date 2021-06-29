@@ -2,6 +2,7 @@ package pt.unl.fct.di.example.bruh;
 
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,8 +63,17 @@ public class DeleteFragment  extends Fragment {
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     Toast.makeText(getActivity(), "User deleted", Toast.LENGTH_SHORT).show();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new PerfilFragment()).commit();
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+
+                    editor.putString("Authentication_firstName", "");
+                    editor.putString("Authentication_lastName", "");
+                    editor.putString("Authentication_role", "");
+                    editor.putString("Authentication_username", "");
+                    editor.apply();
+                    changeScreen();
+
                 }else
                     Toast.makeText(getActivity(), "Failed to delete user", Toast.LENGTH_SHORT).show();
             }
@@ -74,5 +84,11 @@ public class DeleteFragment  extends Fragment {
             }
         });
 
+    }
+
+    private void changeScreen() {
+        Intent intent;
+        intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
     }
 }

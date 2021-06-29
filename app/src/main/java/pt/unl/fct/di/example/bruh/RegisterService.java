@@ -36,4 +36,7 @@ public interface RegisterService {
 
     @PUT("/rest/update/pass")
     Call<String> updatePassword(@Body ChangePassword userInfo);
+
+    @GET("/rest/profile/{username}")
+    Call<UserInfo> userInfo(@Path("username") String username);
 }
