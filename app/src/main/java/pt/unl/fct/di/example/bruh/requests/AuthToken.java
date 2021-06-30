@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.bruh;
+package pt.unl.fct.di.example.bruh.requests;
 
 
 public class AuthToken {

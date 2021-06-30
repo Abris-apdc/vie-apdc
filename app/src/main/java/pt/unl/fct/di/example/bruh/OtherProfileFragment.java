@@ -1,6 +1,5 @@
 package pt.unl.fct.di.example.bruh;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class OtherProfileFragment extends Fragment {

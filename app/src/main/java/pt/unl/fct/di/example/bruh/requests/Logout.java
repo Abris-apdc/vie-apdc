@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.bruh;
+package pt.unl.fct.di.example.bruh.requests;
 import com.google.gson.annotations.SerializedName;
 public class Logout {
 

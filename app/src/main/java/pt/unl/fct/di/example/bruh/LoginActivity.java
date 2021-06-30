@@ -2,7 +2,6 @@ package pt.unl.fct.di.example.bruh;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import pt.unl.fct.di.example.bruh.requests.AuthToken;
+import pt.unl.fct.di.example.bruh.requests.Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

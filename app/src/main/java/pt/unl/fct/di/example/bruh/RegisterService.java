@@ -1,13 +1,19 @@
 package pt.unl.fct.di.example.bruh;
 
+import pt.unl.fct.di.example.bruh.requests.AuthToken;
+import pt.unl.fct.di.example.bruh.requests.ChangePassword;
+import pt.unl.fct.di.example.bruh.requests.Delete;
+import pt.unl.fct.di.example.bruh.requests.Login;
+import pt.unl.fct.di.example.bruh.requests.Logout;
+import pt.unl.fct.di.example.bruh.requests.ModifyUser;
+import pt.unl.fct.di.example.bruh.requests.Register;
+import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
+import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.http.Body;
 
-import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;

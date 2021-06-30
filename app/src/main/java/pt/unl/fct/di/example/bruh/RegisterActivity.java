@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 
+import pt.unl.fct.di.example.bruh.requests.Register;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

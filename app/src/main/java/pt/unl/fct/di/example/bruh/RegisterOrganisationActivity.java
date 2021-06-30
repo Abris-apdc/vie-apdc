@@ -3,22 +3,16 @@ package pt.unl.fct.di.example.bruh;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Locale;
-
+import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

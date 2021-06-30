@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import pt.unl.fct.di.example.bruh.requests.Logout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

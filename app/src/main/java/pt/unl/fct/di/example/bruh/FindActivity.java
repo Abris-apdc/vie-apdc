@@ -15,11 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import pt.unl.fct.di.example.bruh.requests.Logout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
