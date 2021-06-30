@@ -8,20 +8,13 @@ function UpdateForm(){
     const [email1, setEmail] = useState("")
     const [gender1, setGender] = useState("")
     const [phone1, setPhone] = useState("")
-    const [landLine1, setLandLine] = useState("")
     const [address1, setAddress] = useState("")
-    const [secondAddress1, setSecondAddress] = useState("")
-    const [city1, setCity] = useState("")
-    const [country1, setCountry] = useState("")
-    const [zip1, setZip] = useState("")
     const [nationality1, setNationality] = useState("")
     const [firstLanguage1, setFirstLanguage] = useState("")
-    const [secondLanguage1, setSecondLanguage] = useState("")
     const [bio1, setBio] = useState("")
-    const [education1, setEducation] = useState("")
     const [profile1, setProfile] = useState("")
 
-    const tokenID1 = "26215a01-4506-41de-8ed7-c0a765f5e1a0"
+    const tokenID1 = localStorage.getItem('tokenID');
 
     function handleChangeFirstName(e:ChangeEvent<HTMLInputElement>){
         setFirstName(e.target.value)
@@ -48,35 +41,11 @@ function UpdateForm(){
     }
 
     function checkPhone(){
-        return phone1.toString().length === 9
-    }
-
-    function handleChangeLandLine(e:ChangeEvent<HTMLInputElement>){
-        setLandLine(e.target.value)
-    }
-
-    function checkLandLine(){
-        return phone1.toString().length === 9
+        return phone1.toString().length === 9 || phone1.toString() === ""
     }
 
     function handleChangeAddress(e:ChangeEvent<HTMLInputElement>){
         setAddress(e.target.value)
-    }
-
-    function handleChangeSecondAddress(e:ChangeEvent<HTMLInputElement>){
-        setSecondAddress(e.target.value)
-    }
-
-    function handleChangeCity(e:ChangeEvent<HTMLInputElement>){
-        setCity(e.target.value)
-    }
-
-    function handleChangeCountry(e:ChangeEvent<HTMLInputElement>){
-        setCountry(e.target.value)
-    }
-
-    function handleChangeZip(e:ChangeEvent<HTMLInputElement>){
-        setZip(e.target.value)
     }
 
     function handleChangeNationality(e:ChangeEvent<HTMLInputElement>){
@@ -87,16 +56,8 @@ function UpdateForm(){
         setFirstLanguage(e.target.value)
     }
 
-    function handleChangeSecondLanguage(e:ChangeEvent<HTMLInputElement>){
-        setSecondLanguage(e.target.value)
-    }
-
     function handleChangeBio(e:ChangeEvent<HTMLInputElement>){
         setBio(e.target.value)
-    }
-
-    function handleChangeEducation(e:ChangeEvent<HTMLInputElement>){
-        setEducation(e.target.value)
     }
 
     function handleChangeProfile(e:ChangeEvent<HTMLSelectElement>){
@@ -115,10 +76,6 @@ function UpdateForm(){
             alert("Invalid Phone Number")
             return
         }
-        if(!checkLandLine()){
-            alert("Invalid Land Line Number")
-            return
-        }
         
         fetch("https://amazing-office-313314.appspot.com/rest/update",
             {method:"PUT", 
@@ -129,7 +86,9 @@ function UpdateForm(){
         .then(data=> {if(!data.ok){
             alert("Something went wrong")
         }else {
+            alert("Update Successful")
             console.log(data);
+            window.location.href = "/myProfile";
         }});
         
     }
@@ -137,14 +96,15 @@ function UpdateForm(){
     function createJson(){
         return JSON.stringify({firstName:firstName1, lastName:lastName1,  
             email:email1, gender:gender1, phoneNumber:phone1,
-            landLine:landLine1, address:address1, secondAddress:secondAddress1,
-            city:city1, country:country1, cp:zip1, nationality:nationality1,
-            firstLanguage:firstLanguage1, secondLanguage:secondLanguage1,
-            description:bio1, educationLevel:education1, perfil:profile1,
+            address:address1, nationality:nationality1,
+            firstLanguage:firstLanguage1,
+            description:bio1, perfil:profile1,
             tokenID:tokenID1 })
     }
 
     return <div className="container">
+        <br/>
+        <br/>
     <form onSubmit={(e:any) => {e.preventDefault()}}>
         <label style={{color: "white"}}>First Name:</label>
         <input type={"text"} value={firstName1} onChange={handleChangeFirstName}/>
@@ -163,33 +123,19 @@ function UpdateForm(){
         <br/>
         <label style={{color: "white"}}>Phone Number:</label>
         <input type={"text"} value={phone1} onChange={handleChangePhone}/>
-        <label style={{color: "white"}}>Land Line Phone Number:</label>
-        <input type={"text"} value={landLine1} onChange={handleChangeLandLine}/>
         <label style={{color: "white"}}>Address:</label>
         <input type={"text"} value={address1} onChange={handleChangeAddress}/>
-        <label style={{color: "white"}}>Second Address:</label>
-        <input type={"text"} value={secondAddress1} onChange={handleChangeSecondAddress}/>
-        <label style={{color: "white"}}>City:</label>
-        <input type={"text"} value={city1} onChange={handleChangeCity}/>
-        <label style={{color: "white"}} >Country:</label>
-        <input type={"text"} value={country1} onChange={handleChangeCountry}/>
-        <label style={{color: "white"}}>Zip Code:</label>
-        <input type={"text"} value={zip1} onChange={handleChangeZip}/>
         <label style={{color: "white"}}>Nationality:</label>
         <input type={"text"} value={nationality1} onChange={handleChangeNationality}/>
-        <label style={{color: "white"}}>Native Language:</label>
+        <label style={{color: "white"}}>Language:</label>
         <input type={"text"} value={firstLanguage1} onChange={handleChangeFirstLanguage}/>
-        <label style={{color: "white"}}>Second Language:</label>
-        <input type={"text"} value={secondLanguage1} onChange={handleChangeSecondLanguage}/>
         <label style={{color: "white"}}>Bio:</label>
         <input type={"text"} value={bio1} height= {50} onChange={handleChangeBio}/>
-        <label style={{color: "white"}}>Education:</label>
-        <input type={"text"} value={education1} onChange={handleChangeEducation}/>
         <label style={{color: "white"}}>Profile Visibility:</label>
         <select name={profile1} onChange={handleChangeProfile}>
             <option value=""></option>
             <option value="Publico">Public</option>
-            <option value="Privado">Privad</option>
+            <option value="Privado">Private</option>
         </select>
     </form>
     <button type="button" onClick={updateUser}>Update</button>

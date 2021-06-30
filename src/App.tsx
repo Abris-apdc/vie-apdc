@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import PersistentDrawerRightNotLoggedIn from './interface/Drawer';
-import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'; 
+import {BrowserRouter as Router, Redirect, Route, useParams} from 'react-router-dom'; 
 import RegisterUser from './resources/RegisterUser';
 import RegisterOrg from './resources/RegisterOrg';
 import RegisterSelect from './resources/RegisterSelect';
@@ -13,6 +13,7 @@ import UpdateForm from './resources/UpdateUser';
 import PersistenDrawerLoggedIn from './interface/DrawerLoggedIn';
 import Profile from './interface/Profile';
 import UpdatePassForm from './resources/UpdatePassword';
+import PublicProfile from './interface/PublicProfile';
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
@@ -22,18 +23,18 @@ import UpdatePassForm from './resources/UpdatePassword';
             <RedirectHome/>
             {isLoggedIn && <PersistenDrawerLoggedIn/>}
             {!isLoggedIn && <PersistentDrawerRightNotLoggedIn/>}
-            <Route path="/Home" component={HomePage}/>
-            <Route path="/About" component={AboutUsPage}/>
-            <Route path="/Register_User" component={RegisterUser}/>
-            <Route path="/Register_Organization" component={RegisterOrg}/>
-            <Route path="/Register" component={RegisterSelect}/>
-            <Route path="/Login" component={LoginForm}/>
-            <Route path="/LoggedIn/Profile" component={Profile}/>
-            <Route path="/LoggedIn/Update" component={UpdateForm}/>
-            <Route path="/LoggedIn/Delete" component={DeleteForm}/>
-            <Route path="/LoggedIn/About" component={AboutUsPage}/>
-            <Route path="/LoggedIn/Logout" component={Logout}/>
-            <Route path="/LoggedIn/Password" component={UpdatePassForm}/>
+            <Route exact path="/home" component={HomePage}/>
+            <Route exact path="/register_user" component={RegisterUser}/>
+            <Route exact path="/register_organization" component={RegisterOrg}/>
+            <Route exact path="/register" component={RegisterSelect}/>
+            <Route exact path="/login" component={LoginForm}/>
+            <Route exact path="/myProfile" component={Profile}/>
+            <Route exact path="/update" component={UpdateForm}/>
+            <Route exact path="/delete" component={DeleteForm}/>
+            <Route exact path="/about" component={AboutUsPage}/>
+            <Route exact path="/logout" component={Logout}/>
+            <Route exact path="/password" component={UpdatePassForm}/>
+            <Route exact path="/profile/:username/" component={Account}/>
           </div>
         </Router>
       );
@@ -42,12 +43,12 @@ import UpdatePassForm from './resources/UpdatePassword';
     function RedirectHome(){
       var redirect;
       var isLoggedIn = localStorage.getItem('tokenID') != null;
-      const inRawPath = window.location.pathname == "/";
+      const inRawPath = window.location.pathname === "/";
       if(inRawPath)
         if(!isLoggedIn)
-          redirect = <Redirect to="/Home"/>
+          redirect = <Redirect to="/home"/>
         else
-          redirect = <Redirect to="/LoggedIn/Feed"/>
+          redirect = <Redirect to="/feed"/>
       return(
         <div>
           {redirect}
@@ -69,14 +70,20 @@ import UpdatePassForm from './resources/UpdatePassword';
 
       localStorage.removeItem('tokenID');
       localStorage.removeItem('username');
+      localStorage.removeItem('role');
 
-      window.location.href="../Home";
+      window.location.href="../home";
 
-      if(localStorage.getItem('hasReloaded') == "nop"){
+      if(localStorage.getItem('hasReloaded') === "nop"){
         window.location.reload();
         localStorage.removeItem('hasReloaded');
       }
       return <div/>
     } 
+
+    function Account() {
+      const account:string = useParams();
+      return PublicProfile(account);
+    }
 
     export default App; 

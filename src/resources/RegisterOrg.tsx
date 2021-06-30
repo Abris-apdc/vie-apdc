@@ -125,7 +125,8 @@ function RegisterOrgForm(){
             .then(response=> {response.json().then(function(parsedData){
                 localStorage.setItem("tokenID", parsedData.tokenID);
                 localStorage.setItem("username", parsedData.username);
-                window.location.href = "/loggedIn/Feed";
+                localStorage.setItem("role", parsedData.role);
+                window.location.href = "/feed";
                 });
             });
         }});

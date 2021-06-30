@@ -65,6 +65,7 @@ function UpdatePassForm(){
         .then(data=> {if(!data.ok){
             alert("Wrong password")
         }else {
+            alert("Update Successful")
             console.log(data);
             window.location.href = "/loggedIn/Profile";
         }});

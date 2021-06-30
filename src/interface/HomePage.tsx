@@ -15,7 +15,7 @@ function HomePage(){
             <span style={{color:"white", fontSize:"35px"}}>&nbsp;by Abris</span>
             <br/>
             <br/>
-            <span style={{color:"white", fontSize:"20px"}}>Ever wanted to be a volunteer but didn't knew where to start?</span>
+            <span style={{color:"white", fontSize:"20px"}}>Ever wanted to be a volunteer but didn't know where to start?</span>
             <br/>
             <br/>
             <span style={{color:"white", fontSize:"20px"}}>Sign up to begin changing the world!</span>

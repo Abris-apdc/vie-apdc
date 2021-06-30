@@ -4,6 +4,7 @@ import React from 'react';
 import clsx from 'clsx';
 import logo from './../logo.svg';  
 import MenuIcon from '@material-ui/icons/Menu';
+import SearchBar from './SearchBar';
 
 const drawerWidth = 240;
 
@@ -80,10 +81,11 @@ export default function PersistenDrawerLoggedIn(){
         <div style={{display:"flex"}}>
             <AppBar position="fixed" className={clsx(classes.appBar, {[classes.appBarShift]: open})}>
                 <Toolbar style={{background:'#1B3651', display: 'flex', justifyContent:'space-between'}}>
-                    <Link href="/LoggedIn/Feed" style={{color: "white"}}> 
+                    <Link href="/feed" style={{color: "white"}}> 
                         <strong>Vie</strong>
                     </Link>
-                    <a href="/LoggedIn/Feed"><img src={logo} alt="logo" width="55px" style={{position:"relative", top:"2px"}}/></a>
+                    <a href="/feed"><img src={logo} alt="logo" width="55px" style={{position:"relative", top:"2px"}}/></a>
+                    <SearchBar/>    
                     <IconButton color="inherit" aria-label="open drawer" edge="end" onClick={menu} className={clsx(open)}>
                         <MenuIcon/>
                     </IconButton>
@@ -102,8 +104,8 @@ export default function PersistenDrawerLoggedIn(){
                 paper: classes.drawerPaper,
                 }}>
                 <List>
-                    {['Feed', 'Profile', 'About'].map((text) => (
-                    <ListItem button key={text} component="a" href={text}>
+                    {['Feed', 'myProfile', 'About'].map((text) => (
+                    <ListItem button key={text} component="a" href={"/"+text}>
                         <ListItemText primary={text} />
                     </ListItem>
                     ))}
@@ -111,7 +113,7 @@ export default function PersistenDrawerLoggedIn(){
                 <Divider/>
                 <List>
                     {['Logout'].map((text) => (
-                    <ListItem button key={text} component="a" href={text}>
+                    <ListItem button key={text} component="a" href={"/"+text}>
                         <ListItemText primary={text} />
                     </ListItem>
                     ))}

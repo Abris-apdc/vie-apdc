@@ -90,6 +90,10 @@ function RegisterForm(){
         return date < new Date();
     }
 
+    function checkUsername(){
+        return username1.includes(" ");
+    }
+
     function registerUser(){
         console.log("Registering User");
         console.log(createJson());
@@ -113,7 +117,11 @@ function RegisterForm(){
             alert("You must be at least 15 years old to create an account")
             return
         }
-        
+        if(checkUsername()){
+            alert("Username cannot contain empty spaces")
+            return
+        }
+
         fetch("https://amazing-office-313314.appspot.com/rest/register",
             {method:"POST", 
             headers:{ 'Accept': 'application/json, text/plain',
@@ -135,6 +143,7 @@ function RegisterForm(){
             .then(response=> {response.json().then(function(parsedData){
                 localStorage.setItem("tokenID", parsedData.tokenID);
                 localStorage.setItem("username", parsedData.username);
+                localStorage.setItem("role", parsedData.role);
                 window.location.href = "/loggedIn/Feed";
                 });
             });
