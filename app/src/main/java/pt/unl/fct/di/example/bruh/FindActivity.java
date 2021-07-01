@@ -101,19 +101,19 @@ public class FindActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String token = preferences.getString("Authentication_Id", "");
-        String username = preferences.getString("Authentication_username", "");
+
 
         clientAPI = clientAPI.getInstance();
 
 
         Logout l = new Logout(
-                username, token
+                 token
         );
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Authentication_Id", "null");
         editor.putString("Authentication_username", "null");
         editor.apply();
-        Toast.makeText(getApplicationContext(), l.getUsername() + "  " + l.getToken(), Toast.LENGTH_SHORT).show();
+
         clientAPI.getRegisterService().doLogout(l).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> r) {

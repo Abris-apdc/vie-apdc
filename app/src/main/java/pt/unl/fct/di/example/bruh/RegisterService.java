@@ -5,6 +5,7 @@ import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.Delete;
 import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
+import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
 import pt.unl.fct.di.example.bruh.requests.ModifyUser;
 import pt.unl.fct.di.example.bruh.requests.Register;
 import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
@@ -36,6 +37,9 @@ public interface RegisterService {
 
     @PUT("/rest/update/")
     Call<String> updateUser(@Body ModifyUser userInfo);
+
+    @PUT("/rest/update/organisation")
+    Call<String> updateOrg(@Body ModifyOrg orgInfo);
 
     @HTTP(method = "DELETE", path = "/rest/delete", hasBody = true)
     Call<String> deleteUser(@Body Delete userInfo);

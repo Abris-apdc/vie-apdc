@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +45,7 @@ public class PerfilFragment extends Fragment {
 
         edit = (Button) view.findViewById(R.id.activity_perfil_edit);
 
-        getUserInfo();
+        getUserInfo(view);
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,20 +60,39 @@ public class PerfilFragment extends Fragment {
         return view;
     }
 
-    protected void getUserInfo() {
+    protected void getUserInfo(View v) {
 
         SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String token = preferences.getString("Authentication_Id", "");
-        String fn = preferences.getString("Authentication_firstName", "");
-        String ln = preferences.getString("Authentication_lastName", "");
+
         String r = preferences.getString("Authentication_role", "");
         String id = preferences.getString("Authentication_username", "");
-        firstName.setText(fn);
-        lastName.setText(ln);
+
         role.setText(r);
         username.setText(id);
+        doRequest(v);
+    }
+
+    private void doRequest(View view) {
+
         clientAPI = clientAPI.getInstance();
 
+        clientAPI.getRegisterService().userInfo(username.getText().toString()).enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> r) {
+                if(r.isSuccessful()) {
+                    firstName.setText(r.body().getFirstName());
+                    lastName.setText(r.body().getLastName());
+
+
+                }else
+                    Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

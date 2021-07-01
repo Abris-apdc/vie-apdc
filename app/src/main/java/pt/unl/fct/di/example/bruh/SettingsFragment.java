@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment {
     private void edit(){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         if (role.equals("ORG")) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyOrgFragment()).commit();
         } else
             fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
     }

@@ -54,7 +54,7 @@ public class DeleteFragment  extends Fragment {
 
         Delete delete = new Delete(
                 username,
-                //password.getText().toString(),
+                password.getText().toString(),
                 token
         );
 

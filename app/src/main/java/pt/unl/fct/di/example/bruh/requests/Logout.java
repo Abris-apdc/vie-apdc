@@ -2,18 +2,13 @@ package pt.unl.fct.di.example.bruh.requests;
 import com.google.gson.annotations.SerializedName;
 public class Logout {
 
-    @SerializedName("username")
-    private String username;
+
     @SerializedName("tokenID")
     private String token;
 
-    public Logout(String username ,String token) {
-        this.username = username;
-        this.token = token;
-    }
+    public Logout(String token) {
 
-    public String getUsername() {
-        return username;
+        this.token = token;
     }
 
     public String getToken() {
