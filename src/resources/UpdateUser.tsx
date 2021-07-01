@@ -1,6 +1,8 @@
+import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
 import './Register.css';
+import PublishIcon from '@material-ui/icons/Publish';
 
 function UpdateForm(){
     const [firstName1, setFirstName] = useState("")
@@ -102,48 +104,74 @@ function UpdateForm(){
             tokenID:tokenID1 })
     }
 
-    return <div className="container">
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
+
+    return <div className="container" style={{transform: "scale(1.20)"}}>
         <br/>
         <br/>
         <br/>
         <br/>
         <br/>
         <br/>
-    <form onSubmit={(e:any) => {e.preventDefault()}}>
-        <label style={{color: "white"}}>First Name:</label>
-        <input type={"text"} value={firstName1} onChange={handleChangeFirstName}/>
-        <label style={{color: "white"}}>Last Name:</label>
-        <input type={"text"} value={lastName1} onChange={handleChangeLastName}/>
-        <label style={{color: "white"}}>Email:</label>
-        <input type={"text"} value={email1} onChange={handleChangeEmail}/>
-        <label style={{color: "white"}}>Gender:</label>
-        <select name={gender1} onChange={handleChangeGender}>
-            <option value=""></option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Non-Binary">Non-Binary</option>
-            <option value="Other">Other</option>
-        </select>
         <br/>
-        <label style={{color: "white"}}>Phone Number:</label>
-        <input type={"text"} value={phone1} onChange={handleChangePhone}/>
-        <label style={{color: "white"}}>Address:</label>
-        <input type={"text"} value={address1} onChange={handleChangeAddress}/>
-        <label style={{color: "white"}}>Nationality:</label>
-        <input type={"text"} value={nationality1} onChange={handleChangeNationality}/>
-        <label style={{color: "white"}}>Language:</label>
-        <input type={"text"} value={firstLanguage1} onChange={handleChangeFirstLanguage}/>
-        <label style={{color: "white"}}>Bio:</label>
-        <input type={"text"} value={bio1} height= {50} onChange={handleChangeBio}/>
-        <label style={{color: "white"}}>Profile Visibility:</label>
-        <select name={profile1} onChange={handleChangeProfile}>
-            <option value=""></option>
-            <option value="Publico">Public</option>
-            <option value="Privado">Private</option>
-        </select>
-    </form>
-    <button type="button" onClick={updateUser}>Update</button>
-</div>
+        <div style={{display:"flex", justifyContent:"center"}}>
+            <Box bgcolor='#1B3651' width={1} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                <form onSubmit={(e:any) => {e.preventDefault()}}>
+                    <label style={{color: "white"}}>First Name:</label>
+                    <input type={"text"} value={firstName1} onChange={handleChangeFirstName}/>
+                    <label style={{color: "white"}}>Last Name:</label>
+                    <input type={"text"} value={lastName1} onChange={handleChangeLastName}/>
+                    <label style={{color: "white"}}>Email:</label>
+                    <input type={"text"} value={email1} onChange={handleChangeEmail}/>
+                    <label style={{color: "white"}}>Gender:</label>´
+                    <br/>
+                    <select name={gender1} onChange={handleChangeGender}>
+                        <option value=""></option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-Binary">Non-Binary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <br/>
+                    <label style={{color: "white"}}>Phone Number:</label>
+                    <input type={"text"} value={phone1} onChange={handleChangePhone}/>
+                    <label style={{color: "white"}}>Address:</label>
+                    <input type={"text"} value={address1} onChange={handleChangeAddress}/>
+                    <label style={{color: "white"}}>Nationality:</label>
+                    <input type={"text"} value={nationality1} onChange={handleChangeNationality}/>
+                    <label style={{color: "white"}}>Language:</label>
+                    <input type={"text"} value={firstLanguage1} onChange={handleChangeFirstLanguage}/>
+                    <label style={{color: "white"}}>Bio:</label>
+                    <input type={"text"} value={bio1} height= {50} onChange={handleChangeBio}/>
+                    <label style={{color: "white"}}>Profile Visibility:</label>
+                    <br/>
+                    <select name={profile1} onChange={handleChangeProfile}>
+                        <option value=""></option>
+                        <option value="Publico">Public</option>
+                        <option value="Privado">Private</option>
+                    </select>
+                </form>
+                <br/>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<PublishIcon/>}
+                    onClick={updateUser}>
+                    Update
+                </Button>
+            </Box>
+        </div>
+    </div>
 
 }
 

@@ -1,6 +1,8 @@
+import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
 import './Register.css';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 function DeleteForm(){
@@ -39,24 +41,49 @@ function DeleteForm(){
         setPassword(e.target.value)
     }
 
-    return <div>
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
+    return <div style={{transform: "scale(1.50)"}}>
             <br/>
             <br/>
             <br/>
             <br/>
             <br/>
             <br/>
-            <span style={{color:"white", fontSize:"20px"}}>This will delete your account,</span>
-            <br/>
-            <span style={{color:"white", fontSize:"20px"}}>if really want to continue confirm your password and press the button below.</span>
             <br/>
             <br/>
             <br/>
-            <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
             <br/>
-            <br/>
-            <button type="button" onClick={deleteUser}>Delete</button>
-</div>
+            <div style={{display:"flex", justifyContent:"center"}}>
+                <Box bgcolor='#1B3651' width={2/5} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                    <span style={{color:"white", fontSize:"20px"}}>This will delete your account.</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"20px"}}>If really want to continue confirm your password and press the button below.</span>
+                    <br/>
+                    <br/>
+                    <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
+                    <br/>
+                    <br/>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        href="/update"
+                        className={classes.button}
+                        onClick={deleteUser}
+                        startIcon={<DeleteIcon/>}>
+                        Delete
+                    </Button>
+                </Box>
+            </div>
+    </div>
 
 }
 

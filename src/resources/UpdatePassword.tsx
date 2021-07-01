@@ -1,6 +1,8 @@
+import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
 import './Register.css';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
 function UpdatePassForm(){
     const [currPassword1, setCurrPassword] = useState("")
@@ -77,21 +79,47 @@ function UpdatePassForm(){
             confirmation:confirmation1, tokenID:localStorage.getItem('tokenID')})
     }
 
-    return <div className="container">
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
+    return <div className="container" style={{transform: "scale(1.50)"}}>
             <br/>
             <br/>
             <br/>
             <br/>
             <br/>
-            <form onSubmit={(e:any) => {e.preventDefault()}}>
-                <label style={{color: "white"}}>Current Password:</label>
-                <input type={"password"} value={currPassword1} onChange={handleChangeCurrPassword} required = {true}/>
-                <label style={{color: "white"}}>New Password:</label>
-                <input type={"password"} value={newPassword1} onChange={handleChangeNewPassword} required = {true}/>
-                <label style={{color: "white"}}>Confirm Password:</label>
-                <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
-            </form>
-            <button type="button" onClick={updatePassword}>Change Password</button>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div style={{display:"flex", justifyContent:"center"}}>
+                <Box bgcolor='#1B3651' width="100%" textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                <form onSubmit={(e:any) => {e.preventDefault()}}>
+                    <label style={{color: "white"}}>Current Password:</label>
+                    <input type={"password"} value={currPassword1} onChange={handleChangeCurrPassword} required = {true}/>
+                    <label style={{color: "white"}}>New Password:</label>
+                    <input type={"password"} value={newPassword1} onChange={handleChangeNewPassword} required = {true}/>
+                    <label style={{color: "white"}}>Confirm Password:</label>
+                    <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
+                </form>
+                <br/>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={updatePassword}
+                    className={classes.button}
+                    startIcon={<VpnKeyIcon/>}>
+                    Change Password
+                </Button>
+                </Box>
+            </div>
         </div>
 
 }

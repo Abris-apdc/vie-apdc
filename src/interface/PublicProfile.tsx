@@ -38,9 +38,14 @@ function PublicProfile(username: string){
 
     if (isLoading) {
         return <div style={{color:"white"}} className="App">
-                    <br/>Loading...<br/>
-                    <CircularProgress style={{color:"white"}}/>
-                </div>;
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>Loading...<br/>
+            <CircularProgress style={{color:"white"}}/>
+        </div>;
     }
 
     if(gotError){

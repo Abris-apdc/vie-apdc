@@ -34,6 +34,11 @@ function Profile(){
 
     if (isLoading) {
         return <div style={{color:"white"}} className="App">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         <br/>Loading...<br/>
         <CircularProgress style={{color:"white"}}/>
     </div>;
