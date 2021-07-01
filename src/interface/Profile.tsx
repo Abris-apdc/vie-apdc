@@ -42,6 +42,11 @@ function Profile(){
     return(
         <div style={{transform: "2000px"}}>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <span style={{color:"white"}}>{localStorage.getItem('username')}'s profile.</span>
             <br/>
             <span style={{color:"white"}}>Name: {firstName}&nbsp;{lastName}</span>

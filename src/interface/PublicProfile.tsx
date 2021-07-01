@@ -61,6 +61,11 @@ function PublicProfile(username: string){
     return(
         <div>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <span style={{color:"white"}}>Username: {user}</span>
             <br/>
             <span style={{color:"white"}}>Name: {firstName}&nbsp;{lastName}</span>

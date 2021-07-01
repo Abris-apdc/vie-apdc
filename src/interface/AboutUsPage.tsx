@@ -7,6 +7,10 @@ function AboutUsPage(){
         <div>
             <br/>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <div style={{display:"flex", justifyContent:"center"}}>
                 <Box bgcolor='#1B3651' width={2/4} textAlign="justify" p={2} borderRadius="borderRadius" boxShadow={2}>
                     <span style={{color:"white", fontSize:"50px", display:"flex", justifyContent:"flex-start"}}><strong>Welcome to Vie!</strong></span>

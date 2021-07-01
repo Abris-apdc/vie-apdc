@@ -146,7 +146,7 @@ function RegisterForm(){
                 localStorage.setItem("tokenID", parsedData.tokenID);
                 localStorage.setItem("username", parsedData.username);
                 localStorage.setItem("role", parsedData.role);
-                window.location.href = "/loggedIn/Feed";
+                window.location.href = "/feed";
                 });
             });
         }});
@@ -178,34 +178,38 @@ function RegisterForm(){
         <br/>
         <br/>
         <br/>
-        <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
-            <form onSubmit={(e:any) => {e.preventDefault()}}>
-                <label style={{color: "white"}}>First Name:</label>
-                <input type={"text"} value={firstName1} style={{width: "180px"}} onChange={handleChangeFirstName} required = {true}/>
-                <label style={{color: "white"}}>Last Name:</label>
-                <input type={"text"} value={lastName1} style={{width: "180px"}} onChange={handleChangeLastName} required = {true}/>
-                <label style={{color: "white"}}>Username:</label> 
-                <input type={"text"} value={username1} style={{width: "180px"}} onChange={handleChangeUsername} required = {true}/>
-                <label style={{color: "white"}}>Email:</label>
-                <input type={"text"} value={email1} style={{width: "180px"}} onChange={handleChangeEmail} required = {true}/>
-                <label style={{color: "white"}}>Password:</label>
-                <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
-                <label style={{color: "white"}}>Confirm Password:</label>
-                <input type={"password"} value={confirmation1} style={{width: "180px"}} onChange={handleChangeConfirmation} required = {true}/>
-                <label style={{color: "white"}}>Birthday:</label>
-                <input type={"date"} style={{width: "180px"}} onChange={handleChangeDate} required = {true}/>
-            </form>
-            <br/>
-            <Button
-                href="/register"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                startIcon={<CheckCircleIcon/>}
-                onClick={registerUser}>
-                Register
-            </Button>
-        </Box>
+        <br/>
+        <br/>
+        <br/>
+        <div style={{display:"flex", justifyContent:"center"}}>
+            <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                <form onSubmit={(e:any) => {e.preventDefault()}}>
+                    <label style={{color: "white"}}>First Name:</label>
+                    <input type={"text"} value={firstName1} onChange={handleChangeFirstName} required = {true}/>
+                    <label style={{color: "white"}}>Last Name:</label>
+                    <input type={"text"} value={lastName1} onChange={handleChangeLastName} required = {true}/>
+                    <label style={{color: "white"}}>Username:</label> 
+                    <input type={"text"} value={username1} onChange={handleChangeUsername} required = {true}/>
+                    <label style={{color: "white"}}>Email:</label>
+                    <input type={"text"} value={email1} onChange={handleChangeEmail} required = {true}/>
+                    <label style={{color: "white"}}>Password:</label>
+                    <input type={"password"} value={password1} onChange={handleChangePassword} required = {true}/>
+                    <label style={{color: "white"}}>Confirm Password:</label>
+                    <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
+                    <label style={{color: "white"}}>Birthday:</label>
+                    <input type={"date"} onChange={handleChangeDate} required = {true}/>
+                </form>
+                <br/>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<CheckCircleIcon/>}
+                    onClick={registerUser}>
+                    Register
+                </Button>
+            </Box>
+        </div>
     </div>
 
 }

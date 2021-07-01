@@ -105,6 +105,10 @@ function UpdateForm(){
     return <div className="container">
         <br/>
         <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     <form onSubmit={(e:any) => {e.preventDefault()}}>
         <label style={{color: "white"}}>First Name:</label>
         <input type={"text"} value={firstName1} onChange={handleChangeFirstName}/>

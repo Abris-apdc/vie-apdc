@@ -73,24 +73,29 @@ function LoginForm(){
         <br/>
         <br/>
         <br/>
-        <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
-            <form onSubmit={(e:any) => {e.preventDefault()}}>
-                <label style={{color: "white"}}>Username:</label> 
-                <input type={"text"} value={username1} style={{width: "180px"}} onChange={handleChangeUsername} required = {true}/>
-                <label style={{color: "white"}}>Password:</label>
-                <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
-            </form>
-            <br/> 
-            <Button
-                onClick={loginUser}
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                startIcon={<ArrowRightIcon/>}
-            >
-                Login
-            </Button>
-        </Box>
+        <br/>
+        <br/>
+        <br/>
+        <div style={{display:"flex", justifyContent:"center"}}>
+            <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                <form onSubmit={(e:any) => {e.preventDefault()}}>
+                    <label style={{color: "white"}}>Username:</label> 
+                    <input type={"text"} value={username1}  onChange={handleChangeUsername} required = {true}/>
+                    <label style={{color: "white"}}>Password:</label>
+                    <input type={"password"} value={password1} onChange={handleChangePassword} required = {true}/>
+                </form>
+                <br/> 
+                <Button
+                    onClick={loginUser}
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<ArrowRightIcon/>}
+                >
+                    Login
+                </Button>
+            </Box>
+        </div>
     </div>
 }
 

@@ -78,16 +78,21 @@ function UpdatePassForm(){
     }
 
     return <div className="container">
-    <form onSubmit={(e:any) => {e.preventDefault()}}>
-        <label style={{color: "white"}}>Current Password:</label>
-        <input type={"password"} value={currPassword1} onChange={handleChangeCurrPassword} required = {true}/>
-        <label style={{color: "white"}}>New Password:</label>
-        <input type={"password"} value={newPassword1} onChange={handleChangeNewPassword} required = {true}/>
-        <label style={{color: "white"}}>Confirm Password:</label>
-        <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
-    </form>
-    <button type="button" onClick={updatePassword}>Change Password</button>
-</div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <form onSubmit={(e:any) => {e.preventDefault()}}>
+                <label style={{color: "white"}}>Current Password:</label>
+                <input type={"password"} value={currPassword1} onChange={handleChangeCurrPassword} required = {true}/>
+                <label style={{color: "white"}}>New Password:</label>
+                <input type={"password"} value={newPassword1} onChange={handleChangeNewPassword} required = {true}/>
+                <label style={{color: "white"}}>Confirm Password:</label>
+                <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
+            </form>
+            <button type="button" onClick={updatePassword}>Change Password</button>
+        </div>
 
 }
 

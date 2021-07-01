@@ -159,35 +159,40 @@ function RegisterOrgForm(){
                 <br/>
                 <br/>
                 <br/>
-                <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
-                    <form onSubmit={(e:any) => {e.preventDefault()}}>
-                        <label style={{color: "white"}}>Organization Name:</label>
-                        <input type={"text"} value={name1} style={{width: "180px"}} onChange={handleChangeName} required = {true}/>
-                        <label style={{color: "white"}}>Owner's Name:</label>
-                        <input type={"text"} value={owner1} style={{width: "180px"}} onChange={handleChangeOwner} required = {true}/>
-                        <label style={{color: "white"}}>Email:</label>
-                        <input type={"text"} value={email1} style={{width: "180px"}} onChange={handleChangeEmail} required = {true}/>
-                        <label style={{color: "white"}}>Password:</label>
-                        <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
-                        <label style={{color: "white"}}>Confirm Password:</label>
-                        <input type={"password"} value={confirmation1} style={{width: "180px"}} onChange={handleChangeConfirmation} required = {true}/>
-                        <label style={{color: "white"}}>CardID:</label>
-                        <input type={"text"} value={id1} style={{width: "180px"}} onChange={handleChangeID} required = {true}/>
-                        <label style={{color: "white"}}>Address:</label>
-                        <input type={"text"} value={address1} style={{width: "180px"}} onChange={handleChangeAddress} required = {true}/>
-                        <label style={{color: "white"}}>Service Type:</label>
-                        <input type={"text"} value={serviceType1} style={{width: "180px"}} onChange={handleChangeServiceType} required = {true}/>
-                    </form><br/>
-                    <Button
-                        href="/register"
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        startIcon={<CheckCircleIcon/>}
-                        onClick={registerOrganisation}>
-                        Register
-                    </Button>
-                </Box>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div style={{display:"flex", justifyContent:"center"}}>
+                    <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                        <form onSubmit={(e:any) => {e.preventDefault()}}>
+                            <label style={{color: "white"}}>Organization Name:</label>
+                            <input type={"text"} value={name1} onChange={handleChangeName} required = {true}/>
+                            <label style={{color: "white"}}>Owner's Name:</label>
+                            <input type={"text"} value={owner1} onChange={handleChangeOwner} required = {true}/>
+                            <label style={{color: "white"}}>Email:</label>
+                            <input type={"text"} value={email1} onChange={handleChangeEmail} required = {true}/>
+                            <label style={{color: "white"}}>Password:</label>
+                            <input type={"password"} value={password1} onChange={handleChangePassword} required = {true}/>
+                            <label style={{color: "white"}}>Confirm Password:</label>
+                            <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
+                            <label style={{color: "white"}}>CardID:</label>
+                            <input type={"text"} value={id1} onChange={handleChangeID} required = {true}/>
+                            <label style={{color: "white"}}>Address:</label>
+                            <input type={"text"} value={address1} onChange={handleChangeAddress} required = {true}/>
+                            <label style={{color: "white"}}>Service Type:</label>
+                            <input type={"text"} value={serviceType1} onChange={handleChangeServiceType} required = {true}/>
+                        </form><br/>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            startIcon={<CheckCircleIcon/>}
+                            onClick={registerOrganisation}>
+                            Register
+                        </Button>
+                    </Box>
+                </div>
             </div>
 }
 
