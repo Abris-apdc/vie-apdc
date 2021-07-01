@@ -1,5 +1,6 @@
 import { Box, Button, createStyles, Link, makeStyles, Theme, Typography } from '@material-ui/core';
 import React from 'react';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 function HomePage(){
     const useStyles = makeStyles((theme: Theme) =>
@@ -36,6 +37,7 @@ function HomePage(){
                         variant="contained"
                         color="primary"
                         className={classes.button}
+                        startIcon={<ArrowRightIcon/>}
                     >
                         Create an account
                     </Button>

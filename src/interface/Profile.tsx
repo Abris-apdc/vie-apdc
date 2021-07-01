@@ -1,5 +1,10 @@
+import { Button, CircularProgress, createStyles, makeStyles, Theme } from '@material-ui/core';
 import axios from 'axios';
 import React, { useState } from 'react';
+import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 var firstName: string;
 var lastName: string;
@@ -16,8 +21,22 @@ function Profile(){
         setLoading(false);
     })
 
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
+
     if (isLoading) {
-        return <div style={{color:"white"}} className="App"><br/>Loading...</div>;
+        return <div style={{color:"white"}} className="App">
+        <br/>Loading...<br/>
+        <CircularProgress style={{color:"white"}}/>
+    </div>;
     }
 
     return(
@@ -30,11 +49,44 @@ function Profile(){
             <span style={{color:"white"}}>Role: {role}</span>
             <br/>
             <br/>
-            <a href="/update"><button style={{padding: "15px 47px",  fontSize:"15px"}}>Update Info</button></a>
-            <a href="/delete"><button style={{padding: "15px 30px",  fontSize:"15px"}}>Delete Account</button></a>
+            <Button
+                variant="contained"
+                color="primary"
+                href={"/profile/"+localStorage.getItem('username')}
+                className={classes.button}
+                startIcon={<VisibilityIcon/>}>
+                Check how your profile looks to public eye!
+            </Button>
             <br/>
-            <a href="/password"><button style={{padding: "15px 55px",  fontSize:"15px"}}>Update Password</button></a>
-            <a href={"/profile/"+localStorage.getItem('username')}><button style={{padding: "15px 30px",  fontSize:"15px"}}>See Your Public Profile!</button></a>
+            <Button
+                variant="contained"
+                color="primary"
+                href="/update"
+                className={classes.button}
+                style={{width: "210px"}}
+                startIcon={<InfoIcon/>}>
+                update Info
+            </Button>
+            <br/>
+            <Button
+                variant="contained"
+                color="primary"
+                href="/password"
+                style={{width: "210px"}}
+                className={classes.button}
+                startIcon={<VpnKeyIcon/>}>
+                change password
+            </Button>
+            <br/>
+            <Button
+                variant="contained"
+                color="primary"
+                href="/delete"
+                style={{width: "210px"}}
+                className={classes.button}
+                startIcon={<DeleteIcon/>}>
+                Delete account
+            </Button>
         </div>
     )
 }

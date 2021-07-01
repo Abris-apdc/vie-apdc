@@ -1,6 +1,8 @@
+import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
 import { Redirect } from "react-router-dom";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import './Register.css';
 
 function RegisterForm(){
@@ -160,25 +162,51 @@ function RegisterForm(){
             confirmation:confirmation1, year:year1, month:month1, day:day1})
     }
 
-    return <div className="container">
-    <form onSubmit={(e:any) => {e.preventDefault()}}>
-        <label style={{color: "white"}}>First Name:</label>
-        <input type={"text"} value={firstName1} onChange={handleChangeFirstName} required = {true}/>
-        <label style={{color: "white"}}>Last Name:</label>
-        <input type={"text"} value={lastName1} onChange={handleChangeLastName} required = {true}/>
-        <label style={{color: "white"}}>Username:</label> 
-        <input type={"text"} value={username1} onChange={handleChangeUsername} required = {true}/>
-        <label style={{color: "white"}}>Email:</label>
-        <input type={"text"} value={email1} onChange={handleChangeEmail} required = {true}/>
-        <label style={{color: "white"}}>Password:</label>
-        <input type={"password"} value={password1} onChange={handleChangePassword} required = {true}/>
-        <label style={{color: "white"}}>Confirm Password:</label>
-        <input type={"password"} value={confirmation1} onChange={handleChangeConfirmation} required = {true}/>
-        <label style={{color: "white"}}>Birthday:</label>
-        <input type={"date"} onChange={handleChangeDate} required = {true}/>
-    </form>
-    <button type="button" onClick={registerUser}>Register</button>
-</div>
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
+    return <div className="container" style={{transform: "scale(1.35)"}}>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+            <form onSubmit={(e:any) => {e.preventDefault()}}>
+                <label style={{color: "white"}}>First Name:</label>
+                <input type={"text"} value={firstName1} style={{width: "180px"}} onChange={handleChangeFirstName} required = {true}/>
+                <label style={{color: "white"}}>Last Name:</label>
+                <input type={"text"} value={lastName1} style={{width: "180px"}} onChange={handleChangeLastName} required = {true}/>
+                <label style={{color: "white"}}>Username:</label> 
+                <input type={"text"} value={username1} style={{width: "180px"}} onChange={handleChangeUsername} required = {true}/>
+                <label style={{color: "white"}}>Email:</label>
+                <input type={"text"} value={email1} style={{width: "180px"}} onChange={handleChangeEmail} required = {true}/>
+                <label style={{color: "white"}}>Password:</label>
+                <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
+                <label style={{color: "white"}}>Confirm Password:</label>
+                <input type={"password"} value={confirmation1} style={{width: "180px"}} onChange={handleChangeConfirmation} required = {true}/>
+                <label style={{color: "white"}}>Birthday:</label>
+                <input type={"date"} style={{width: "180px"}} onChange={handleChangeDate} required = {true}/>
+            </form>
+            <br/>
+            <Button
+                href="/register"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<CheckCircleIcon/>}
+                onClick={registerUser}>
+                Register
+            </Button>
+        </Box>
+    </div>
 
 }
 

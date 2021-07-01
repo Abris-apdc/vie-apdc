@@ -1,5 +1,7 @@
+import { Button, CircularProgress, createStyles, makeStyles, Theme } from '@material-ui/core';
 import axios from 'axios';
 import React, { useState } from 'react';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
 var firstName: string;
 var lastName: string;
@@ -24,8 +26,21 @@ function PublicProfile(username: string){
             setError(true);
         })  
 
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+        button: {
+        margin: theme.spacing(1),
+        },
+    }),
+    );
+
+    const classes = useStyles();
+
     if (isLoading) {
-        return <div style={{color:"white"}} className="App"><br/>Loading...</div>;
+        return <div style={{color:"white"}} className="App">
+                    <br/>Loading...<br/>
+                    <CircularProgress style={{color:"white"}}/>
+                </div>;
     }
 
     if(gotError){
@@ -34,7 +49,14 @@ function PublicProfile(username: string){
 
     var isLoggedIn = <p/>;
     if(localStorage.getItem('username') === user)
-        isLoggedIn = <a href="/myProfile"><button style={{padding: "12px 20px",  fontSize:"15px"}}>Go Back</button></a>;
+        isLoggedIn = <Button
+        variant="contained"
+        color="primary"
+        href="/myProfile"
+        className={classes.button}
+        startIcon={<ArrowLeftIcon/>}>
+        go back
+    </Button>;  
 
     return(
         <div>
