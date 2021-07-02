@@ -58,6 +58,9 @@ public class RegisterResource {
 				List<Value<String>> following = new ArrayList<Value<String>>();
 				following.add(StringValue.of("test"));
 				
+				List<Value<String>> routes = new ArrayList<Value<String>>();
+				routes.add(StringValue.of("test"));
+				
 				user = Entity.newBuilder(userKey)
 						.set("user_name", data.getUsername())
 						.set("user_firstName", data.getFirstName())
@@ -74,6 +77,7 @@ public class RegisterResource {
 						.set("user_following", 0)
 						.set("user_followers_list", followers)
 						.set("user_followers", 0)
+						.set("user_routes_list", routes)
 						.build();
 				txn.add(user);
 
@@ -158,6 +162,8 @@ public class RegisterResource {
 			else {
 				List<Value<String>> followers = new LinkedList<Value<String>>();
 				List<Value<String>> follows = new LinkedList<Value<String>>();
+				List<Value<String>> routes = new ArrayList<Value<String>>();
+				routes.add(StringValue.of("test"));
 				
 				
 				org = Entity.newBuilder(orgKey)
@@ -181,6 +187,7 @@ public class RegisterResource {
 						.set("org_following_list", ListValue.of(follows))
 						.set("org_following", 0)
 						.set("org_followers_list", ListValue.of(followers))
+						.set("org_routes_list", routes)
 						.set("org_followers", 0)
 						.set("org_tokenID", UUID.randomUUID().toString())
 						.build();
