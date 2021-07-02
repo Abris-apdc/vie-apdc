@@ -89,7 +89,6 @@ public class RegisterOrganisationActivity extends AppCompatActivity {
                         owner.getText().toString(),
                         email.getText().toString(),
                         password.getText().toString(),
-                        confirmation.getText().toString(),
                         id.getText().toString(),
                         address.getText().toString(),
                         serviceType.getText().toString()

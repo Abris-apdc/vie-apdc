@@ -1,5 +1,6 @@
 package pt.unl.fct.di.example.bruh;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -43,6 +44,7 @@ public class ChangeRoleAdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 changeRole();
+                changeScreen();
             }
         });
         return view;
@@ -76,6 +78,12 @@ public class ChangeRoleAdminFragment extends Fragment {
 
     public void setUsername(String username){
         this.username = username;
+    }
+
+    private void changeScreen() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+
+        startActivity(intent);
     }
 
     private void  changeRole() {

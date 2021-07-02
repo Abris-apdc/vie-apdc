@@ -132,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
                         lastName.getText().toString(),
                         username.getText().toString(),
                         password.getText().toString(),
-                        confirmation.getText().toString(),
                         email.getText().toString(),
                         fYear,
                         fMonth,

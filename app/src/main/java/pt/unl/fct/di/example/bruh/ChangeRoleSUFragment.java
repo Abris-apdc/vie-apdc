@@ -1,5 +1,6 @@
 package pt.unl.fct.di.example.bruh;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -43,7 +44,10 @@ public class ChangeRoleSUFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 changeRole();
+                changeScreen();
             }
+
+
         });
         return view;
     }
@@ -78,6 +82,11 @@ public class ChangeRoleSUFragment extends Fragment {
         this.username = username;
     }
 
+    private void changeScreen() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+
+        startActivity(intent);
+    }
     private void  changeRole() {
         SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String token = preferences.getString("Authentication_Id", "");

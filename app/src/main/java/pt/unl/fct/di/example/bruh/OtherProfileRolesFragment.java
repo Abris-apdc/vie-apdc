@@ -62,7 +62,6 @@ public class OtherProfileRolesFragment  extends Fragment {
                     fn.setText(r.body().getFirstName());
                     ln.setText(r.body().getLastName());
                     role.setText(r.body().getRole());
-
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
             }
@@ -89,7 +88,7 @@ public class OtherProfileRolesFragment  extends Fragment {
             su.setUsername(profile.getText().toString());
             fragmentManager.beginTransaction().replace(R.id.fragment_container, su).commit();
         }
-        
+
     }
 
 

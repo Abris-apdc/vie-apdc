@@ -17,9 +17,6 @@ public class Register {
     @SerializedName("password")
     private String password;
 
-    @SerializedName("confirmation")
-    private String confirmation;
-
     @SerializedName("email")
     private String email;
 
@@ -34,13 +31,12 @@ public class Register {
 
 
 
-    public Register(String firstname, String lastName,String username, String password, String confirmation, String email, String year,String month, String day) {
+    public Register(String firstname, String lastName,String username, String password, String email, String year,String month, String day) {
 
         this.firstname = firstname;
        this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.confirmation = confirmation;
         this.email = email;
         this.year = year;
         this.month = month;
@@ -53,10 +49,6 @@ public class Register {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getConfirmation() {
-        return confirmation;
     }
 
     public String getEmail() {
