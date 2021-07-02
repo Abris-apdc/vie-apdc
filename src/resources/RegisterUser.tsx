@@ -159,7 +159,7 @@ function RegisterForm(){
     function createJson(){
         return JSON.stringify({firstName:firstName1, lastName:lastName1,  
             username:username1, email:email1, password:password1, 
-            confirmation:confirmation1, year:year1, month:month1, day:day1})
+            year:year1, month:month1, day:day1})
     }
 
     const useStyles = makeStyles((theme: Theme) =>

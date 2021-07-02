@@ -140,7 +140,7 @@ function RegisterOrgForm(){
 
     function createJson(){
         return JSON.stringify({name:name1, owner:owner1,  
-            email:email1, password:password1, confirmation:confirmation1, 
+            email:email1, password:password1,
             id:id1, address:address1, serviceType:serviceType1})
     }
 
