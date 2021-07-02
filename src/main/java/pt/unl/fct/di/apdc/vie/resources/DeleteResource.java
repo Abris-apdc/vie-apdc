@@ -28,8 +28,8 @@ import pt.unl.fct.di.apdc.vie.util.DeleteData;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class DeleteResource {
 
-	private static final String USER = "USER";
-	private static final String ORG = "ORG";
+	private static final String SU = "SU";
+	//private static final String ORG = "ORG";
 	
 	private static final Logger LOG = Logger.getLogger(DeleteResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
@@ -46,19 +46,19 @@ public class DeleteResource {
 	public Response removeSelf(DeleteData data)  {
 		Transaction txn = datastore.newTransaction();
 		try {
-			boolean isUser = true;
-			if(data.getUsername().contains("@"))
-				isUser = false;
-			Key userKey;
-			if(isUser)
-				userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
-			else
-				userKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getUsername());
+			//boolean isUser = true;
+			//if(data.getUsername().contains("@"))
+				//isUser = false;
+			//Key userKey;
+			//if(isUser)
+			
+			//else
+				//userKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getUsername());
 			
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
 			
-			Entity logged = txn.get(tokenKey);
-			long end = logged.getLong("token_end_time");
+			Entity token = txn.get(tokenKey);
+			long end = token.getLong("token_end_time");
 			
 			//o token expirou
 			if(end <  System.currentTimeMillis()) {
@@ -67,13 +67,21 @@ public class DeleteResource {
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
 			
-			Entity account = txn.get(userKey);
-			
+			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
+			Entity account = txn.get(accountKey);
+
 			String hashedPWD;
-			if(isUser)
-				hashedPWD = account.getString("user_pwd");
-			else
-				hashedPWD = account.getString("org_pwd");
+			//if(isUser)
+			hashedPWD = account.getString("account_pwd");
+			//else
+			//hashedPWD = account.getString("org_pwd");
+			
+			if(token.getString("token_role").equals(SU)) {
+				//se ele for SU pode apagar qq conta
+				txn.delete(accountKey);
+				txn.commit();
+				return Response.ok(g.toJson("Account deleted.")).build();
+			}
 			
 			//pass errada
 			if(!hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
@@ -81,22 +89,23 @@ public class DeleteResource {
 				return Response.status(Status.FORBIDDEN).entity("Wrong pass.").build();
 			}
 			
-			if (logged.getString("token_role").equals(USER) && logged.getString("token_username").equals(data.getUsername())) {
+			if (token.getString("token_username").equals(data.getUsername())) {
+				//ele tenta remover-se a si proprio
 				txn.delete(tokenKey);
-				txn.delete(userKey);
+				txn.delete(accountKey);
 				txn.commit();
-				return Response.ok(g.toJson("User deleted.")).build();
+				return Response.ok(g.toJson("Your account was deleted.")).build();
 				
 			} 
-			else if (logged.getString("token_role").equals(ORG) && logged.getString("token_username").equals(data.getUsername())) {
+			/*else if (logged.getString("token_role").equals(ORG) && logged.getString("token_username").equals(data.getUsername())) {
 				txn.delete(tokenKey);
 				txn.delete(userKey);
 				txn.commit();
 				return Response.ok().entity("Organization deleted.").build();
-			}
+			}*/
 			else {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("Attempt to remove user failed.").build();
+				return Response.status(Status.FORBIDDEN).entity("Attempt to remove account failed.").build();
 			}
 		} finally {
 

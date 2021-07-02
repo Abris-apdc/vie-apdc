@@ -42,7 +42,7 @@ public class RegisterResource {
 	public Response doRegistration(UserRegisterData data) throws EntityNotFoundException {
 		LOG.fine("Attempt to register user: " + data.getUsername());		
 		Transaction txn = datastore.newTransaction();
-		Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
+		Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
 
 		try {
 			Entity user = txn.get(userKey);
@@ -54,30 +54,30 @@ public class RegisterResource {
 			else {
 				LocalDate date = LocalDate.of(Integer.parseInt(data.getYear()), Integer.parseInt(data.getMonth()), Integer.parseInt(data.getDay()));
 				List<Value<String>> followers = new ArrayList<Value<String>>();
-				followers.add( StringValue.of("test"));
+				//followers.add( StringValue.of("test"));
 				List<Value<String>> following = new ArrayList<Value<String>>();
-				following.add(StringValue.of("test"));
+				//following.add(StringValue.of("test"));
 				
 				List<Value<String>> routes = new ArrayList<Value<String>>();
 				routes.add(StringValue.of("test"));
 				
 				user = Entity.newBuilder(userKey)
-						.set("user_name", data.getUsername())
-						.set("user_firstName", data.getFirstName())
-						.set("user_lastName", data.getLastName())
-						.set("user_pwd", DigestUtils.sha512Hex(data.getPassword()))
-						.set("user_email", data.getEmail())
-						.set("user_birthDay", date.toString())
-						.set("user_perfil", "Public")
-						.set("user_role", "USER")
-						.set("user_state", "ENABLE")
-						.set("user_creation_time", Timestamp.now())
+						.set("account_name", data.getUsername())
+						.set("account_firstName", data.getFirstName())
+						.set("account_lastName", data.getLastName())
+						.set("account_pwd", DigestUtils.sha512Hex(data.getPassword()))
+						.set("account_email", data.getEmail())
+						.set("account_birthDay", date.toString())
+						.set("account_perfil", "Public")
+						.set("account_role", "USER")
+						.set("account_state", "ENABLE")
+						.set("account_creation_time", Timestamp.now())
 						//.set("user_tokenID", UUID.randomUUID().toString())
-						.set("user_following_list", following)
-						.set("user_following", 0)
-						.set("user_followers_list", followers)
-						.set("user_followers", 0)
-						.set("user_routes_list", routes)
+						.set("account_following_list", following)
+						.set("account_following", 0)
+						.set("account_followers_list", followers)
+						.set("account_followers", 0)
+						.set("account_routes_list", routes)
 						.build();
 				txn.add(user);
 
@@ -100,7 +100,7 @@ public class RegisterResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doOrganisationRegistration(OrgRegisterData data) throws EntityNotFoundException {
 		
-		if (data.getName() == "")
+		/*if (data.getName() == "")
 			return Response.status(Status.FORBIDDEN).entity("Invalid organisation name.").build();
 		
 		//if (data.getInfo() == "")
@@ -147,10 +147,10 @@ public class RegisterResource {
 		
 		if(data.getServiceType() == "")
 			return Response.status(Status.FORBIDDEN).entity("Invalid service.").build();
-		
+		*/
 		Transaction txn = datastore.newTransaction();
 		LOG.fine("Attempt to register organisation: " + data.getName());
-		Key orgKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getEmail());
+		Key orgKey = datastore.newKeyFactory().setKind("Account").newKey(data.getName());
 
 		try {
 			Entity org = txn.get(orgKey);
@@ -167,29 +167,29 @@ public class RegisterResource {
 				
 				
 				org = Entity.newBuilder(orgKey)
-						.set("org_name", data.getName())
-						//.set("org_info", data.getInfo())
+						.set("account_name", data.getName())
+						.set("account_perfil", "Public")
 						//.set("org_second_name", data.getSecondName())
-						.set("org_owner", data.getOwner())
-						.set("org_cardID", data.getid())
-						.set("org_address", data.getAddress())
+						.set("account_owner", data.getOwner())
+						.set("account_cardID", data.getid())
+						.set("account_address", data.getAddress())
 						//.set("org_cp", data.getCP())
 						//.set("org_location", data.getLocation())
 						//.set("org_country", data.getCountry())
 						//.set("org_phone", data.getPhone())
 						//.set("org_mobile", data.getMobile())
-						.set("org_pwd", DigestUtils.sha512Hex(data.getPassword()))
-						.set("org_email", data.getEmail())
-						.set("org_service", data.getServiceType())
-						.set("org_role", "ORG")
-						.set("org_state", "ENABLE")
-						.set("org_creation_time", Timestamp.now())
-						.set("org_following_list", ListValue.of(follows))
-						.set("org_following", 0)
-						.set("org_followers_list", ListValue.of(followers))
-						.set("org_routes_list", routes)
-						.set("org_followers", 0)
-						.set("org_tokenID", UUID.randomUUID().toString())
+						.set("account_pwd", DigestUtils.sha512Hex(data.getPassword()))
+						.set("account_email", data.getEmail())
+						.set("account_service", data.getServiceType())
+						.set("account_role", "ORG")
+						.set("account_state", "ENABLE")
+						.set("account_creation_time", Timestamp.now())
+						.set("account_following_list", ListValue.of(follows))
+						.set("account_following", 0)
+						.set("account_followers_list", ListValue.of(followers))
+						.set("account_routes_list", routes)
+						.set("account_followers", 0)
+						//.set("org_tokenID", UUID.randomUUID().toString())
 						.build();
 				txn.add(org);
 

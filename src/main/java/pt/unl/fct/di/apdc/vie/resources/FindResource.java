@@ -44,31 +44,31 @@ public class FindResource {
 			boolean all = false;
 			if(pattern.equals("all"))
 				all = true;
-			Query<Entity> orgsQuery = Query.newEntityQueryBuilder()
-					.setKind("Organisation")
+			Query<Entity> accountsQuery = Query.newEntityQueryBuilder()
+					.setKind("Account")
 					.build();
-			QueryResults<Entity> orgsResults = txn.run(orgsQuery);
+			QueryResults<Entity> accountsResults = txn.run(accountsQuery);
 			
-			Query<Entity> usersQuery = Query.newEntityQueryBuilder()
+			/*Query<Entity> usersQuery = Query.newEntityQueryBuilder()
 					.setKind("User")
 					.build();
-			QueryResults<Entity> usersResults = txn.run(usersQuery);
+			QueryResults<Entity> usersResults = txn.run(usersQuery);*/
 			
 			List<String> allResults = new ArrayList<>();
 			//List<String> users = new ArrayList<>();
 			if(!all) {
-			orgsResults.forEachRemaining(e -> {
-				if(e.getString("org_name").toLowerCase().contains(pattern.toLowerCase()))
-					allResults.add(e.getString("org_name"));
+			accountsResults.forEachRemaining(e -> {
+				if(e.getString("account_name").toLowerCase().contains(pattern.toLowerCase()))
+					allResults.add(e.getString("account_name"));
 			});
-			usersResults.forEachRemaining(e -> {
-				if(e.getString("user_name").toLowerCase().contains(pattern.toLowerCase()))
-					allResults.add(e.getString("user_name"));
-			});
+			/*accountsResults.forEachRemaining(e -> {
+				if(e.getString("account_name").toLowerCase().contains(pattern.toLowerCase()))
+					allResults.add(e.getString("account_name"));
+			});*/
 			}
 			else {
 				//all
-				usersResults.forEachRemaining(e -> {allResults.add(e.getString("user_name"));});
+				accountsResults.forEachRemaining(e -> {allResults.add(e.getString("account_name"));});
 				//possivelmente adicionar tb as organizacoes
 			}
 			txn.commit();

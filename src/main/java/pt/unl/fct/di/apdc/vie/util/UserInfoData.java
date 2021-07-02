@@ -8,7 +8,7 @@ public class UserInfoData {
     	
     }
     
-    public UserInfoData(String firstName, String lastName, String role, String username) {
+    public UserInfoData(String role, String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;

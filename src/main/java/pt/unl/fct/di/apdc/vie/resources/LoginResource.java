@@ -34,8 +34,7 @@ public class LoginResource {
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
 	
-	private KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
-	private KeyFactory orgKeyFactory = datastore.newKeyFactory().setKind("Organisation");
+	private KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("Account");
 
 	public LoginResource() {
 	}
@@ -47,29 +46,35 @@ public class LoginResource {
 	public Response doLogin(LoginData data) {
 		LOG.fine("Attempt to log in user: " + data.getUsername());
 
-		boolean isUser = !data.getUsername().contains("@");
-		Key key;
-		if(!isUser)
-			key = orgKeyFactory.newKey(data.getUsername());
-		else
-			key = userKeyFactory.newKey(data.getUsername());
+		//boolean isUser = !data.getUsername().contains("@");
+		//Key key;
+		//if(!isUser)
+			//key = orgKeyFactory.newKey(data.getUsername());
+		//else
+			Key key = userKeyFactory.newKey(data.getUsername());
 		
 		Transaction txn = datastore.newTransaction();
 		try {
-			Entity user = txn.get(key);
-			if(user == null) {
-				//user does not exit
+			Entity account = txn.get(key);
+			if(account == null) {
+				//account does not exit
 				txn.rollback();
 				LOG.warning("Failed login attempt. Username '" + data.getUsername() + "' doesn't exist in datastore.");
 				return Response.status(Status.NOT_FOUND).entity("Wrong pass or username.").build();
 			}
 			
+			/*boolean isUser = true;
+			if( account.getString("account_role").equals("ORG")) {
+				isUser = false;
+			}*/
+			
+			
 			//pass errada
-			String hashedPWD;
-			if(isUser)
-				hashedPWD = user.getString("user_pwd");
-			else
-				hashedPWD = user.getString("org_pwd");
+			//String hashedPWD;
+			//if(isUser)
+				String hashedPWD = account.getString("account_pwd");
+			//else
+				//hashedPWD = user.getString("org_pwd");
 			
 			if(!hashedPWD.equals(DigestUtils.sha512Hex(data.getPassword()))) {
 				txn.rollback();
@@ -78,38 +83,38 @@ public class LoginResource {
 			}
 			
 			//creates token
-			AuthToken authToken;
-			if(isUser) {
-				authToken = new AuthToken(data.getUsername(), UUID.randomUUID().toString());
-				authToken.setRole(user.getString("user_role"));
-			}
-			else {
+			//AuthToken authToken;
+			//if(isUser) {
+			AuthToken authToken = new AuthToken(data.getUsername(), UUID.randomUUID().toString());
+			authToken.setRole(account.getString("account_role"));
+			//}
+			/*else {
 				authToken = new AuthToken(data.getUsername(), UUID.randomUUID().toString());
 				authToken.setRole(user.getString("org_role"));
-			}
+			}*/
 			Key tokenKey = datastore.newKeyFactory()
 					.setKind("Token")
 					.newKey(authToken.getTokenID());
-			Entity token = txn.get(tokenKey);
-			if(token != null) {	//already logged in
+			//Entity token = txn.get(tokenKey);
+			/*if(token != null) {	//already logged in
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while loged in.");
 				return Response.status(Status.FORBIDDEN).entity("You are already logged in.").build();
-			}
+			}*/
 			
 			//account disabled
-			if(isUser && user.getString("user_state").equals("DISABLED")) { 
+			if(account.getString("account_state").equals("DISABLED")) { 
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
 			}
-			else if(!isUser && user.getString("org_state").equals("DISABLED")) { 
+			/*else if(!isUser && user.getString("org_state").equals("DISABLED")) { 
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
-			}
+			}*/
 			
-			token = Entity.newBuilder(tokenKey)
+			Entity token = Entity.newBuilder(tokenKey)
 					.set("token_id", authToken.getTokenID())
 					.set("token_role", authToken.getRole())
 					.set("token_username", authToken.getUsername())

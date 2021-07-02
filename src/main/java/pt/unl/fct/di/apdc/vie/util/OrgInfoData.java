@@ -9,7 +9,7 @@ public class OrgInfoData {
     	
     }
     
-    public OrgInfoData(String name, String address, String service, String role, String email) {
+    public OrgInfoData(String role, String name, String address, String service, String email) {
         this.name = name;
         this.address = address;
         this.service = service;

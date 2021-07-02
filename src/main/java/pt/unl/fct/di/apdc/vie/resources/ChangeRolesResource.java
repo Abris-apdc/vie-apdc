@@ -60,13 +60,17 @@ public class ChangeRolesResource {
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
 			
-			Key userAMudarKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
+			Key userAMudarKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
 			Entity userAMudar = txn.get(userAMudarKey);
 			
 			//user a mudar nao existe
 			if(userAMudar == null) {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("The user you are trying to change doesn't exist.").build();
+				return Response.status(Status.FORBIDDEN).entity("The account you are trying to change doesn't exist.").build();
+			}
+			if(userAMudar.getString("account_role").equals(ORG)) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You can't do that.").build();
 			}
 			
 			if(!data.getNewRole().equals(USER)
@@ -83,16 +87,15 @@ public class ChangeRolesResource {
 				return Response.status(Status.FORBIDDEN).entity("You can't change someone's role to ORG.").build();
 			}
 			
-			Key userQueMudaKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
+			Key userQueMudaKey = datastore.newKeyFactory().setKind("Account").newKey(token.getString("token_username"));
 			Entity userQueMuda = txn.get(userQueMudaKey);
 			
 			if(userQueMuda == null) {
-				//ele e uma org dai nao existir nos "User"
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
 			}
 			
-			String userQueMudaRole = userQueMuda.getString("user_role");
+			String userQueMudaRole = userQueMuda.getString("account_role");
 			
 			//orgs users e mods nao podem mudar roles
 			if (userQueMudaRole.equals(USER)
@@ -101,18 +104,18 @@ public class ChangeRolesResource {
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
 			}
 			
-			if(userQueMudaRole.equals(ADMIN) && !data.getNewRole().equals(MOD)) {
+			if(userQueMudaRole.equals(ADMIN) && !data.getNewRole().equals(MOD) && !data.getNewRole().equals(USER)) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
 			}
 			
-			if(userQueMudaRole.equals(ADMIN) && !userAMudar.getString("user_role").equals(USER)) {
+			if(userQueMudaRole.equals(ADMIN) && !userAMudar.getString("account_role").equals(USER) && !userAMudar.getString("account_role").equals(MOD)) {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("You can't change roles.").build();
 			}
 			
 			userAMudar = Entity.newBuilder(userAMudar)
-					.set("user_role",data.getNewRole())
+					.set("account_role",data.getNewRole())
 					.build();
 			txn.update(userAMudar);
 			txn.commit();

@@ -47,39 +47,42 @@ public class ProfileResource {
 		
 		try {
 				
-			Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-			Key orgKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
+			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(username);
+			//Key orgKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
 			
-			Entity userAccount = txn.get(userKey);
-			Entity orgAccount = txn.get(orgKey);
+			Entity account = txn.get(accountKey);
+			//Entity orgAccount = txn.get(orgKey);
 			
-			//a conta nao existe nem nos users nem nas orgs
-			if(userAccount == null && orgAccount == null){
+			//conta nao existe
+			if(account == null){
 				txn.rollback();
 				return Response.status(Status.NOT_FOUND).entity("Account doesn't exist.").build();
 			}
-			if(userAccount != null && userAccount.getString("user_perfil").equals("Private")) {
+			if(account.getString("account_perfil").equals("Private")) {
+				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("Account is Private.").build();
 			}
-			if(userAccount == null) {
+			String role = account.getString("account_role");
+			if(role.equals("ORG")) {
+				
 				//uma org
 				
 				OrgInfoData oi = new OrgInfoData(
-						orgAccount.getString("org_name"),
-						orgAccount.getString("org_address"),
-						orgAccount.getString("org_service"),
-						orgAccount.getString("org_role"),
-						orgAccount.getString("org_email"));	
+						account.getString("account_role"),
+						account.getString("account_name"),
+						account.getString("account_address"),
+						account.getString("account_service"),
+						account.getString("account_email"));	
 				txn.commit();
 				return Response.ok(g.toJson(oi)).build();
 			}
 			
 			//um user
 			UserInfoData ui = new UserInfoData(
-					userAccount.getString("user_firstName"),
-					userAccount.getString("user_lastName"),
-					userAccount.getString("user_role"),
-					userAccount.getString("user_name"));
+					account.getString("account_role"),
+					account.getString("account_firstName"),
+					account.getString("account_lastName"),
+					account.getString("account_name"));
 			txn.commit();
 			return Response.ok(g.toJson(ui)).build();
 
@@ -107,38 +110,47 @@ public class ProfileResource {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
 			}
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
 			Key followingKey;
 			
 			String followingUsername = token.getString("token_username");
 
-			String roleFollowing = "user";
-			if(followingUsername.contains("@"))
-				roleFollowing = "org";
+			//String roleFollowing = "user";
+			//if(followingUsername.contains("@"))
+				//roleFollowing = "org";
 
-			if(roleFollowing.equals("user")) 
-				followingKey = datastore.newKeyFactory().setKind("User").newKey(followingUsername);
-			else
-				followingKey = datastore.newKeyFactory().setKind("Organisation").newKey(followingUsername);
+			//if(roleFollowing.equals("user")) 
+				followingKey = datastore.newKeyFactory().setKind("Account").newKey(followingUsername);
+			//else
+				//followingKey = datastore.newKeyFactory().setKind("Organisation").newKey(followingUsername);
 			
 			Entity userFollowing = txn.get(followingKey);	
 			
-			long nFollowing = userFollowing.getLong(roleFollowing.concat("_following"));
+			long nFollowing = userFollowing.getLong("account_following");
 			List<Value<String>> following = new LinkedList<Value<String>>();
-			List<Value<String>> following1 = userFollowing.getList(roleFollowing.concat("_following_list"));
+			List<Value<String>> following1 = userFollowing.getList("account_following_list");
 			for(int i = 0;i<following1.size();i++) {
 				following.add(following1.get(i));
 			}
 			
 			
-			String roleFollowed = "user";
-			if(username.contains("@")) 
-				roleFollowed = "org";
+			//String roleFollowed = "user";
+			//if(username.contains("@")) 
+				//roleFollowed = "org";
 			
 			Key followedKey;
-			if(roleFollowed.equals("user")) 
-				followedKey = datastore.newKeyFactory().setKind("User").newKey(username);
-			else
-				followedKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
+			//if(roleFollowed.equals("user")) 
+				followedKey = datastore.newKeyFactory().setKind("Account").newKey(username);
+			//else
+				//followedKey = datastore.newKeyFactory().setKind("Organisation").newKey(username);
 
 			Entity userFollowed = txn.get(followedKey);
 			if(userFollowed == null) {
@@ -146,12 +158,12 @@ public class ProfileResource {
 				return Response.status(Status.FORBIDDEN).entity("The user you are trying to follow doesn't exists.").build();
 			}
 
-			String followedPerfil = userFollowed.getString(roleFollowed.concat("_perfil"));
+			String followedPerfil = userFollowed.getString("account_perfil");
 			
 			if(followedPerfil.equals("Public")) {
-				long nFollowers = userFollowed.getLong(roleFollowed.concat( "_followers"));
+				long nFollowers = userFollowed.getLong("account_followers");
 				List<Value<String>> followers = new LinkedList<Value<String>>();
-				List<Value<String>> followers1 = userFollowed.getList(roleFollowed.concat("_followers_list"));
+				List<Value<String>> followers1 = userFollowed.getList("account_followers_list");
 				for(int i = 0;i<followers1.size();i++) {
 					followers.add(followers1.get(i));
 				}
@@ -159,8 +171,8 @@ public class ProfileResource {
 				nFollowers++;
 				
 				userFollowed = Entity.newBuilder(userFollowed)
-						.set(roleFollowed.concat("_followers"), nFollowers)
-						.set(roleFollowed.concat("_followers_list"), ListValue.of(followers))
+						.set("account_followers", nFollowers)
+						.set("account_followers_list", ListValue.of(followers))
 						.build();
 				
 				txn.update(userFollowed);
@@ -170,19 +182,19 @@ public class ProfileResource {
 				nFollowing++;
 				
 				userFollowing = Entity.newBuilder(userFollowing)
-						.set(roleFollowing.concat("_following"), nFollowing)
-						.set(roleFollowing.concat("_following_list"), ListValue.of(following))
+						.set("account_following", nFollowing)
+						.set("account_following_list", ListValue.of(following))
 						.build();
 				txn.update(userFollowing);
 			}
 			else {		//Private
 				List<Value<String>> requests = new LinkedList<Value<String>>();
-				List<Value<String>> requests1 = userFollowed.getList(roleFollowed.concat("_requests_list"));
+				List<Value<String>> requests1 = userFollowed.getList("account_requests_list");
 				for(int i = 0;i<requests1.size();i++) {
 					requests.add(requests1.get(i));
 				}
 				requests.add(StringValue.of(username));
-				userFollowed = Entity.newBuilder(userFollowed).set(roleFollowed.concat("_requests_list"), requests).build();
+				userFollowed = Entity.newBuilder(userFollowed).set("account_requests_list", requests).build();
 				txn.update(userFollowed);
 			}
 
