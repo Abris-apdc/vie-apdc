@@ -173,9 +173,9 @@ public class MapsResource {
 			for(String l : locations1) {
 				Key localKey = datastore.newKeyFactory().setKind("Location").newKey(l);
 				Entity local = txn.get(localKey);
-				if (local != null) {
+				if (local == null) {
 					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("Location alredy exists.").build();
+					return Response.status(Status.FORBIDDEN).entity("Location does not exist.").build();
 				}
 				else {
 					route.add( StringValue.of(l));
@@ -187,7 +187,7 @@ public class MapsResource {
 			Entity r = txn.get(routeKey);
 			if(r != null) {
 				txn.rollback();
-				return Response.status(Status.CONFLICT).entity("Route alreadu exist.").build();
+				return Response.status(Status.CONFLICT).entity("Route already exist.").build();
 			}
 			r = Entity.newBuilder(routeKey)
 					.set("route_locations_list", route)
