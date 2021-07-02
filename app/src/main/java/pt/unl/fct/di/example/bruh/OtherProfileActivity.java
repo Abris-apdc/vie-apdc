@@ -22,6 +22,7 @@ import retrofit2.Response;
 public class OtherProfileActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     private Fragment perfil = new PerfilFragment();
+    private String role;
 
     private ClientAPI clientAPI;
     @Override
@@ -34,11 +35,21 @@ public class OtherProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_other_profile);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
+        getRole();
+        if(role.equals("SU") || role.equals("ADMIN")) {
+            OtherProfileRolesFragment p = new OtherProfileRolesFragment();
+            p.setValues(profile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, p).commit();
+        } else {
+            OtherProfileFragment p = new OtherProfileFragment();
+            p.setValues(profile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, p).commit();
+        }
+    }
 
-        OtherProfileFragment p = new OtherProfileFragment();
-        p.setValues(profile);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, p).commit();
+    private void getRole() {
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        role = preferences.getString("Authentication_role", "");
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListner =

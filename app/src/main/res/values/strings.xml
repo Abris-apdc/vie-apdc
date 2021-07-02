@@ -25,4 +25,15 @@
         <item>Non-Binary</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="su_roles">
+
+        <item>MOD</item>
+        <item>ADMIN</item>
+        <item>USER</item>
+    </string-array>
+
+    <string-array name="admin_roles">
+        <item>MOD</item>
+    </string-array>
 </resources>

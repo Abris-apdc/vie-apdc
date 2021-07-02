@@ -38,7 +38,7 @@ public class ModifyFragment extends Fragment {
         firstName = (EditText) view.findViewById(R.id.activity_modify_first_name);
         lastName = (EditText) view.findViewById(R.id.activity_modify_last_name);
         email = (EditText) view.findViewById(R.id.activity_modify_email);
-        genders(view);
+       // genders(view);
         phone = (EditText) view.findViewById(R.id.activity_modify_phone);
         address = (EditText) view.findViewById(R.id.activity_modify_address);
         nacionality = (EditText) view.findViewById(R.id.activity_modify_nacionality);
