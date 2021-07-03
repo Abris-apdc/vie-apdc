@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -209,4 +209,92 @@ public class ProfileResource {
 			}
 		}
 	}
+	
+	@DELETE
+	@Path("/unfollow/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response unfollow(@PathParam("username") String username, FollowData data)  {
+		Transaction txn = datastore.newTransaction();
+		try {
+			
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+			Entity token = txn.get(tokenKey);
+			
+			if(token == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
+			String unfollowingUsername = token.getString("token_username");
+			
+			Key unfollowingKey = datastore.newKeyFactory().setKind("Account").newKey(unfollowingUsername);
+			
+			Entity userUnfollowing = txn.get(unfollowingKey);	
+			
+			long nFollowing = userUnfollowing.getLong("account_following");
+			
+			List<Value<String>> following = new LinkedList<Value<String>>();
+			List<Value<String>> following1 = userUnfollowing.getList("account_following_list");
+			for(int i = 0;i<following1.size();i++) {
+				if(!following1.get(i).get().equals(username))
+					following.add(following1.get(i));
+			}
+			//following ja n tem o gajo a parar de seguir
+			
+			//decrease nr following counter
+			nFollowing--;
+			
+			userUnfollowing = Entity.newBuilder(userUnfollowing)
+					.set("account_following", nFollowing)
+					.set("account_following_list", ListValue.of(following))
+					.build();
+			txn.update(userUnfollowing);
+			
+			
+			Key unfollowedKey= datastore.newKeyFactory().setKind("Account").newKey(username);
+			
+			Entity userUnfollowed = txn.get(unfollowedKey);
+			if(userUnfollowed == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("The user you are trying to follow doesn't exists.").build();
+			}
+			
+			long nFollowers = userUnfollowed.getLong("account_followers");
+			List<Value<String>> followers = new LinkedList<Value<String>>();
+			List<Value<String>> followers1 = userUnfollowed.getList("account_followers_list");
+			for(int i = 0;i<followers1.size();i++) {
+				if(!followers1.get(i).get().equals(unfollowingUsername))
+					followers.add(followers1.get(i));
+			}
+			//followers ja n tem o gajo q parou de seguir
+			
+			//decrease nr followers counter
+			nFollowers--;
+			
+			userUnfollowed = Entity.newBuilder(userUnfollowed)
+					.set("account_followers", nFollowers)
+					.set("account_followers_list", ListValue.of(followers))
+					.build();
+			
+			txn.update(userUnfollowed);
+			
+			txn.commit();
+			return Response.ok("Updated.").build();
+			
+		} finally {
+			if(txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
 }
