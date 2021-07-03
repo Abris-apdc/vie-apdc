@@ -241,16 +241,21 @@ public class ProfileResource {
 			
 			long nFollowing = userUnfollowing.getLong("account_following");
 			
+			boolean changedFollowing = false;
+			
 			List<Value<String>> following = new LinkedList<Value<String>>();
 			List<Value<String>> following1 = userUnfollowing.getList("account_following_list");
 			for(int i = 0;i<following1.size();i++) {
-				if(!following1.get(i).get().equals(username))
+				if(following1.get(i).get().equals(username))
+					changedFollowing = true;
+				else
 					following.add(following1.get(i));
 			}
 			//following ja n tem o gajo a parar de seguir
 			
 			//decrease nr following counter
-			nFollowing--;
+			if(changedFollowing)
+				nFollowing--;
 			
 			userUnfollowing = Entity.newBuilder(userUnfollowing)
 					.set("account_following", nFollowing)
@@ -268,16 +273,21 @@ public class ProfileResource {
 			}
 			
 			long nFollowers = userUnfollowed.getLong("account_followers");
+			
+			boolean changedFollowers = false;
 			List<Value<String>> followers = new LinkedList<Value<String>>();
 			List<Value<String>> followers1 = userUnfollowed.getList("account_followers_list");
 			for(int i = 0;i<followers1.size();i++) {
-				if(!followers1.get(i).get().equals(unfollowingUsername))
+				if(followers1.get(i).get().equals(unfollowingUsername))
+					changedFollowers = true;
+				else
 					followers.add(followers1.get(i));
 			}
 			//followers ja n tem o gajo q parou de seguir
 			
 			//decrease nr followers counter
-			nFollowers--;
+			if(changedFollowers)
+				nFollowers--;
 			
 			userUnfollowed = Entity.newBuilder(userUnfollowed)
 					.set("account_followers", nFollowers)
