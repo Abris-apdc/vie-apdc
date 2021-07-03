@@ -56,6 +56,7 @@ public class RegisterResource {
 				List<Value<String>> followers = new ArrayList<Value<String>>();
 				//followers.add( StringValue.of("test"));
 				List<Value<String>> following = new ArrayList<Value<String>>();
+				List<Value<String>> requests = new LinkedList<Value<String>>();
 				//following.add(StringValue.of("test"));
 				
 				List<Value<String>> routes = new ArrayList<Value<String>>();
@@ -77,6 +78,7 @@ public class RegisterResource {
 						.set("account_following", 0)
 						.set("account_followers_list", followers)
 						.set("account_followers", 0)
+						.set("account_requests_list", requests)
 						.set("account_routes_list", routes)
 						.build();
 				txn.add(user);
@@ -162,6 +164,7 @@ public class RegisterResource {
 			else {
 				List<Value<String>> followers = new LinkedList<Value<String>>();
 				List<Value<String>> follows = new LinkedList<Value<String>>();
+				List<Value<String>> requests = new LinkedList<Value<String>>();
 				List<Value<String>> routes = new ArrayList<Value<String>>();
 				routes.add(StringValue.of("test"));
 				
@@ -184,9 +187,10 @@ public class RegisterResource {
 						.set("account_role", "ORG")
 						.set("account_state", "ENABLE")
 						.set("account_creation_time", Timestamp.now())
-						.set("account_following_list", ListValue.of(follows))
+						.set("account_following_list", follows)
 						.set("account_following", 0)
-						.set("account_followers_list", ListValue.of(followers))
+						.set("account_followers_list", followers)
+						.set("account_requests_list", requests)
 						.set("account_routes_list", routes)
 						.set("account_followers", 0)
 						//.set("org_tokenID", UUID.randomUUID().toString())
