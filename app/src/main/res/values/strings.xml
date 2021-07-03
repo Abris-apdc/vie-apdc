@@ -35,5 +35,6 @@
 
     <string-array name="admin_roles">
         <item>MOD</item>
+        <item>USER</item>
     </string-array>
 </resources>
