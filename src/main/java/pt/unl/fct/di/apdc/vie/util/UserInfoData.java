@@ -2,17 +2,18 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class UserInfoData {
 	
-    private String firstName, lastName, role, username;
+    private String firstName, lastName, role, username, birthDay;
 
     public UserInfoData() {
     	
     }
     
-    public UserInfoData(String role, String firstName, String lastName, String username) {
+    public UserInfoData(String role, String username, String firstName, String lastName, String birthDay) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.username = username;
+        this.birthDay = birthDay;
     }
     
     /*public String getUsername() {

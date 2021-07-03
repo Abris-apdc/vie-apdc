@@ -80,9 +80,10 @@ public class ProfileResource {
 			//um user
 			UserInfoData ui = new UserInfoData(
 					account.getString("account_role"),
+					account.getString("account_name"),
 					account.getString("account_firstName"),
 					account.getString("account_lastName"),
-					account.getString("account_name"));
+					account.getString("account_birthDay"));
 			txn.commit();
 			return Response.ok(g.toJson(ui)).build();
 
