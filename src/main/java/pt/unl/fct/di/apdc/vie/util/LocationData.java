@@ -2,6 +2,7 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class LocationData {
 
+	private String name;
 	private String coordinates;
 	private String address;
 	private String owner;
@@ -13,7 +14,8 @@ public class LocationData {
 
 	}
 
-	public LocationData(String coordinates, String address, String owner, String info, String schedule, String tokenID) {
+	public LocationData(String name, String coordinates, String address, String owner, String info, String schedule, String tokenID) {
+		this.name = name;
 		this.coordinates = coordinates;
 		this.address = address;
 		this.owner = owner;
@@ -21,6 +23,8 @@ public class LocationData {
 		this.schedule = schedule;
 		this.tokenID = tokenID;
 	}
+	
+	
 	
 	public String getCoordinates() {
 		return coordinates;	
@@ -62,6 +66,14 @@ public class LocationData {
 	}
 	public void setTokenID (String tokenID) {
 		this.tokenID = tokenID;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

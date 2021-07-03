@@ -24,11 +24,14 @@ import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Transaction;
 import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
+import pt.unl.fct.di.apdc.vie.util.FindUserData;
 import pt.unl.fct.di.apdc.vie.util.LocationData;
 import pt.unl.fct.di.apdc.vie.util.OrgInfoData;
 import pt.unl.fct.di.apdc.vie.util.RouteData;
@@ -49,7 +52,7 @@ public class MapsResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response addLocation(LocationData data) {
 		Transaction txn = datastore.newTransaction();
-		Key localKey = datastore.newKeyFactory().setKind("Location").newKey(data.getCoordinates());
+		Key localKey = datastore.newKeyFactory().setKind("Location").newKey(data.getName());
 
 		try {
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
@@ -72,6 +75,7 @@ public class MapsResource {
 			else {
 				
 				local = Entity.newBuilder(localKey)
+						.set("local_coordinates", data.getCoordinates())
 						.set("local_address", data.getAddress())
 						.set("local_owner", data.getOwner())
 						.set("local_info", data.getInfo())
@@ -94,16 +98,16 @@ public class MapsResource {
 	
 	
 	@GET
-	@Path("/{coordinates}")
+	@Path("/{name}")
 	//@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response getPoint(@PathParam("coordinates") String coordinates) {
+	public Response getPoint(@PathParam("name") String name) {
 		
 		Transaction txn = datastore.newTransaction();
 		
 		try {
 				
-			Key localKey = datastore.newKeyFactory().setKind("Location").newKey(coordinates);
+			Key localKey = datastore.newKeyFactory().setKind("Location").newKey(name);
 			
 			Entity location = txn.get(localKey);
 			
@@ -113,7 +117,8 @@ public class MapsResource {
 				return Response.status(Status.NOT_FOUND).entity("Location doesn't exist.").build();
 			}
 			//um user
-			LocationData ui = new LocationData(coordinates,
+			LocationData ui = new LocationData(name,
+					location.getString("local_coordinates"),
 					location.getString("local_address"),
 					location.getString("local_owner"),
 					location.getString("local_info"),
@@ -136,18 +141,7 @@ public class MapsResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response addRoute(RouteData data) {
 		Transaction txn = datastore.newTransaction();
-		Key userKey;
-		String type;
-		if(data.getUsername().contains("@")) {
-			type = "org";
-			userKey = datastore.newKeyFactory().setKind("Organisation").newKey(data.getUsername());
-
-		}
-		else {
-			type = "user";
-			userKey = datastore.newKeyFactory().setKind("User").newKey(data.getUsername());
-
-		}
+		Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
 
 		Entity user = txn.get(userKey);	
 
@@ -198,7 +192,7 @@ public class MapsResource {
 
 			//add to users routes
 			List<Value<String>> routes = new LinkedList<Value<String>>();
-			List<Value<String>> routes1 = user.getList(type.concat("_routes_list"));
+			List<Value<String>> routes1 = user.getList("account_routes_list");
 			for(int i = 0;i<routes1.size();i++) {
 				routes.add(routes1.get(i));
 			}
@@ -206,7 +200,7 @@ public class MapsResource {
 			routes.add(StringValue.of(data.getRouteName()));
 			
 			user = Entity.newBuilder(user)
-					.set(type.concat("_routes_list"), ListValue.of(routes))
+					.set("account_routes_list", ListValue.of(routes))
 					.build();
 			txn.update(user);
 
@@ -222,6 +216,62 @@ public class MapsResource {
 			}
 		}
 	}
+	
+	
+	@GET
+	@Path("/user/routes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getUserRoutes(FindUserData data) {
+		Transaction txn = datastore.newTransaction();
+		try {
+			
+			Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.username);
+			Entity user = txn.get(userKey);	
+			
+			if(user == null) {
+				txn.rollback();
+				return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
+			}
+			
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.tokenID);
+			Entity logged = txn.get(tokenKey);
+			long end = logged.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			if(user.getString("account_perfil").equals("Private") && !logged.getString("token_username").equals(data.username)) {
+				return Response.status(Status.FORBIDDEN).entity("User profile is private.").build();
+			}
+ 
+			
+			List<String> routes = new LinkedList<String>();
+			List<Value<String>> routes1 = user.getList("account_routes_list");
+			for(int i = 0;i<routes1.size();i++) {
+				Key routesKey = datastore.newKeyFactory().setKind("Routes").newKey(routes1.get(i).get());
+				Entity route = txn.get(routesKey);
+				routes.add(g.toJson(route));
+			}
+			
+
+			txn.commit();
+			return Response.ok(g.toJson(routes)).build();
+
+		} catch (Exception e) {
+			txn.rollback();
+			return Response.status(Status.FORBIDDEN).entity("Attempt to see organisations by name failed.").build();
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
 	
 
 }
