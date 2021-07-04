@@ -4,6 +4,7 @@ import pt.unl.fct.di.example.bruh.requests.AuthToken;
 import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
 import pt.unl.fct.di.example.bruh.requests.Delete;
+import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
 import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
@@ -53,4 +54,7 @@ public interface RegisterService {
 
     @PUT("/rest/changeRole")
     Call<String> changeRole(@Body ChangeRole username);
+
+    @POST("/rest/profile/follow/{username}")
+    Call<String> follow(@Path("username") String username, @Body Follow follow);
 }

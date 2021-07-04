@@ -1,5 +1,6 @@
 package pt.unl.fct.di.example.bruh;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -8,18 +9,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class OtherProfileFragment extends Fragment {
-    String username;
-    TextView profile, fn,ln,role;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    private String username;
+    private Boolean folloing;
+    private TextView profile, fn,ln,role;
+    private Button follow;
 
     private ClientAPI clientAPI;
 
@@ -31,9 +39,17 @@ public class OtherProfileFragment extends Fragment {
         fn = (TextView) view.findViewById(R.id.other_profile_fn);
         ln = (TextView) view.findViewById(R.id.other_profile_ln);
         role = (TextView) view.findViewById(R.id.other_profile_role);
+        follow = (Button) view.findViewById(R.id.other_profile_follow);
 
         profile.setText(username);
         doRequest(view);
+
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                follow();
+            }
+        });
 
         return view;
     }
@@ -56,6 +72,32 @@ public class OtherProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void follow(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().follow(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    folloing = true;
+
+                }else {
+                    Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+                    folloing = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                folloing = false;
                 Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
             }
         });

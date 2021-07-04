@@ -15,11 +15,15 @@ public class UserInfo {
     @SerializedName("username")
     private String username;
 
-    public UserInfo(String firstName,String lastName, String role, String username) {
+    @SerializedName("bDay")
+    private String bDay;
+
+    public UserInfo(String role, String username, String firstName,String lastName,String bDay  ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.username = username;
+        this.bDay = bDay;
 
     }
     public String getFirstName() {
