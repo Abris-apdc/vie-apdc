@@ -261,9 +261,6 @@ public class MapsResource {
 			txn.commit();
 			return Response.ok(g.toJson(routes)).build();
 
-		} catch (Exception e) {
-			txn.rollback();
-			return Response.status(Status.FORBIDDEN).entity("Attempt to see organisations by name failed.").build();
 		} finally {
 			if (txn.isActive()) {
 				txn.rollback();
