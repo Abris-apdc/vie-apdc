@@ -75,7 +75,6 @@ function DeleteForm(){
                     <Button
                         variant="contained"
                         color="primary"
-                        href="/update"
                         className={classes.button}
                         onClick={deleteUser}
                         startIcon={<DeleteIcon/>}>

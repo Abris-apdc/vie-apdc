@@ -86,12 +86,6 @@ function RegisterForm(){
         setDay(dateArr[2])
     }
 
-    function checkDate(){
-        var later15Years = parseInt(year1) + 15
-        var date = new Date(later15Years + "-" + month1 + "-" + day1);
-        return date < new Date();
-    }
-
     function checkUsername(){
         return username1.includes(" ");
     }
@@ -113,10 +107,6 @@ function RegisterForm(){
         }
         if(!checkConfirm()){
             alert("Pasword do not match")
-            return
-        }
-        if(!checkDate()){
-            alert("You must be at least 15 years old to create an account")
             return
         }
         if(checkUsername()){
