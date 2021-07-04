@@ -97,13 +97,13 @@ public class WarningsResource {
 				else {
 					//esta a tentar dar um warning a um mod ou admin ou num su
 					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("No permissions.").build();
+					return Response.status(Status.FORBIDDEN).entity("No permission.").build();
 				}
 				
 			}
 			else {
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("You don't have permisions.").build();
+				return Response.status(Status.FORBIDDEN).entity("You don't have permission.").build();
 			}
 			
 			
