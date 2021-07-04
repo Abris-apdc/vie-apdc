@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
@@ -80,6 +79,7 @@ public class RegisterResource {
 						.set("account_followers", 0)
 						.set("account_requests_list", requests)
 						.set("account_routes_list", routes)
+						.set("account_warnings", 0)
 						.build();
 				txn.add(user);
 
@@ -193,6 +193,7 @@ public class RegisterResource {
 						.set("account_requests_list", requests)
 						.set("account_routes_list", routes)
 						.set("account_followers", 0)
+						.set("account_warnings", 0)
 						//.set("org_tokenID", UUID.randomUUID().toString())
 						.build();
 				txn.add(org);
