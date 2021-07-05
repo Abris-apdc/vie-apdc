@@ -1,9 +1,6 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
@@ -16,32 +13,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
-import com.google.cloud.datastore.ListValue;
-import com.google.cloud.datastore.Query;
-import com.google.cloud.datastore.QueryResults;
-import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Transaction;
-import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
-import pt.unl.fct.di.apdc.vie.util.FindUserData;
 import pt.unl.fct.di.apdc.vie.util.LocationData;
-import pt.unl.fct.di.apdc.vie.util.OrgInfoData;
-import pt.unl.fct.di.apdc.vie.util.RouteData;
-import pt.unl.fct.di.apdc.vie.util.UserInfoData;
 
 @Path("/map")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class MapsResource {
 	
-	private static final Logger LOG = Logger.getLogger(ProfileResource.class.getName());
+	private static final Logger LOG = Logger.getLogger(MapsResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
 	
@@ -135,140 +121,9 @@ public class MapsResource {
 	}
 	
 
-	@POST
-	@Path("/route")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response addRoute(RouteData data) {
-		Transaction txn = datastore.newTransaction();
-		Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
-
-		Entity user = txn.get(userKey);	
-
-		try {
-			if(user == null) {
-				txn.rollback();
-				return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
-			}
-			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
-
-			Entity logged = txn.get(tokenKey);
-			long end = logged.getLong("token_end_time");
-
-			//o token expirou
-			if(end <  System.currentTimeMillis()) {
-				txn.delete(tokenKey);
-				txn.commit();
-				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
-			}
-
-			String[] locations1 = data.getLocations();
-			List<Value<String>> route = new ArrayList<Value<String>>();
-			for(String l : locations1) {
-				Key localKey = datastore.newKeyFactory().setKind("Location").newKey(l);
-				Entity local = txn.get(localKey);
-				if (local == null) {
-					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("Location does not exist.").build();
-				}
-				else {
-					route.add( StringValue.of(l));
-				}
-			}
-
-			Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(data.getRouteName());
-
-			Entity r = txn.get(routeKey);
-			if(r != null) {
-				txn.rollback();
-				return Response.status(Status.CONFLICT).entity("Route already exist.").build();
-			}
-			r = Entity.newBuilder(routeKey)
-					.set("route_locations_list", route)
-					.set("route_owner", data.getUsername())
-					.set("route_info", data.getInfo())
-					.build();
-			txn.add(r);
-
-			//add to users routes
-			List<Value<String>> routes = new LinkedList<Value<String>>();
-			List<Value<String>> routes1 = user.getList("account_routes_list");
-			for(int i = 0;i<routes1.size();i++) {
-				routes.add(routes1.get(i));
-			}
-			
-			routes.add(StringValue.of(data.getRouteName()));
-			
-			user = Entity.newBuilder(user)
-					.set("account_routes_list", ListValue.of(routes))
-					.build();
-			txn.update(user);
-
-			LOG.info("Route " + data.getRouteName() + "successfully added.");
-			txn.commit();
-			return Response.ok(g.toJson("Route addded.")).build();
-
-		} finally {
-
-			if (txn.isActive()) {
-				txn.rollback();
-				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-			}
-		}
-	}
 	
 	
-	@GET
-	@Path("/user/routes")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response getUserRoutes(FindUserData data) {
-		Transaction txn = datastore.newTransaction();
-		try {
-			
-			Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.username);
-			Entity user = txn.get(userKey);	
-			
-			if(user == null) {
-				txn.rollback();
-				return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
-			}
-			
-			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.tokenID);
-			Entity logged = txn.get(tokenKey);
-			long end = logged.getLong("token_end_time");
-			
-			//o token expirou
-			if(end <  System.currentTimeMillis()) {
-				txn.delete(tokenKey);
-				txn.commit();
-				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
-			}
-			if(user.getString("account_perfil").equals("Private") && !logged.getString("token_username").equals(data.username)) {
-				return Response.status(Status.FORBIDDEN).entity("User profile is private.").build();
-			}
- 
-			
-			List<String> routes = new LinkedList<String>();
-			List<Value<String>> routes1 = user.getList("account_routes_list");
-			for(int i = 0;i<routes1.size();i++) {
-				Key routesKey = datastore.newKeyFactory().setKind("Routes").newKey(routes1.get(i).get());
-				Entity route = txn.get(routesKey);
-				routes.add(g.toJson(route));
-			}
-			
-
-			txn.commit();
-			return Response.ok(g.toJson(routes)).build();
-
-		} finally {
-			if (txn.isActive()) {
-				txn.rollback();
-				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-			}
-		}
-	}
-	
+		
 	
 
 }
