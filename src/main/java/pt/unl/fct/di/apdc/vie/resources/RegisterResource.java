@@ -59,7 +59,6 @@ public class RegisterResource {
 				//following.add(StringValue.of("test"));
 				
 				List<Value<String>> routes = new ArrayList<Value<String>>();
-				routes.add(StringValue.of("test"));
 				
 				user = Entity.newBuilder(userKey)
 						.set("account_name", data.getUsername())

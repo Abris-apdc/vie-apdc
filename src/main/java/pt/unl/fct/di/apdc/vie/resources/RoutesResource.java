@@ -9,7 +9,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -29,8 +28,7 @@ import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.DeleteRouteData;
-import pt.unl.fct.di.apdc.vie.util.FindUserData;
-import pt.unl.fct.di.apdc.vie.util.ListRoutesData;
+import pt.unl.fct.di.apdc.vie.util.GetRoutesData;
 import pt.unl.fct.di.apdc.vie.util.ModifyRouteData;
 import pt.unl.fct.di.apdc.vie.util.RouteData;
 
@@ -131,13 +129,14 @@ public class RoutesResource {
 	}
 	
 	
-	@GET
-	@Path("/user")
+	@POST
+	@Path("/get")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response getUserRoutes(ListRoutesData data) {
+	public Response listRoutes(GetRoutesData data) {
 		Transaction txn = datastore.newTransaction();
 		try {
+			
 			
 			Key userKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
 			Entity user = txn.get(userKey);	
@@ -158,17 +157,28 @@ public class RoutesResource {
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
 			if(user.getString("account_perfil").equals("Private") && !logged.getString("token_username").equals(data.getUsername())) {
+				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("User profile is private.").build();
 			}
- 
+  
 			
-			List<String> routes = new LinkedList<String>();
+			
+			List<String> routes = new ArrayList<>();
+			
 			List<Value<String>> routes1 = user.getList("account_routes_list");
 			for(int i = 0;i<routes1.size();i++) {
+				String thisRoute = "Name: ";
 				Key routesKey = datastore.newKeyFactory().setKind("Routes").newKey(routes1.get(i).get());
+				thisRoute += routes1.get(i).get();
+				thisRoute += "; Locations: ";
 				Entity route = txn.get(routesKey);
-				routes.add(g.toJson(route));
-			}
+				List<Value<String>> locations = route.getList("route_locations_list");
+				for(int j = 0; j < locations.size(); j++) {
+					thisRoute += locations.get(j).get();
+					thisRoute += "; ";
+				}
+				routes.add(thisRoute);
+			} 
 			
 
 			txn.commit();
@@ -184,7 +194,7 @@ public class RoutesResource {
 	
 	
 	
-	@PUT
+	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response modifyRoute(ModifyRouteData data) {
@@ -215,7 +225,7 @@ public class RoutesResource {
 					return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
 				}
 				
-				if(data.getRouteLocations() != null) {
+				if(data.getRouteLocations().length != 0) {
 					String[] locations1 = data.getRouteLocations();
 					List<Value<String>> route1 = new ArrayList<Value<String>>();
 					for(String l : locations1) {
@@ -240,7 +250,7 @@ public class RoutesResource {
 					
 				}
 				
-				if(data.getInfo() != null) {
+				if(data.getInfo() != "") {
 					route = Entity.newBuilder(route)
 							.set("route_info", ListValue.of(data.getInfo()))
 							.build();
