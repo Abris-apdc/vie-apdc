@@ -1,4 +1,4 @@
-import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button, createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
 import './Register.css';
@@ -51,7 +51,8 @@ function DeleteForm(){
 
     const classes = useStyles();
 
-    return <div style={{transform: "scale(1.50)"}}>
+    return <div>
+            <br/>
             <br/>
             <br/>
             <br/>
@@ -63,13 +64,14 @@ function DeleteForm(){
             <br/>
             <br/>
             <div style={{display:"flex", justifyContent:"center"}}>
-                <Box bgcolor='#1B3651' width={2/5} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
-                    <span style={{color:"white", fontSize:"20px"}}>This will delete your account.</span>
+                <Box bgcolor='#1B3651' width={1/2} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}  style={{transform: "scale(1.5)"}}>
+                    <Typography style={{color:"white", fontSize:"20px"}}>
+                        This will delete your account.
+                        <br/>
+                        If really want to continue confirm your password and press the button below.
+                    </Typography>             
                     <br/>
-                    <span style={{color:"white", fontSize:"20px"}}>If really want to continue confirm your password and press the button below.</span>
-                    <br/>
-                    <br/>
-                    <input type={"password"} value={password1} style={{width: "180px"}} onChange={handleChangePassword} required = {true}/>
+                    <input type={"password"} value={password1} onChange={handleChangePassword} required = {true}/>     
                     <br/>
                     <br/>
                     <Button

@@ -37,8 +37,7 @@ function HomePage(){
                         variant="contained"
                         color="primary"
                         className={classes.button}
-                        startIcon={<ArrowRightIcon/>}
-                    >
+                        startIcon={<ArrowRightIcon/>}>
                         Create an account
                     </Button>
                     <br/>
