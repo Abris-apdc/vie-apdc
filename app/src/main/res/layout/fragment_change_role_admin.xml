@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Select a Role"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/change_role_su_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/change_role_admin_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,9 +32,10 @@
         android:id="@+id/change_role_admin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="88dp"
         android:text="Change"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change_role_admin_spinner" />
 
