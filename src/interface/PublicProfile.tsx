@@ -95,7 +95,7 @@
         </Button>;  
 
         var SU = <p/>;
-        if(localStorage.getItem('role') === "SU"){
+        if(localStorage.getItem('role') === "SU" && role !== "SU" && role !== "ORG"){
             SU =  
             <select name={role} onChange={handleChangeRole}>
             <option value=""></option>
@@ -106,7 +106,7 @@
         }
 
         var ADMIN = <p/>;
-        if(localStorage.getItem('role') === "ADMIN" && role !== "ADMIN"){
+        if(localStorage.getItem('role') === "ADMIN" && role !== "ADMIN" && role !== "ORG"){
             ADMIN =  
             <select name={role} onChange={handleChangeRole}>
             <option value=""></option>
