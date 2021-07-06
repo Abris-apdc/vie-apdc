@@ -66,7 +66,6 @@ public class ChangePasswordFragment  extends Fragment {
         ChangePassword cp = new ChangePassword(
                 oldPass.getText().toString(),
                 newPass.getText().toString(),
-                confirmation.getText().toString(),
                 token
         );
 

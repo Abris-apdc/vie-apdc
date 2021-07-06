@@ -88,9 +88,10 @@ public class OtherProfileFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     folloing = true;
-
+                    follow.setText("Following");
+                    Toast.makeText(getActivity(), "Following", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
                     folloing = false;
                 }
             }
@@ -98,7 +99,9 @@ public class OtherProfileFragment extends Fragment {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 folloing = false;
-                Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+                follow.setText("Following");
+                Toast.makeText(getActivity(), "Following", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

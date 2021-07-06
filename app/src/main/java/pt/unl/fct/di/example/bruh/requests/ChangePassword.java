@@ -9,16 +9,13 @@ public class ChangePassword {
     @SerializedName("newPass")
     private String newPass;
 
-    @SerializedName("confirmation")
-    private String confirmation;
 
     @SerializedName("tokenID")
     private String tokenID;
 
-    public ChangePassword(String oldPass, String newPass, String confirmation, String tokenID) {
+    public ChangePassword(String oldPass, String newPass, String tokenID) {
         this.oldPass = oldPass;
         this.newPass = newPass;
-        this.confirmation = confirmation;
         this.tokenID = tokenID;
     }
 }
