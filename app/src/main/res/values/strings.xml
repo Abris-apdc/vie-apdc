@@ -33,8 +33,10 @@
         <item>USER</item>
     </string-array>
 
-    <string-array name="admin_roles">
+    <string-array name="admin_roles">git 
         <item>MOD</item>
         <item>USER</item>
     </string-array>
+    <string name="title_activity_add_place">AddPlaceActivity</string>
+
 </resources>

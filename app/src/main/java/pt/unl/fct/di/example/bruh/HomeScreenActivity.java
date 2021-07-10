@@ -32,11 +32,12 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         String token = preferences.getString("Authentication_Id", "");
         if (token.equals("null") || token == null){
-            Intent intent = new Intent((Context)HomeScreenActivity.this, LoginActivity.class);
-            HomeScreenActivity.this.startActivity(intent);
-        }else {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
 
+           startActivity(intent);
+        }else {
+           Intent intent = new Intent(this, MainActivity.class);
+          //  Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
 
