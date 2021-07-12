@@ -13,6 +13,16 @@
 
         const [gotError, setError] = useState(false);
 
+        const [following, setFollowing] = useState(false);
+
+        axios.get("https://amazing-office-313314.appspot.com/rest/getFollowing/"+localStorage.getItem('username'))
+        .then(function ({data}) {
+            for (var i = 0; i < data.length; i++) {
+                if(data[i] === user)
+                    setFollowing(true);
+            }
+        });
+
         axios.get("https://amazing-office-313314.appspot.com/rest/profile/"+user)
             .then(function ({data}) {
                 firstName = data.firstName;
@@ -37,16 +47,13 @@
         const classes = useStyles();
 
         function createJson(){
-            console.log(user)
-            console.log(localStorage.getItem("tokenID"))
-            console.log(role)
             return JSON.stringify({username:user, tokenID:localStorage.getItem("tokenID"), newRole:role});
         }
 
         function handleChangeRole(e:ChangeEvent<HTMLSelectElement>){
             console.log(role)
             console.log(e.target.value)
-            if(e.target.value=="")
+            if(e.target.value==="")
                 return
             if(role !== e.target.value){
                 role = e.target.value;
@@ -66,6 +73,40 @@
             else
                 alert("You can't change to actual role.")
         }
+
+        function handleFollow(){
+            fetch("https://amazing-office-313314.appspot.com/rest/profile/follow/"+user,
+            {method:"POST", 
+            headers:{ 'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'},
+            body: createJsonFollow()
+            })
+            .then(data=> {if(!data.ok){
+                alert("Something went wrong");
+            }else {
+                window.location.reload();
+            }});
+        }
+
+        function handleUnfollow(){
+            fetch("https://amazing-office-313314.appspot.com/rest/profile/unfollow/"+user,
+            {method:"DELETE", 
+            headers:{ 'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'},
+            body: createJsonFollow()
+            })
+            .then(data=> {if(!data.ok){
+                alert("Something went wrong");
+                console.log(data);
+            }else {
+                window.location.reload();
+            }});
+        }
+
+        function createJsonFollow(){
+            return JSON.stringify({tokenID:localStorage.getItem('tokenID')})
+        }
+
         
         if (isLoading) {
             return <div style={{color:"white"}} className="App">
@@ -85,14 +126,15 @@
 
         var isLoggedIn = <p/>;
         if(localStorage.getItem('username') === user)
-            isLoggedIn = <Button
-            variant="contained"
-            color="primary"
-            href="/myProfile"
-            className={classes.button}
-            startIcon={<ArrowLeftIcon/>}>
-            go back
-        </Button>;  
+            isLoggedIn = 
+            <Button
+                variant="contained"
+                color="primary"
+                href="/myProfile"
+                className={classes.button}
+                startIcon={<ArrowLeftIcon/>}>
+                go back
+            </Button>;
 
         var SU = <p/>;
         if(localStorage.getItem('role') === "SU" && role !== "SU" && role !== "ORG"){
@@ -115,6 +157,28 @@
         </select>;
         }
 
+        var FOLLOW = <p/>;
+        if(localStorage.getItem('username') !== user && !following)
+            FOLLOW =  
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={handleFollow}>
+                follow
+            </Button>;
+
+        var UNFOLLOW = <p/>;
+        if(following)
+            UNFOLLOW = 
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUnfollow}
+                className={classes.button}>
+                unfollow
+            </Button>;
+
         return(
             <div>
                 <br/>
@@ -131,7 +195,8 @@
                 <br/>
                 {SU}
                 {ADMIN}
-                <br/>
+                {FOLLOW}
+                {UNFOLLOW}
                 {isLoggedIn}
             </div>
         )   

@@ -1,7 +1,6 @@
 import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react"
 import { ChangeEvent, useState} from "react"
-import { Redirect } from "react-router-dom";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import './Register.css';
 

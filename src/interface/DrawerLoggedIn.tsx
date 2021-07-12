@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -77,7 +77,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawer = () => {
@@ -104,7 +103,7 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"relative", top:"2px", left:"223px"}}/></a>
+          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"738px"}}/></a>
           <SearchBar/>
         </Toolbar>
       </AppBar>
