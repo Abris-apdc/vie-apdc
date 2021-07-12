@@ -307,4 +307,35 @@ public class ProfileResource {
 		}
 	}
 	
+	@GET
+	@Path("/get/{username}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getProfile(@PathParam("username") String username)  {
+
+		Transaction txn = datastore.newTransaction();
+		
+		try {
+				
+			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(username);
+			
+			Entity account = txn.get(accountKey);
+			
+			//conta nao existe
+			if(account == null){
+				txn.rollback();
+				return Response.status(Status.NOT_FOUND).entity("Account doesn't exist.").build();
+			}
+			
+			txn.commit();
+			return Response.ok(g.toJson(account)).build();
+
+		} finally {
+			if(txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
+	
 }
