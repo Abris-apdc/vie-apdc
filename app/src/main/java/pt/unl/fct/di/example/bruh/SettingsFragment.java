@@ -1,5 +1,6 @@
 package pt.unl.fct.di.example.bruh;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +14,14 @@ import androidx.fragment.app.FragmentManager;
 
 public class SettingsFragment extends Fragment {
     public String role;
-    private Button edit, password, delete;
+    private Button edit, photo,password, delete;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         edit = (Button) view.findViewById(R.id.fraagment_settings_edit);
+        photo = (Button) view.findViewById(R.id.fraagment_settings_photo);
         password = (Button) view.findViewById(R.id.fraagment_settings_password);
         delete = (Button) view.findViewById(R.id.fraagment_settings_delete);
 
@@ -30,7 +32,12 @@ public class SettingsFragment extends Fragment {
                 edit();
             }
         });
-
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photo();
+            }
+        });
         password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +61,12 @@ public class SettingsFragment extends Fragment {
             fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyFragment()).commit();
     }
 
+    private void photo(){
+      //  Intent intent = new Intent(getActivity(), PerfilPhotoActivity.class);
+        //startActivity(intent);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ChangePerfilPhotoFragment()).commit();
+    }
     private void password(){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new ChangePasswordFragment()).commit();
