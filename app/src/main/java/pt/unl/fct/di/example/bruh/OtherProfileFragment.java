@@ -24,8 +24,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class OtherProfileFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
+    private static final String FOLLOW = "Follow";
+    private static final String UNFOLLOW = "Unfollow";
     private String username;
-    private Boolean folloing;
     private TextView profile, fn,ln,role;
     private Button follow;
 
@@ -47,7 +48,12 @@ public class OtherProfileFragment extends Fragment {
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                follow();
+
+                if (follow.getText().equals(FOLLOW)){
+                    follow();
+                } else{
+                    unfollow();
+                }
             }
         });
 
@@ -65,6 +71,11 @@ public class OtherProfileFragment extends Fragment {
                     fn.setText(r.body().getFirstName());
                     ln.setText(r.body().getLastName());
                     role.setText(r.body().getRole());
+                    if (!r.body().isFollowing()){
+                        follow.setText(FOLLOW);
+                    } else {
+                        follow.setText(UNFOLLOW);
+                    }
 
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
@@ -87,20 +98,45 @@ public class OtherProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
-                    folloing = true;
-                    follow.setText("Following");
-                    Toast.makeText(getActivity(), "Following", Toast.LENGTH_SHORT).show();
+                    follow.setText(UNFOLLOW);
+                    Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
                 }else {
                   //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
-                    folloing = false;
+
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                folloing = false;
-                follow.setText("Following");
-                Toast.makeText(getActivity(), "Following", Toast.LENGTH_SHORT).show();
+                follow.setText(UNFOLLOW);
+                Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void unfollow(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().unfollow(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    follow.setText(FOLLOW);
+                    Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
+                }else {
+                    //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(FOLLOW);
+                Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
 
             }
         });

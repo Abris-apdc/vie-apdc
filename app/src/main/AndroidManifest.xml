@@ -21,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bruh">
 
-
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -30,22 +29,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <activity
-            android:name=".AddPlaceActivity"/>
-        <activity android:name=".OtherProfileActivity" />
-        <activity
-            android:name=".RegisterOrganisationActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".FindActivity" />
-        <activity
-            android:name=".HomeScreenActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -69,12 +52,32 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait" />
+        <activity android:name=".MapsActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".AddPlaceActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".OtherProfileActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait" />
+        <activity android:name=".FindActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"/>
+
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MapsActivity" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".RegisterOrganisationActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".HomeScreenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

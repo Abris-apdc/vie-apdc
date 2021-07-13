@@ -120,8 +120,8 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                if((LocalDate.now().getYear() - Integer.parseInt(fYear))<15){
-                    Toast.makeText(getApplicationContext(), "You must be over 15 years old.", Toast.LENGTH_SHORT).show();
+                if((LocalDate.now().getYear() - Integer.parseInt(fYear))<0){
+                    Toast.makeText(getApplicationContext(), "Invalid birthday date", Toast.LENGTH_SHORT).show();
                     return;
 
                 }

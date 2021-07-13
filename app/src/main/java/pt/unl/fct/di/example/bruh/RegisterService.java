@@ -15,6 +15,7 @@ import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.http.Body;
 
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -57,4 +58,7 @@ public interface RegisterService {
 
     @POST("/rest/profile/follow/{username}")
     Call<String> follow(@Path("username") String username, @Body Follow follow);
+
+    @HTTP(method = "DELETE", path = "/rest/profile/unfollow/{username}", hasBody = true)
+    Call<String> unfollow(@Path("username") String username, @Body Follow follow);
 }

@@ -18,12 +18,16 @@ public class UserInfo {
     @SerializedName("bDay")
     private String bDay;
 
-    public UserInfo(String role, String username, String firstName,String lastName,String bDay  ) {
+    @SerializedName("isFollowing")
+    private boolean isFollowing;
+
+    public UserInfo(String role, String username, String firstName,String lastName,String bDay, boolean isFollowing ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.username = username;
         this.bDay = bDay;
+        this.isFollowing = isFollowing;
 
     }
     public String getFirstName() {
@@ -42,4 +46,7 @@ public class UserInfo {
         return username;
     }
 
+    public boolean isFollowing(){
+        return isFollowing;
+    }
 }

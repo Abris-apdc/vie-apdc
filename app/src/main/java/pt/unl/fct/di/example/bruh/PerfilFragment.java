@@ -24,11 +24,6 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class PerfilFragment extends Fragment {
-    private static final String FIRST_NAME = "username";
-    private static final String LAST_NAME = "lastName";
-    private static final String ROLE = "role";
-    private static final String USERNAME = "username";
-
     public static final String SHARED_PREFS = "sharedPrefs";
     private TextView firstName, lastName, role, username;
     private Button edit;
@@ -82,6 +77,7 @@ public class PerfilFragment extends Fragment {
                 if(r.isSuccessful()) {
                     firstName.setText(r.body().getFirstName());
                     lastName.setText(r.body().getLastName());
+                    role.setText(r.body().getRole());
 
 
                 }else
