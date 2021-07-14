@@ -25,6 +25,7 @@ import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.ListValue;
 import com.google.cloud.datastore.StringValue;
 
+import pt.unl.fct.di.apdc.vie.util.AccountData;
 import pt.unl.fct.di.apdc.vie.util.FollowData;
 import pt.unl.fct.di.apdc.vie.util.OrgInfoData;
 import pt.unl.fct.di.apdc.vie.util.UserInfoData;
@@ -326,8 +327,18 @@ public class ProfileResource {
 				return Response.status(Status.NOT_FOUND).entity("Account doesn't exist.").build();
 			}
 			
+			
+			AccountData aux = new AccountData(account.getString("account_address"),account.getString("account_birthDay"),account.getString("account_cardID"),account.getString("account_creation_time"),account.getString("account_email"),account.getString("account_firstName"),account.getString("account_followers"),account.getString("account_following"),account.getString("account_gender"),account.getString("account_lastName"),account.getString("account_name"),account.getString("account_owner"),account.getString("account_perfil"),account.getString("account_phone"),account.getString("account_pwd"),account.getString("account_role"),account.getString("account_service"),account.getString("account_state"),account.getString("account_warnings"));
+			List<Value<String>> followers = account.getList("account_followers_list");
+			List<Value<String>> following = account.getList("account_following_list");
+			List<Value<String>> reqs = account.getList("account_requests_list");
+			List<Value<String>> routes = account.getList("account_routes_list");
+			aux.setFollowers(followers);
+			aux.setFollowing(following);
+			aux.setRequests(reqs);
+			aux.setRoutes(routes);
 			txn.commit();
-			return Response.ok(g.toJson(account)).build();
+			return Response.ok(g.toJson(aux)).build();
 
 		} finally {
 			if(txn.isActive()) {
