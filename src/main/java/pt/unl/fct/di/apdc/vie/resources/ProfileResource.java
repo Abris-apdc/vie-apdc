@@ -370,5 +370,52 @@ public class ProfileResource {
 		}
 	}
 	
-	
+	@GET
+	@Path("/isFollowing/{username}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response isFollowing(@PathParam("username") String username, FollowData data)  {
+
+		Transaction txn = datastore.newTransaction();
+		
+		try {
+			
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+			Entity token = txn.get(tokenKey);
+			
+			if(token == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
+			
+			Key key = datastore.newKeyFactory().setKind("Account").newKey(token.getString("token_username"));
+			
+			Entity user = txn.get(key);
+			
+			List<Value<String>> following = user.getList("account_following_list");
+			
+			for(int i = 0; i<following.size();i++) {
+				if(following.get(i).get().equals(username)) {
+					txn.commit();
+					return Response.ok().build();
+				}
+			}
+			txn.commit();
+			return Response.status(Status.NOT_FOUND).build();
+			
+		} finally {
+			if(txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
 }
