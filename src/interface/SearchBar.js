@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function SearchBar() {
 
-    var text = "";
+    const[value, setValue] = React.useState("");
 
     var [myOptions, setMyOptions] = useState([]);
 
@@ -30,12 +30,8 @@ export default function SearchBar() {
     
     function handleRedirect(event){
 		if(event.key === 'Enter'){
-			document.location.href = "/profile/"+text;
+			document.location.href = "/profile/"+value;
 	    }
-    }
-
-    function updateInput(value){
-        text = value;
     }
 
     return (
@@ -46,7 +42,7 @@ export default function SearchBar() {
             autoComplete
             autoHighlight
             options={myOptions}
-            onChange={(value) => updateInput(value)}
+            onChange={(event, value) => setValue(value)}
             renderInput={(params) => (
                 <TextField {...params}
                     onChange={getDataFromAPI}

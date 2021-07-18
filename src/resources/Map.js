@@ -16,9 +16,7 @@ var lat = 0;
 var long = 0;
 
 navigator.geolocation.getCurrentPosition(function(position) {
-    console.log("Latitude is :", position.coords.latitude);
     lat = position.coords.latitude;
-    console.log("Longitude is :", position.coords.longitude);
     long = position.coords.longitude;
 });
 
@@ -54,7 +52,7 @@ export class MapContainer extends Component {
                 <br/>
                 <br/>
                 <br/>
-                <br/>
+                <br/>   
                 <br/>
                 <Map
                 google={this.props.google}
