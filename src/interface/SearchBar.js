@@ -42,7 +42,7 @@ export default function SearchBar() {
             autoComplete
             autoHighlight
             options={myOptions}
-            onChange={(event, value) => setValue(value)}
+            onChange={(_event, value) => setValue(value)}
             renderInput={(params) => (
                 <TextField {...params}
                     onChange={getDataFromAPI}

@@ -89,19 +89,21 @@ function Profile(){
                 <b>Following: </b> {following}
             </Button>
             <br/>
-            <Box bgcolor='#1B3651' width={0.5} textAlign="Left" p={2} borderRadius="borderRadius" boxShadow={2} alignSelf="center">
-                <span style = {{color:"white",fontSize:"20px"}}>About {localStorage.getItem('username')}:</span>
-                <br/>
-                <span style={{color:"white", fontSize:"15px"}}><b>Name:</b> {firstName}&nbsp;{lastName}</span>
-                <br/>
-                <span style={{color:"white", fontSize:"15px"}}><b>Birthday:</b> {birthday}</span>
-                <br/>
-                <span style={{color:"white", fontSize:"15px"}}><b>Email:</b> {email}</span>
-                <br/>
-                <span style={{color:"white", fontSize:"15px"}}><b>Phone:</b> {phone}</span>
-                <br/>
-                <span style={{color:"white", fontSize:"15px"}}><b>Role:</b> {role}</span>
-            </Box>
+            <div style={{display:"flex", justifyContent:"center"}}>
+                <Box bgcolor='#1B3651' width={0.5} textAlign="Left" p={2} borderRadius="borderRadius" boxShadow={2}>
+                    <span style = {{color:"white",fontSize:"20px"}}>About {localStorage.getItem('username')}:</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"15px"}}><b>Name:</b> {firstName}&nbsp;{lastName}</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"15px"}}><b>Birthday:</b> {birthday}</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"15px"}}><b>Email:</b> {email}</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"15px"}}><b>Phone:</b> {phone}</span>
+                    <br/>
+                    <span style={{color:"white", fontSize:"15px"}}><b>Role:</b> {role}</span>
+                </Box>
+            </div>
             <br/>
             <br/>
             <Button
