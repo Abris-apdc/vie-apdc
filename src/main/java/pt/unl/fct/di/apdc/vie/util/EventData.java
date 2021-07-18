@@ -1,26 +1,24 @@
 package pt.unl.fct.di.apdc.vie.util;
 
-public class LocationData {
+public class EventData {
 
 	private String name;
 	private String coordinates;
 	private String address;
-	private String owner;
-	private String info;
-	private String schedule;
+	private String org;
+	private String duration;
 	private String tokenID;
 
-	public LocationData() {
+	public EventData() {
 
 	}
 
-	public LocationData(String name, String coordinates, String address, String owner, String info, String schedule, String tokenID) {
+	public EventData(String name, String coordinates, String address, String org, String duration, String tokenID) {
 		this.name = name;
 		this.coordinates = coordinates;
 		this.address = address;
-		this.owner = owner;
-		this.info = info;
-		this.schedule = schedule;
+		this.org = org;
+		this.duration = duration;
 		this.tokenID = tokenID;
 	}
 	
@@ -40,25 +38,18 @@ public class LocationData {
 		this.address = address;
 	}
 
-	public String getOwner() {
-		return owner;	
+	public String getOrg() {
+		return org;	
 	}
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
-
-	public String getInfo() {
-		return info;	
-	}
-	public void setInfo(String info) {
-		this.info = info;
+	public void setOrg(String org) {
+		this.org = org;
 	}
 
-	public String getSchedule() {
-		return schedule;	
+	public String getDuration() {
+		return duration;	
 	}
-	public void setSchedule(String schedule) {
-		this.schedule = schedule;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
 	public String getTokenID() {

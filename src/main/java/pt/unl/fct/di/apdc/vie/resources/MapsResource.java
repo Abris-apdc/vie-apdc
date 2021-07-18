@@ -1,6 +1,8 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
@@ -18,10 +20,12 @@ import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.Transaction;
 import com.google.gson.Gson;
 
-import pt.unl.fct.di.apdc.vie.util.LocationData;
+import pt.unl.fct.di.apdc.vie.util.EventData;
 
 @Path("/map")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -36,9 +40,9 @@ public class MapsResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response addLocation(LocationData data) {
+	public Response addEvent(EventData data) {
 		Transaction txn = datastore.newTransaction();
-		Key localKey = datastore.newKeyFactory().setKind("Location").newKey(data.getName());
+		Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(data.getName());
 
 		try {
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
@@ -52,26 +56,29 @@ public class MapsResource {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
-			Entity local = txn.get(localKey);
-			if (local != null) {
+			else if(!logged.getString("token_role").equals("ORG")) {
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Action not allowed.").build();
+			}
+			Entity event = txn.get(eventKey);
+			if (event != null) {
 				//ja existe um user com o mesmo username
 				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("Location alredy exists.").build();
+				return Response.status(Status.FORBIDDEN).entity("Event alredy exists.").build();
 			}
 			else {
 				
-				local = Entity.newBuilder(localKey)
-						.set("local_coordinates", data.getCoordinates())
-						.set("local_address", data.getAddress())
-						.set("local_owner", data.getOwner())
-						.set("local_info", data.getInfo())
-						.set("local_schedule", data.getSchedule())
+				event = Entity.newBuilder(eventKey)
+						.set("event_coordinates", data.getCoordinates())
+						.set("event_address", data.getAddress())
+						.set("event_org", data.getOrg())
+						.set("event_duration", data.getDuration())
 						.build();
-				txn.add(local);
+				txn.add(event);
 
-				LOG.info("Location " + data.getAddress() + "successfully added.");
+				LOG.info("Event " + data.getAddress() + "successfully added.");
 				txn.commit();
-				return Response.ok(g.toJson("Location addded.")).build();
+				return Response.ok(g.toJson("Event addded.")).build();
 			}
 		} finally {
 
@@ -82,48 +89,77 @@ public class MapsResource {
 		}
 	}
 	
-	
 	@GET
-	@Path("/{name}")
-	//@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response getPoint(@PathParam("name") String name) {
-		
+	public Response listEvents() {
 		Transaction txn = datastore.newTransaction();
-		
 		try {
+			
+			Query<Entity> eventQuery = Query.newEntityQueryBuilder()
+					.setKind("Event")
+					.build();
+			QueryResults<Entity> eventsResults = txn.run(eventQuery);
+			
+			
+			List<String> allResults = new ArrayList<>();
+			
+			eventsResults.forEachRemaining(e -> {allResults.add(e.getString("event_name"));});
 				
-			Key localKey = datastore.newKeyFactory().setKind("Location").newKey(name);
-			
-			Entity location = txn.get(localKey);
-			
-			//a conta nao existe nem nos users nem nas orgs
-			if(location == null ){
-				txn.rollback();
-				return Response.status(Status.NOT_FOUND).entity("Location doesn't exist.").build();
-			}
-			//um user
-			LocationData ui = new LocationData(name,
-					location.getString("local_coordinates"),
-					location.getString("local_address"),
-					location.getString("local_owner"),
-					location.getString("local_info"),
-					location.getString("local_schedule"), "");
 			txn.commit();
-			return Response.ok(g.toJson(ui)).build();
+			return Response.ok(g.toJson(allResults)).build();
 
+		} catch (Exception e) {
+			txn.rollback();
+			return Response.status(Status.FORBIDDEN).entity("Attempt to see events failed.").build();
 		} finally {
-			if(txn.isActive()) {
+			if (txn.isActive()) {
 				txn.rollback();
 				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}
+
 	}
 	
-
-	
-	
+	@GET
+	@Path("/list/{organization}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response listEventsByOrg(@PathParam("organization") String org) {
+		Transaction txn = datastore.newTransaction();
+		try {
+			
+			Query<Entity> eventsQuery = Query.newEntityQueryBuilder()
+					.setKind("Account")
+					.build();
+			QueryResults<Entity> eventsResults = txn.run(eventsQuery);
+			
 		
+			
+			List<String> allResults = new ArrayList<>();
+
+				eventsResults.forEachRemaining(e -> {
+				if(e.getString("event_org").toLowerCase().equals(org.toLowerCase()))
+					allResults.add(e.getString("event_name"));});
+		
+			
+			txn.commit();
+			return Response.ok(g.toJson(allResults)).build();
+
+		} catch (Exception e) {
+			txn.rollback();
+			return Response.status(Status.FORBIDDEN).entity("Attempt to see events by organization failed.").build();
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+
+	}
+
+	
+}
 	
 
-}
+	
+	
