@@ -370,7 +370,7 @@ public class ProfileResource {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/isFollowing/{username}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response isFollowing(@PathParam("username") String username, FollowData data)  {
