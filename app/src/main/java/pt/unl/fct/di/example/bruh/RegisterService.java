@@ -10,9 +10,11 @@ import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
 import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
 import pt.unl.fct.di.example.bruh.requests.ModifyUser;
+import pt.unl.fct.di.example.bruh.requests.PlaceEvent;
 import pt.unl.fct.di.example.bruh.requests.Register;
 import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
+import pt.unl.fct.di.example.bruh.requests.Warning;
 import retrofit2.Call;
 import retrofit2.http.Body;
 
@@ -57,6 +59,9 @@ public interface RegisterService {
     @PUT("/rest/changeRole")
     Call<String> changeRole(@Body ChangeRole username);
 
+    @POST("/rest/warning/{username}")
+    Call<String> giveWarning(@Path("username") String username, @Body Warning follow);
+
     @POST("/rest/profile/follow/{username}")
     Call<String> follow(@Path("username") String username, @Body Follow follow);
 
@@ -65,4 +70,7 @@ public interface RegisterService {
 
     @POST("/rest/profile/isFollowing/{username}")
     Call<String> isFollowing(@Path("username") String username, @Body IsFollowing follow);
+
+    @POST("/rest/map")
+    Call<String> addEvent(@Body PlaceEvent event);
 }
