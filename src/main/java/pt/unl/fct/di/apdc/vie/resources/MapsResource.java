@@ -104,7 +104,7 @@ public class MapsResource {
 			
 			List<String> allResults = new ArrayList<>();
 			
-			eventsResults.forEachRemaining(e -> {allResults.add(e.getString("event_name"));});
+			eventsResults.forEachRemaining(e -> {allResults.add(e.getKey().toString());});
 				
 			txn.commit();
 			return Response.ok(g.toJson(allResults)).build();
@@ -129,7 +129,7 @@ public class MapsResource {
 		try {
 			
 			Query<Entity> eventsQuery = Query.newEntityQueryBuilder()
-					.setKind("Account")
+					.setKind("Event")
 					.build();
 			QueryResults<Entity> eventsResults = txn.run(eventsQuery);
 			
