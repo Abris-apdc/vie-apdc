@@ -104,7 +104,7 @@ public class MapsResource {
 			
 			List<String> allResults = new ArrayList<>();
 			
-			eventsResults.forEachRemaining(e -> {allResults.add(e.getKey().toString());});
+			eventsResults.forEachRemaining(e -> {allResults.add(e.getKey().getName());});
 				
 			txn.commit();
 			return Response.ok(g.toJson(allResults)).build();
@@ -139,7 +139,7 @@ public class MapsResource {
 
 				eventsResults.forEachRemaining(e -> {
 				if(e.getString("event_org").toLowerCase().equals(org.toLowerCase()))
-					allResults.add(e.getString("event_name"));});
+					allResults.add(e.getKey().getName());});
 		
 			
 			txn.commit();
