@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pt.unl.fct.di.example.bruh.requests.Follow;
+import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +28,7 @@ public class OtherProfileFragment extends Fragment {
     private static final String FOLLOW = "Follow";
     private static final String UNFOLLOW = "Unfollow";
     private String username;
+    private boolean is;
     private TextView profile, fn,ln,role;
     private Button follow;
 
@@ -43,7 +45,9 @@ public class OtherProfileFragment extends Fragment {
         follow = (Button) view.findViewById(R.id.other_profile_follow);
 
         profile.setText(username);
-        doRequest(view);
+        isFollowing();
+        doRequest();
+
 
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +64,28 @@ public class OtherProfileFragment extends Fragment {
         return view;
     }
 
-    private void doRequest(View view) {
+    private void isFollowing(){
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+        clientAPI = clientAPI.getInstance();
+        IsFollowing f = new IsFollowing(token);
+        clientAPI.getRegisterService().isFollowing(username,f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    follow.setText(FOLLOW);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(UNFOLLOW);
+            }
+        });
+    }
+
+    private void doRequest() {
 
         clientAPI = clientAPI.getInstance();
 
@@ -71,11 +96,6 @@ public class OtherProfileFragment extends Fragment {
                     fn.setText(r.body().getFirstName());
                     ln.setText(r.body().getLastName());
                     role.setText(r.body().getRole());
-                    if (!r.body().isFollowing()){
-                        follow.setText(FOLLOW);
-                    } else {
-                        follow.setText(UNFOLLOW);
-                    }
 
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();

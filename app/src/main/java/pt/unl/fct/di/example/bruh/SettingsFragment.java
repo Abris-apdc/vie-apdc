@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 public class SettingsFragment extends Fragment {
     public String role;
     private Button edit, photo,password, delete;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

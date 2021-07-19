@@ -5,6 +5,7 @@ import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
 import pt.unl.fct.di.example.bruh.requests.Delete;
 import pt.unl.fct.di.example.bruh.requests.Follow;
+import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
 import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
@@ -61,4 +62,7 @@ public interface RegisterService {
 
     @HTTP(method = "DELETE", path = "/rest/profile/unfollow/{username}", hasBody = true)
     Call<String> unfollow(@Path("username") String username, @Body Follow follow);
+
+    @POST("/rest/profile/isFollowing/{username}")
+    Call<String> isFollowing(@Path("username") String username, @Body IsFollowing follow);
 }
