@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
+import pt.unl.fct.di.example.bruh.requests.Follow;
+import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import pt.unl.fct.di.example.bruh.requests.Warning;
 import retrofit2.Call;
@@ -25,9 +27,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class OtherProfileRolesFragment  extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
+    private static final String FOLLOW = "Follow";
+    private static final String UNFOLLOW = "Unfollow";
     String username, myRole;
     TextView profile, fn,ln,role;
-    Button changeRole, warning;
+    Button changeRole, warning, follow;
 
     private ClientAPI clientAPI;
 
@@ -41,8 +45,23 @@ public class OtherProfileRolesFragment  extends Fragment {
         role = (TextView) view.findViewById(R.id.other_profile_role_roles);
         changeRole = (Button) view.findViewById(R.id.other_profile_change_roles);
         warning = (Button) view.findViewById(R.id.other_profile_warning);
+        follow = (Button) view.findViewById(R.id.other_profile_follow_roles);
         profile.setText(username);
+
+        isFollowing();
         doRequest(view);
+
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (follow.getText().equals(FOLLOW)){
+                    follow();
+                } else{
+                    unfollow();
+                }
+            }
+        });
 
         warning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +120,27 @@ public class OtherProfileRolesFragment  extends Fragment {
 
     }
 
+    private void isFollowing(){
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+        clientAPI = clientAPI.getInstance();
+        IsFollowing f = new IsFollowing(token);
+        clientAPI.getRegisterService().isFollowing(username,f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    follow.setText(FOLLOW);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(UNFOLLOW);
+            }
+        });
+    }
+
     private void warning(){
         SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String token = preferences.getString("Authentication_Id", "");
@@ -126,7 +166,56 @@ public class OtherProfileRolesFragment  extends Fragment {
             }
         });
     }
+    private void follow(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
 
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().follow(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    follow.setText(UNFOLLOW);
+                    Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(UNFOLLOW);
+                Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void unfollow(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().unfollow(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    follow.setText(FOLLOW);
+                    Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
+                }else {
+                    //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(FOLLOW);
+                Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
     private void changeScreen(){
         Intent intent = new Intent(getActivity(), MainActivity.class);
 
