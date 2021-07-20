@@ -9,9 +9,9 @@ Gosta de: Tiro com Arco
 Não gosta de: Pimentos
 
 ### Pedro Bailão, nº 53675
-Gosta de: Vinho Verde
+Gosta de: The Legend Of Zelda
 
-Não gosta de: Putas
+Não gosta de: Sonic
 
 
 
