@@ -3,6 +3,7 @@ package pt.unl.fct.di.example.bruh;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class PerfilFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private static final String FOLLOWING = "Following: ";
     private static final String FOLLOWERS = "Followers: ";
+    private List<String> list, following_list;
     private TextView firstName, lastName, role, username;
     private Button edit, followers, following;
     private ClientAPI clientAPI;
@@ -50,6 +52,25 @@ public class PerfilFragment extends Fragment {
         followers();
         following();
 
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FollowersFragment st = new FollowersFragment();
+                st.setValues(following_list);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+            }
+        });
+
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FollowersFragment st = new FollowersFragment();
+                st.setValues(list);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+            }
+        });
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +128,7 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> r) {
                 if(r.isSuccessful()) {
+                    list= r.body();
                     nFollowers= r.body().size();
                     followers.setText(FOLLOWERS + nFollowers);
                 }
@@ -126,6 +148,7 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> r) {
                 if(r.isSuccessful()) {
+                    following_list = r.body();
                     int number = r.body().size();
                     following.setText(FOLLOWING + number);
                 }

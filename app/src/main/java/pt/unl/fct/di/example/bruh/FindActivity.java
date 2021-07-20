@@ -75,8 +75,6 @@ public class FindActivity extends AppCompatActivity {
 
     public void onItemClick(ArrayAdapter<String> adapter, View v, int position, long id) {
         String item = (String) adapter.getItem(position);
-       // Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
