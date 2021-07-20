@@ -1,24 +1,41 @@
 # Abris
-## A Equipa
+# A Equipa
 
-A Equipa Abris é constituída por 5 elementos
+### A Equipa Abris é constituída por 5 elementos
 
-### António Santos, nº 51879
-<img src="antonio.png" alt="hi" class="inline"/>
+## António Santos, nº 51879
+<img src="antonio.png" alt="hi" class="inline" width="200" height="250"/>
 Gosta de: Tiro com Arco
 
 Não gosta de: Pimentos
 
+### Inês Rocha, nº 53206
+Gosta de: 
+
+Não gosta de: 
+
 ### Pedro Bailão, nº 53675
+<img src="Bailao.png" alt="hi" class="inline" width="200" height="200"/>
 Gosta de: The Legend Of Zelda
 
 Não gosta de: Sonic
 
+### Ramiro Henriques, nº 52535
+Gosta de: 
+
+Não gosta de: 
+
+### Salvador Silva, nº 54597
+Gosta de: 
+
+Não gosta de: 
 
 
+# A Ambição
 
+## Vie
 
-
+Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como para vida em Francês, um duplo significado apropriado para o conceito do nosso produto, através de caminhos mudar vidas. 
 
 
 ## Welcome to GitHub Pages
