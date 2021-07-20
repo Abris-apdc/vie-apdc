@@ -76,6 +76,11 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function PersistentDrawerLeft() {
+  var isOrg = ['Feed', 'myProfile', 'About Us', 'Join Event'];
+
+  if(localStorage.getItem('role') === "ORG")
+    isOrg = ['Feed', 'myProfile', 'About Us', 'Add New Event'];
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -93,7 +98,7 @@ export default function PersistentDrawerLeft() {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar style={{background:'#1B3651', display: 'flex', justifyContent:'space-between'}}>
+        <Toolbar style={{background:'#1B3651'}}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -101,9 +106,9 @@ export default function PersistentDrawerLeft() {
             edge="start"
             className={clsx(classes.menuButton, open)}
           >
-            <MenuIcon />
+          <MenuIcon/>
           </IconButton>
-          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"738px"}}/></a>
+          <a href="/feed"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48%"}}/></a>
           <SearchBar/>
         </Toolbar>
       </AppBar>
@@ -117,7 +122,7 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <List>
-            {['Feed', 'myProfile', 'About', 'Map'].map((text) => (
+            {isOrg.map((text) => (
             <ListItem button key={text} component="a" href={"/"+text}>
                 <ListItemText primary={text} />
             </ListItem>

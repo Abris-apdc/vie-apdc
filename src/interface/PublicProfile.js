@@ -2,9 +2,13 @@
     import axios from 'axios';
     import React, { useState } from 'react';
     import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+    import { Box } from '@material-ui/core';
+import { Warning } from '@material-ui/icons';
     var firstName;
     var lastName;
     var role;
+    var nFollowers;
+    var nFollowing;
 
     function PublicProfile(username){
         const user= JSON.stringify(username).split(':"')[1].split('"}')[0];
@@ -35,6 +39,13 @@
                 setLoading(false);
                 setError(true);
             })  
+
+        axios.get("https://amazing-office-313314.appspot.com/rest/profile/get/"+user)
+            .then(function ({data}) {
+                console.log(data)
+                nFollowers = data.followers;
+                nFollowing = data.following;
+            })
 
         const useStyles = makeStyles((theme) =>
             createStyles({
@@ -107,6 +118,25 @@
             return JSON.stringify({tokenID:localStorage.getItem('tokenID')})
         }
 
+        function createJsonWarning(){
+            return JSON.stringify({tokenID:localStorage.getItem('tokenID')})
+        }
+
+        function handleWarning(){
+            fetch("https://amazing-office-313314.appspot.com/rest/warning/"+user,
+            {method:"POST", 
+            headers:{ 'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'},
+            body: createJsonWarning()
+            })
+            .then(data=> {if(!data.ok){
+                alert("Something went wrong");
+                console.log(data);
+            }else {
+                window.location.reload();
+            }});
+        }
+
         
         if (isLoading) {
             return <div style={{color:"white"}} className="App">
@@ -144,6 +174,13 @@
             <option value="USER">USER</option>
             <option value="MOD">MOD</option>
             <option value="ADMIN">ADMIN</option>
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<Warning/>}>
+                Warning
+            </Button>
         </select>;
         }
 
@@ -154,6 +191,13 @@
             <option value=""></option>
             <option value="USER">USER</option>
             <option value="MOD">MOD</option>
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<Warning/>}>
+                Warning
+            </Button>
         </select>;
         }
 
@@ -178,8 +222,22 @@
                 className={classes.button}>
                 unfollow
             </Button>;
+        
+        var WARNING = <p/>;
+        if(localStorage.getItem('role') !== "USER" && localStorage.getItem('role') !== "ORG"){
+            WARNING = 
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<Warning/>}
+                onClick={handleWarning}>
+                Warning
+            </Button>
+        }
 
         return(
+            
             <div>
                 <br/>
                 <br/>
@@ -187,17 +245,33 @@
                 <br/>
                 <br/>
                 <br/>
-                <span style={{color:"white"}}>Username: {user}</span>
+                <span style={{color:"white", fontSize:"30px"}}><b>{user}</b></span>
+                <span style={{color:"white", fontSize:"29px"}}>'s profile.</span>
                 <br/>
-                <span style={{color:"white"}}>Name: {firstName}&nbsp;{lastName}</span>
                 <br/>
-                <span style={{color:"white"}}>Role: {role}</span>
+                <span style={{color:"white", fontSize:"22px"}}><b>Followers: </b>{nFollowers}</span>
+                <span style={{color:"white", fontSize:"22px"}}><b> Following: </b>{nFollowing}</span>
                 <br/>
+
+                
                 {SU}
                 {ADMIN}
                 {FOLLOW}
                 {UNFOLLOW}
                 {isLoggedIn}
+                <div style={{display:"flex", justifyContent:"center"}}>
+                    <Box bgcolor='#1B3651' width={0.5} textAlign="Left" p={2} borderRadius="borderRadius" boxShadow={2}>
+                    <span style = {{color:"white",fontSize:"20px"}}>About {user}:</span>
+                    <br/>
+                    <span style={{color:"white"}}>Username: {user}</span>
+                    <br/>
+                    <span style={{color:"white"}}>Name: {firstName}&nbsp;{lastName}</span>
+                    <br/>
+                    <span style={{color:"white"}}>Role: {role}</span>
+                    <br/>
+                    </Box>
+                </div>
+                {WARNING}
             </div>
         )   
     }

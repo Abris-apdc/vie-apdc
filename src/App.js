@@ -32,11 +32,11 @@ import MapContainer from './resources/Map'
             <Route exact path="/myProfile" component={Profile}/>
             <Route exact path="/update" component={UpdateForm}/>
             <Route exact path="/delete" component={DeleteForm}/>
-            <Route exact path="/about" component={AboutUsPage}/>
+            <Route exact path="/About Us" component={AboutUsPage}/>
             <Route exact path="/logout" component={Logout}/>
             <Route exact path="/password" component={UpdatePassForm}/>
             <Route exact path="/profile/:username/" component={Account}/>
-            <Route exact path="/Map" component={MapContainer}/>
+            <Route exact path="/Add New Event" component={MapContainer}/>
           </div>
         </Router>
       );

@@ -1,24 +1,42 @@
 import { Map, GoogleApiWrapper, Marker} from 'google-maps-react';
-import  {Component} from 'react';
+import  {Component} from 'react';import 
+{ Box, Button, Typography } from "@material-ui/core";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const mapStyles = {
     width: '80vh',
     height: '70vh',
+    top: '-53vh',
     margin: '0 auto',
 };
 
 const divSyles = {
     float: 'left',
-    marginLeft: '310px',
+    marginLeft: '330px',
 }
 
-var lat = 0;
-var long = 0;
+const divLeft = {
+    width: '80vh',
+    height: '70vh',
+    position: 'relative',
+    top: '127px',
+    margin: '0 auto',
+}
+
+const textStyles = {
+    float: 'left',
+    marginLeft: '-280px',
+    width:"70vw"
+}
+
+var lat;
+var long;
 
 navigator.geolocation.getCurrentPosition(function(position) {
     lat = position.coords.latitude;
     long = position.coords.longitude;
 });
+
 
 export class MapContainer extends Component {
     constructor(props) {
@@ -47,20 +65,52 @@ export class MapContainer extends Component {
 
     render() {
         return (
-            <div style={divSyles}>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>   
-                <br/>
-                <Map
-                google={this.props.google}
-                style={mapStyles}
-                initialCenter={{ lat: lat, lng: long}}
-                zoom={14}>
-                    {this.displayMarkers()}
-                </Map>
+            <div>
+                <div style={divLeft}>
+                    <div style={textStyles}>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <Box bgcolor='#1B3651' width={2/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                                <form onSubmit={(e) => {e.preventDefault()}}>
+                                    <label style={{color: "white", fontSize: "30px"}}>Add New Event:</label> 
+                                    <br/>
+                                    <label style={{color: "white", fontSize: "20px"}}>Event Name:</label>
+                                    <br/>
+                                    <input type={"text"} required = {true}/>
+                                    <br/>
+                                    <label style={{color: "white", fontSize: "20px"}}>Coordinates:</label>
+                                    <br/>
+                                    <label style={{color: "white", fontSize: "15px", marginBottom: "1%", display: "block"}}>Lat: <input type={"text"} style={{width: "7vw"}} required = {true}/></label>
+                                    <label style={{color: "white", fontSize: "15px"}}>Lng: <input type={"text"} style={{width: "7vw"}} required = {true}/></label>
+                                    <br/>
+                                    <label style={{color: "white", fontSize: "20px"}}>Address:</label>
+                                    <br/>
+                                    <input type={"text"} required = {true}/>
+                                    <br/>
+                                    <label style={{color: "white", fontSize: "20px"}}>Duration:</label>
+                                    <br/>
+                                    <input type={"text"} required = {true}/>
+                                    <br/>
+                                </form><br/>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<CheckCircleIcon/>}>
+                                    Register
+                                </Button>
+                            </Box>
+                    </div>
+                </div>
+                <div style={divSyles}>
+                    <Map
+                    google={this.props.google}
+                    style={mapStyles}
+                    initialCenter={{ lat: lat, lng: long}}
+                    zoom={14}>
+                        {this.displayMarkers()}
+                    </Map>
+                </div>
             </div>
         );
     }

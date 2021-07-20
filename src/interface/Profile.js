@@ -25,11 +25,6 @@ function Profile(){
         lastName = data.lastName;
         role = data.role;
         setLoading(false);
-    })
-
-    axios.get("https://amazing-office-313314.appspot.com/rest/profile/get/"+localStorage.getItem('username'))
-    .then(function ({data}) {
-        console.log(data)
         birthday = data.birthday;
         email = data.email;
         followers = data.followers;

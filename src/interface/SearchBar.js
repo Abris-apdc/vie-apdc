@@ -35,9 +35,9 @@ export default function SearchBar() {
     }
 
     return (
-        <div style={{ width:500, backgroundColor: 'white'}}>
+        <div style={{ backgroundColor: 'white', position: 'fixed', right:"5px"}}>
             <Autocomplete
-            style={{ width: 500 }}
+            style={{width: "25vw"}}
             freeSolo
             autoComplete
             autoHighlight

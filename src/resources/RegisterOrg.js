@@ -115,9 +115,8 @@ function RegisterOrgForm(){
         .then(data=> {if(!data.ok){
             alert("Email already in use")
         }else {
-            console.log(data);
             console.log("Logging In");
-            console.log(createJson());
+            console.log(createJsonLogin());
             fetch("https://amazing-office-313314.appspot.com/rest/login",
                 {method:"POST", 
                 headers:{ 'Accept': 'application/json, text/plain',
@@ -135,7 +134,7 @@ function RegisterOrgForm(){
     }
     
     function createJsonLogin(){
-        return JSON.stringify({username:email1, password:password1})
+        return JSON.stringify({username:name1, password:password1})
     }
 
     function createJson(){

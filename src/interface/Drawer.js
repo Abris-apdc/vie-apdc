@@ -92,7 +92,7 @@ export default function PersistentDrawerLeft() {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar style={{background:'#1B3651', display: 'flex', justifyContent:'space-between'}}>
+        <Toolbar style={{background:'#1B3651'}}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -102,7 +102,7 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"738px"}}/></a>
+          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48%"}}/></a>
           <SearchBar/>
         </Toolbar>
       </AppBar>
