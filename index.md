@@ -5,30 +5,32 @@
 
 ## António Santos, nº 51879
 <img src="antonio.png" alt="hi" class="inline" width="200" height="250"/>
-Gosta de: Tiro com Arco
 
-Não gosta de: Pimentos
+**Gosta de:** Tiro com Arco
+
+**Não gosta de:** Pimentos
 
 ### Inês Rocha, nº 53206
-Gosta de: 
+**Gosta de:** 
 
-Não gosta de: 
+**Não gosta de:**
 
 ### Pedro Bailão, nº 53675
-<img src="Bailao.png" alt="hi" class="inline" width="200" height="200"/>
-Gosta de: The Legend Of Zelda
+<img src="bailao.png" alt="hi" class="inline" width="200" height="250"/>
 
-Não gosta de: Sonic
+**Gosta de:** The Legend Of Zelda
+
+**Não gosta de:** Sonic
 
 ### Ramiro Henriques, nº 52535
-Gosta de: 
+**Gosta de:** 
 
-Não gosta de: 
+**Não gosta de:**
 
 ### Salvador Silva, nº 54597
-Gosta de: 
+**Gosta de:** 
 
-Não gosta de: 
+**Não gosta de:**
 
 
 # A Ambição
