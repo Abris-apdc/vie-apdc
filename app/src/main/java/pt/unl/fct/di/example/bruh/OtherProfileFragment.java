@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
@@ -27,10 +29,13 @@ public class OtherProfileFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private static final String FOLLOW = "Follow";
     private static final String UNFOLLOW = "Unfollow";
+    private static final String FOLLOWING = "Following: ";
+    private static final String FOLLOWERS = "Followers: ";
     private String username;
-    private boolean is;
     private TextView profile, fn,ln,role;
     private Button follow;
+    private TextView following, followers;
+    private int nFollowers;
 
     private ClientAPI clientAPI;
 
@@ -42,9 +47,13 @@ public class OtherProfileFragment extends Fragment {
         fn = (TextView) view.findViewById(R.id.other_profile_fn);
         ln = (TextView) view.findViewById(R.id.other_profile_ln);
         role = (TextView) view.findViewById(R.id.other_profile_role);
+        following = (TextView) view.findViewById(R.id.other_profile_following);
+        followers = (TextView) view.findViewById(R.id.other_profile_followers);
         follow = (Button) view.findViewById(R.id.other_profile_follow);
 
         profile.setText(username);
+        followers();
+        following();
         isFollowing();
         doRequest();
 
@@ -63,6 +72,44 @@ public class OtherProfileFragment extends Fragment {
 
         return view;
     }
+    private void followers(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getFollowersList(username).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    nFollowers= r.body().size();
+                    followers.setText(FOLLOWERS + nFollowers);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user followers", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void following(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getFollowingList(username).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    int number = r.body().size();
+                    following.setText(FOLLOWING + number);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user following number", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void isFollowing(){
 
@@ -119,6 +166,7 @@ public class OtherProfileFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     follow.setText(UNFOLLOW);
+                    followers.setText(FOLLOWERS + (nFollowers +1));
                     Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
                 }else {
                   //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
@@ -129,6 +177,7 @@ public class OtherProfileFragment extends Fragment {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 follow.setText(UNFOLLOW);
+                followers.setText(FOLLOWERS + (nFollowers +1));
                 Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
 
             }
@@ -146,16 +195,15 @@ public class OtherProfileFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> r) {
                 if(r.isSuccessful()) {
                     follow.setText(FOLLOW);
+                    followers.setText(FOLLOWERS + (nFollowers));
                     Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
-                }else {
-                    //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
-
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 follow.setText(FOLLOW);
+                followers.setText(FOLLOWERS + (nFollowers));
                 Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
 
             }

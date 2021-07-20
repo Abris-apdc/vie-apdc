@@ -1,5 +1,7 @@
 package pt.unl.fct.di.example.bruh;
 
+import java.util.List;
+
 import pt.unl.fct.di.example.bruh.requests.AuthToken;
 import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
@@ -73,4 +75,10 @@ public interface RegisterService {
 
     @POST("/rest/map")
     Call<String> addEvent(@Body PlaceEvent event);
+
+    @GET("/rest/getFollowers/{username}")
+    Call<List<String>> getFollowersList(@Path("username") String username);
+
+    @GET("/rest/getFollowing/{username}")
+    Call<List<String>> getFollowingList(@Path("username") String username);
 }

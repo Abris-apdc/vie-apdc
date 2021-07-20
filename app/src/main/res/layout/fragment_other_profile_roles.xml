@@ -13,10 +13,9 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="16dp"
         android:text="User Name"
-        android:textSize="30dp"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.854"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4_roles"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -25,10 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="First Name"
-        android:textSize="30dp"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.837"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4_roles"
         app:layout_constraintTop_toBottomOf="@+id/set_profile_roles" />
 
     <TextView
@@ -37,22 +35,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Last Name"
-        android:textSize="30dp"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.845"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4_roles"
         app:layout_constraintTop_toBottomOf="@+id/other_profile_fn_roles" />
 
     <TextView
         android:id="@+id/other_profile_role_roles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
         android:text="Role"
-        android:textSize="30dp"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4_roles"
         app:layout_constraintTop_toBottomOf="@+id/other_profile_ln_roles" />
 
     <ImageView
@@ -70,11 +66,13 @@
         android:id="@+id/other_profile_follow_roles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:text="Follow"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/other_profile_role_roles" />
+        app:layout_constraintTop_toBottomOf="@+id/other_profile_following_roles" />
+
     <Button
         android:id="@+id/other_profile_change_roles"
         android:layout_width="wrap_content"
@@ -94,6 +92,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/other_profile_change_roles" />
+
+    <TextView
+        android:id="@+id/other_profile_followers_roles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="200dp"
+        android:text="Followers: "
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/other_profile_role_roles" />
+
+    <TextView
+        android:id="@+id/other_profile_following_roles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="16dp"
+        android:text="Following: "
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.386"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/other_profile_role_roles" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
