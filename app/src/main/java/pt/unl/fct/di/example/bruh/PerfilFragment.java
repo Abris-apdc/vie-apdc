@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.List;
+
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +27,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PerfilFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
+    private static final String FOLLOWING = "Following: ";
+    private static final String FOLLOWERS = "Followers: ";
     private TextView firstName, lastName, role, username;
-    private Button edit;
+    private Button edit, followers, following;
     private ClientAPI clientAPI;
+    private int nFollowers;
 
     @Nullable
     @Override
@@ -39,8 +44,12 @@ public class PerfilFragment extends Fragment {
         username = (TextView) view.findViewById(R.id.activity_perfil_username);
 
         edit = (Button) view.findViewById(R.id.activity_perfil_edit);
-
+        followers = (Button) view.findViewById(R.id.activity_perfil_followers);
+        following = (Button) view.findViewById(R.id.activity_perfil_following);
         getUserInfo(view);
+        followers();
+        following();
+
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +96,44 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void followers(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getFollowersList(username.getText().toString()).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    nFollowers= r.body().size();
+                    followers.setText(FOLLOWERS + nFollowers);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user followers", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void following(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getFollowingList(username.getText().toString()).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    int number = r.body().size();
+                    following.setText(FOLLOWING + number);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user following number", Toast.LENGTH_SHORT).show();
             }
         });
     }
