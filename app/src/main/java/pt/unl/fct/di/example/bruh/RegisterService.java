@@ -81,4 +81,7 @@ public interface RegisterService {
 
     @GET("/rest/getFollowing/{username}")
     Call<List<String>> getFollowingList(@Path("username") String username);
+
+    @GET("/rest/map/list")
+    Call<List<String>> gettAllEvents();
 }
