@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -25,6 +26,7 @@ import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.Transaction;
 import com.google.gson.Gson;
 
+import pt.unl.fct.di.apdc.vie.util.DeleteEventData;
 import pt.unl.fct.di.apdc.vie.util.EventData;
 
 @Path("/map")
@@ -56,7 +58,7 @@ public class MapsResource {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
-			else if(!logged.getString("token_role").equals("ORG")) {
+			else if(!logged.getString("token_role").equals("ORG") || !logged.getString("token_name").equals(data.getOrg())) {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Action not allowed.").build();
 			}
@@ -156,8 +158,51 @@ public class MapsResource {
 		}
 
 	}
-
 	
+
+	@DELETE
+	@Path("/remove")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response deleteEvent(DeleteEventData data) {
+		Transaction txn = datastore.newTransaction();
+		Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(data.getName());
+
+		try {
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+
+			Entity logged = txn.get(tokenKey);
+			long end = logged.getLong("token_end_time");
+
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			Entity event = txn.get(eventKey);
+			if (event == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Event does not exist.").build();
+			}
+			
+			else if( !logged.getString("token_name").equals(event.getString("event_org"))) {
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Action not allowed.").build();
+			}
+			
+			txn.delete(eventKey);
+			txn.commit();
+			return Response.ok(g.toJson("Event deleted.")).build();
+		} finally {
+
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
 }
 	
 

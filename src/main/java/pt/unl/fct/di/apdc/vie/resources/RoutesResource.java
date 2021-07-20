@@ -76,11 +76,11 @@ public class RoutesResource {
 			String[] locations1 = data.getLocations();
 			List<Value<String>> route = new ArrayList<Value<String>>();
 			for(String l : locations1) {
-				Key localKey = datastore.newKeyFactory().setKind("Location").newKey(l);
-				Entity local = txn.get(localKey);
-				if (local == null) {
+				Key localKey = datastore.newKeyFactory().setKind("Event").newKey(l);
+				Entity event = txn.get(localKey);
+				if (event == null) {
 					txn.rollback();
-					return Response.status(Status.FORBIDDEN).entity("Location does not exist.").build();
+					return Response.status(Status.FORBIDDEN).entity("Event does not exist.").build();
 				}
 				else {
 					route.add( StringValue.of(l));
@@ -95,7 +95,7 @@ public class RoutesResource {
 				return Response.status(Status.CONFLICT).entity("Route already exist.").build();
 			}
 			r = Entity.newBuilder(routeKey)
-					.set("route_locations_list", route)
+					.set("route_events_list", route)
 					.set("route_owner", data.getUsername())
 					.set("route_info", data.getInfo())
 					.build();
@@ -170,9 +170,9 @@ public class RoutesResource {
 				String thisRoute = "Name: ";
 				Key routesKey = datastore.newKeyFactory().setKind("Routes").newKey(routes1.get(i).get());
 				thisRoute += routes1.get(i).get();
-				thisRoute += "; Locations: ";
+				thisRoute += "; Events: ";
 				Entity route = txn.get(routesKey);
-				List<Value<String>> locations = route.getList("route_locations_list");
+				List<Value<String>> locations = route.getList("route_events_list");
 				for(int j = 0; j < locations.size(); j++) {
 					thisRoute += locations.get(j).get();
 					thisRoute += "; ";
@@ -229,11 +229,11 @@ public class RoutesResource {
 					String[] locations1 = data.getRouteLocations();
 					List<Value<String>> route1 = new ArrayList<Value<String>>();
 					for(String l : locations1) {
-						Key localKey = datastore.newKeyFactory().setKind("Location").newKey(l);
+						Key localKey = datastore.newKeyFactory().setKind("Event").newKey(l);
 						Entity local = txn.get(localKey);
 						if (local == null) {
 							txn.rollback();
-							return Response.status(Status.FORBIDDEN).entity("Location does not exist.").build();
+							return Response.status(Status.FORBIDDEN).entity("Event does not exist.").build();
 						}
 						else {
 							route1.add( StringValue.of(l));
@@ -242,7 +242,7 @@ public class RoutesResource {
 					
 
 					route = Entity.newBuilder(route)
-							.set("route_locations_list", ListValue.of(route1))
+							.set("route_events_list", ListValue.of(route1))
 							.build();
 					txn.update(route);
 					
