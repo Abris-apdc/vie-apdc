@@ -2,8 +2,12 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class JoinEventData {
 	
-	String event;
-	String username;
+	private String event;
+	private String username;
+	
+	public JoinEventData() {
+		
+	}
 	
 	public JoinEventData(String event, String username) {
 		this.event = event;

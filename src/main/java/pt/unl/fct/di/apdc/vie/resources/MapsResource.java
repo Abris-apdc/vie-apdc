@@ -63,7 +63,7 @@ public class MapsResource {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
-			else if(!logged.getString("token_role").equals("ORG") || !logged.getString("token_name").equals(data.getOrg())) {
+			else if(!logged.getString("token_role").equals("ORG") || !logged.getString("token_username").equals(data.getOrg())) {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Action not allowed.").build();
 			}
