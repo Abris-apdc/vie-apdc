@@ -2,6 +2,7 @@ package pt.unl.fct.di.apdc.vie.resources;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -21,13 +22,17 @@ import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.ListValue;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Transaction;
+import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.DeleteEventData;
 import pt.unl.fct.di.apdc.vie.util.EventData;
+import pt.unl.fct.di.apdc.vie.util.JoinEventData;
 
 @Path("/map")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -69,12 +74,14 @@ public class MapsResource {
 				return Response.status(Status.FORBIDDEN).entity("Event alredy exists.").build();
 			}
 			else {
+				List<Value<String>> people = new LinkedList<Value<String>>();
 				
 				event = Entity.newBuilder(eventKey)
 						.set("event_coordinates", data.getCoordinates())
 						.set("event_address", data.getAddress())
 						.set("event_org", data.getOrg())
 						.set("event_duration", data.getDuration())
+						.set("event_participants_list", people)
 						.build();
 				txn.add(event);
 
@@ -201,6 +208,90 @@ public class MapsResource {
 				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 			}
 		}
+	}
+	
+	@POST
+	@Path("/join") 
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response joinEvent(JoinEventData data) {		
+		Transaction txn = datastore.newTransaction();
+		Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(data.getEvent());
+		
+		try {
+			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
+
+			Entity event = txn.get(eventKey);
+			
+			if(event == null) {
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Event does not exist.").build();
+			}
+			Entity account = txn.get(accountKey);
+			if (account == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("User does not exist.").build();
+			}
+			
+			List<Value<String>> participants = event.getList("event_participants_list");
+			List<Value<String>> participantsNew = new LinkedList<Value<String>>();
+			
+			
+			for(int i = 0;i<participants.size();i++) {
+				participantsNew.add(participants.get(i));
+			}
+			
+			participantsNew.add(StringValue.of(data.getUsername()));
+			
+			
+			event = Entity.newBuilder(event)
+					.set("event_participants_list", ListValue.of(participantsNew))
+					.build();
+			
+			txn.update(event);
+			
+			txn.commit();
+			return Response.ok(g.toJson("Event updated.")).build();
+		} finally {
+
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+		
+	}
+	
+	
+	@GET
+	@Path("/{event}/list") 
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getEventList(@PathParam("event") String eventName) {		
+		Transaction txn = datastore.newTransaction();
+		Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(eventName);
+		
+		try {
+
+			Entity event = txn.get(eventKey);
+			
+			if(event == null) {
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Event does not exist.").build();
+			}
+			
+			List<Value<String>> participants = event.getList("event_participants_list");
+			
+			
+			txn.commit();
+			return Response.ok(g.toJson(participants)).build();
+		} finally {
+
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+		
 	}
 
 }
