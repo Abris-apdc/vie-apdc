@@ -32,6 +32,7 @@ Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como
 
 ## Ramiro Henriques, nº 52535
 <img src="ramiro.png" alt="hi" class="inline" width="200" height="250"/>
+
   **Gosta de:** Futebol
 
   **Não gosta de:** Adeptos de Futebol
