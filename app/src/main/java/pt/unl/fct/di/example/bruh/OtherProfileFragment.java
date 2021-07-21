@@ -17,6 +17,7 @@ import java.util.List;
 
 import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.IsFollowing;
+import pt.unl.fct.di.example.bruh.requests.OrgInfo;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -140,9 +141,13 @@ public class OtherProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> r) {
                 if(r.isSuccessful()) {
-                    fn.setText(r.body().getFirstName());
-                    ln.setText(r.body().getLastName());
-                    role.setText(r.body().getRole());
+                    if(r.body().getRole().equals("ORG")){
+                        orgRequest();
+                    } else {
+                        fn.setText(r.body().getFirstName());
+                        ln.setText(r.body().getLastName());
+                        role.setText(r.body().getRole());
+                    }
 
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
@@ -212,5 +217,30 @@ public class OtherProfileFragment extends Fragment {
 
     public void setValues(String username){
         this.username = username;
+    }
+
+    private void orgRequest() {
+
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().orgInfo(profile.getText().toString()).enqueue(new Callback<OrgInfo>() {
+            @Override
+            public void onResponse(Call<OrgInfo> call, Response<OrgInfo> r) {
+                if(r.isSuccessful()) {
+
+                        fn.setText(r.body().getEmail());
+                        ln.setText(r.body().getAddress());
+                        role.setText(r.body().getRole());
+
+
+                }else
+                    Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<OrgInfo> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

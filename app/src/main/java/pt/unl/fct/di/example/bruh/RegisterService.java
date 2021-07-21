@@ -12,6 +12,7 @@ import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
 import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
 import pt.unl.fct.di.example.bruh.requests.ModifyUser;
+import pt.unl.fct.di.example.bruh.requests.OrgInfo;
 import pt.unl.fct.di.example.bruh.requests.PlaceEvent;
 import pt.unl.fct.di.example.bruh.requests.Register;
 import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
@@ -57,6 +58,9 @@ public interface RegisterService {
 
     @GET("/rest/profile/{username}")
     Call<UserInfo> userInfo(@Path("username") String username);
+
+    @GET("/rest/profile/{username}")
+    Call<OrgInfo> orgInfo(@Path("username") String username);
 
     @PUT("/rest/changeRole")
     Call<String> changeRole(@Body ChangeRole username);
