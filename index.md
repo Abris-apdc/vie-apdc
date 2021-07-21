@@ -19,7 +19,7 @@ Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como
   **Não gosta de:** Pimentos
 
 ## Inês Rocha, nº 53206
-<img src="ines.png" alt="hi" class="inline" width="200" height="250"/>
+<img src="ines.jpeg" alt="hi" class="inline" width="200" height="250"/>
 
   **Gosta de:** Anime
 
@@ -40,7 +40,7 @@ Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como
   **Não gosta de:** Adeptos de Futebol
 
 ## Salvador Silva, nº 54597
-<img src="salvador.png" alt="hi" class="inline" width="200" height="250"/>
+<img src="salvador.jpg" alt="hi" class="inline" width="200" height="250"/>
 
   **Gosta de:** Sporting
 
