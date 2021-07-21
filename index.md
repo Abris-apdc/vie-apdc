@@ -31,9 +31,10 @@ Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como
   **Não gosta de:** Sonic
 
 ## Ramiro Henriques, nº 52535
-  **Gosta de:** 
+<img src="ramiro.png" alt="hi" class="inline" width="200" height="250"/>
+  **Gosta de:** Futebol
 
-  **Não gosta de:**
+  **Não gosta de:** Adeptos de Futebol
 
 ## Salvador Silva, nº 54597
   **Gosta de:** 
