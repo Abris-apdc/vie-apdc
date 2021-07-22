@@ -4,6 +4,8 @@ public class DeleteEventData {
 
 	private String tokenID, name;
 	
+	public DeleteEventData() {	}
+	
 	public DeleteEventData(String tokenID, String name) {
 		this.tokenID = tokenID;
 		this.name = name;

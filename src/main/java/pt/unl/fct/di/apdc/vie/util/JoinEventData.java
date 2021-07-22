@@ -3,15 +3,15 @@ package pt.unl.fct.di.apdc.vie.util;
 public class JoinEventData {
 	
 	private String event;
-	private String username;
+	private String tokenID;
 	
 	public JoinEventData() {
 		
 	}
 	
-	public JoinEventData(String event, String username) {
+	public JoinEventData(String event, String tokenID) {
 		this.event = event;
-		this.username = username;
+		this.tokenID = tokenID;
 	}
 
 	public String getEvent() {
@@ -22,13 +22,15 @@ public class JoinEventData {
 		this.event = event;
 	}
 
-	public String getUsername() {
-		return username;
+
+	public String getTokenID() {
+		return tokenID;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setTokenID(String tokenID) {
+		this.tokenID = tokenID;
 	}
+	
 	
 	
 	

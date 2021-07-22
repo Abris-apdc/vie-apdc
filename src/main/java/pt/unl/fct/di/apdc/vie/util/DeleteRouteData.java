@@ -2,25 +2,16 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class DeleteRouteData {
 
-	private String username, tokenID, route;
+	private String tokenID, route;
 
     public DeleteRouteData() {
     	
     }
     
-    public DeleteRouteData(String username, String tokenID, String route) {
-        this.username = username;
+    public DeleteRouteData( String tokenID, String route) {
         this.tokenID = tokenID;
         this.route = route;
     }
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	public String getTokenID() {
 		return tokenID;

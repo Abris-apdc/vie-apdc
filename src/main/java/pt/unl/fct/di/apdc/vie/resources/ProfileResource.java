@@ -355,8 +355,10 @@ public class ProfileResource {
 			List<Value<String>> following = account.getList("account_following_list");
 			List<Value<String>> reqs = account.getList("account_requests_list");
 			List<Value<String>> routes = account.getList("account_routes_list");
+			List<Value<String>> events = account.getList("account_events_list");
 			aux.setFollowers_list(followers);
 			aux.setFollowing_list(following);
+			aux.setEvents_list(events);
 			aux.setReqs(reqs);
 			aux.setRoutes(routes);
 			txn.commit();

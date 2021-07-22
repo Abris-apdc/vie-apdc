@@ -216,13 +216,17 @@ public class RoutesResource {
 			}
 
 
-
-			if (token.getString("token_username").equals(data.getUsername())) {
 				Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(data.getRouteName());
 				Entity route = txn.get(routeKey);
 
 				if(route == null) {
 					return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
+				}
+				
+				if (!token.getString("token_username").equals(route.getString("route_owner"))) {
+					txn.rollback();
+					return Response.status(Status.FORBIDDEN).entity("Attempt to update route failed.").build();
+				
 				}
 				
 				if(data.getRouteLocations().length != 0) {
@@ -261,12 +265,6 @@ public class RoutesResource {
 				txn.commit();
 				return Response.ok(g.toJson("Route was updated.")).build();
 
-			} 
-
-			else {
-				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("Attempt to update route failed.").build();
-			}
 		} finally {
 
 			if (txn.isActive()) {
@@ -298,18 +296,25 @@ public class RoutesResource {
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
 
-			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(data.getUsername());
+			Key accountKey = datastore.newKeyFactory().setKind("Account").newKey(token.getString("token_username"));
 			Entity account = txn.get(accountKey);
 
+			Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(data.getRoute());
+			Entity route = txn.get(routeKey);
+
+			if(route == null) {
+				return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
+			}
 
 
-			if (token.getString("token_role").equals(SU) || token.getString("token_username").equals(data.getUsername())) {
-				Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(data.getRoute());
-				Entity route = txn.get(routeKey);
-
-				if(route == null) {
-					return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
-				}
+			if (!token.getString("token_username").equals(route.getString("route_owner"))) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Attempt to update route failed.").build();
+			
+			}
+				
+				
+			
 
 				List<Value<String>> routes = new LinkedList<Value<String>>();
 				List<Value<String>> routes1 = account.getList("account_routes_list");
@@ -331,12 +336,7 @@ public class RoutesResource {
 				txn.commit();
 				return Response.ok(g.toJson("Route was deleted.")).build();
 
-			} 
-
-			else {
-				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("Attempt to remove route failed.").build();
-			}
+			
 		} finally {
 
 			if (txn.isActive()) {

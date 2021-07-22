@@ -8,7 +8,7 @@ public class AccountData {
 	
 	
 	private  String address, birthday, cardID, email, firstName, gender, lastName, name, owner, perfil, phone, role, service, state;
-	private List<Value<String>> followers_list, reqs, routes, following_list;
+	private List<Value<String>> followers_list, reqs, routes, following_list, events_list;
 	private long followers, following, warnings;
 	
 
@@ -205,6 +205,18 @@ public class AccountData {
 		this.routes = routes;
 		
 	}
+
+
+	public List<Value<String>> getEvents_list() {
+		return events_list;
+	}
+
+
+	public void setEvents_list(List<Value<String>> events_list) {
+		this.events_list = events_list;
+	}
+	
+	
 
 
 }
