@@ -39,7 +39,8 @@ public class EventFragment extends Fragment {
     private String eventName;
     private TextView name;
     private TextView coordinates, address, duration;
-    private Button participants, join;
+    private String lat, lng;
+    private Button participants, join, map;
     private List<String> list;
     private int nParticipants;
     @SuppressLint("WrongViewCast")
@@ -54,11 +55,18 @@ public class EventFragment extends Fragment {
         duration = (TextView) view.findViewById(R.id.fragment_event_duration);
         participants = (Button) view.findViewById(R.id.fragment_event_participants);
         join = (Button) view.findViewById(R.id.fragment_event_join);
+        map = (Button) view.findViewById(R.id.fragment_event_map);
         name.setText(eventName);
         getEventData();
        // isInEvent();
         getList();
 
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map();
+            }
+        });
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,14 +81,24 @@ public class EventFragment extends Fragment {
         participants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FollowersFragment st = new FollowersFragment();
-                st.setValues(list);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                if(nParticipants == 0)
+                    Toast.makeText(getActivity(), "This event does not have participants", Toast.LENGTH_SHORT).show();
+                else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FollowersFragment st = new FollowersFragment();
+                    st.setValues(list);
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                }
             }
         });
 
         return view;
+    }
+    private void map(){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        EventMapsFragment st = new EventMapsFragment();
+        st.setCoords(lat,lng,eventName);
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
     }
 
     private void getEventData(){
@@ -90,9 +108,10 @@ public class EventFragment extends Fragment {
             @Override
             public void onResponse(Call<EventData> call, Response<EventData> r) {
                 if(r.isSuccessful()) {
-                    String[] cords = r.body().getCoordinates().split(" ");
-
-                    coordinates.setText("        Coordinates: \n" + cords[0] + "\n" + cords[1]);
+                    String[] cords = r.body().getCoordinates().split(", ");
+                    lat = cords[0];
+                    lng = cords[1];
+                    coordinates.setText("        Coordinates: \n" + lat+ "\n" + lng);
                     address.setText("      Address: \n" + r.body().getAddress());
                     duration.setText("Duration: "+ r.body().getDuration());
                 }else

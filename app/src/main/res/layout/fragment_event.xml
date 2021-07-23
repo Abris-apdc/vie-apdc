@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="46dp"
         android:text="Event Name"
         android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/fragment_event_coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:text="Event Coordinates"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,10 +70,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_event_participants" />
 
-
-
-
-
+    <Button
+        android:id="@+id/fragment_event_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="See event in map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_event_join" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

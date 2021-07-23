@@ -34,7 +34,7 @@ public class PerfilFragment extends Fragment {
     private TextView firstName, lastName, role, username;
     private Button edit, followers, following;
     private ClientAPI clientAPI;
-    private int nFollowers;
+    private int nFollowers, nfollowing;
 
     @Nullable
     @Override
@@ -65,20 +65,28 @@ public class PerfilFragment extends Fragment {
         followers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FollowersFragment st = new FollowersFragment();
-                st.setValues(list);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                if(nFollowers == 0)
+                    Toast.makeText(getActivity(), "You do not have followers", Toast.LENGTH_SHORT).show();
+                else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FollowersFragment st = new FollowersFragment();
+                    st.setValues(list);
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                }
             }
         });
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                SettingsFragment st = new SettingsFragment();
-                st.setRole(role.getText().toString());
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                if(nFollowers == 0)
+                    Toast.makeText(getActivity(), "You do not follow people", Toast.LENGTH_SHORT).show();
+                else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    SettingsFragment st = new SettingsFragment();
+                    st.setRole(role.getText().toString());
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                }
             }
         });
 
@@ -149,8 +157,8 @@ public class PerfilFragment extends Fragment {
             public void onResponse(Call<List<String>> call, Response<List<String>> r) {
                 if(r.isSuccessful()) {
                     following_list = r.body();
-                    int number = r.body().size();
-                    following.setText(FOLLOWING + number);
+                    nfollowing = r.body().size();
+                    following.setText(FOLLOWING + nfollowing);
                 }
             }
 
