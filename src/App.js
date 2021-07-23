@@ -14,7 +14,7 @@ import PersistenDrawerLoggedIn from './interface/DrawerLoggedIn';
 import Profile from './interface/Profile';
 import UpdatePassForm from './resources/UpdatePassword';
 import PublicProfile from './interface/PublicProfile';
-import MapContainer from './resources/Map'
+import MapContainer from './resources/CreateEvent'
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
