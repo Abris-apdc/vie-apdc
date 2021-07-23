@@ -13,11 +13,43 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="56dp"
         android:text="Event Name"
-        android:textSize="25dp"
+        android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/fragment_event_coordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Event Coordinates"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_event_name" />
+
+    <TextView
+        android:id="@+id/fragment_event_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Event Address"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_event_coordinates" />
+
+    <TextView
+        android:id="@+id/fragment_event_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="25dp"
+        android:text="Event Duration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_event_address" />
     <Button
         android:id="@+id/fragment_event_participants"
         android:layout_width="wrap_content"
@@ -26,16 +58,22 @@
         android:text="See Participants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_event_name" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_event_duration" />
 
     <Button
         android:id="@+id/fragment_event_join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Join Event"
+        android:text="Join"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_event_participants" />
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

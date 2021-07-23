@@ -6,8 +6,12 @@ import pt.unl.fct.di.example.bruh.requests.AuthToken;
 import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
 import pt.unl.fct.di.example.bruh.requests.Delete;
+import pt.unl.fct.di.example.bruh.requests.EventData;
 import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.IsFollowing;
+import pt.unl.fct.di.example.bruh.requests.IsInEvent;
+import pt.unl.fct.di.example.bruh.requests.JoinEvent;
+import pt.unl.fct.di.example.bruh.requests.LeaveEvent;
 import pt.unl.fct.di.example.bruh.requests.Login;
 import pt.unl.fct.di.example.bruh.requests.Logout;
 import pt.unl.fct.di.example.bruh.requests.ModifyOrg;
@@ -91,4 +95,16 @@ public interface RegisterService {
 
     @GET("/rest/event/{event}/list")
     Call<List<String>> getParticipants(@Path("event") String event);
+
+    @POST("/rest/event/join")
+    Call<String> joinEvent(@Body JoinEvent joinEvent);
+
+    @POST("/rest/event/leave")
+    Call<String> leaveEvent(@Body LeaveEvent leaveEvent);
+
+    @GET("/rest/map/get/{event}")
+    Call<EventData> getEventData(@Path("event") String event);
+
+    @POST("/rest/event/isPart/{event}/")
+    Call<String> isInEvent(@Path("event") String event, @Body IsInEvent isInEvent);
 }
