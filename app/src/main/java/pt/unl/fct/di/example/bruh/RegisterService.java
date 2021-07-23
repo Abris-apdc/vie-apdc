@@ -88,4 +88,7 @@ public interface RegisterService {
 
     @GET("/rest/map/list")
     Call<List<String>> gettAllEvents();
+
+    @GET("/rest/event/{event}/list")
+    Call<List<String>> getParticipants(@Path("event") String event);
 }

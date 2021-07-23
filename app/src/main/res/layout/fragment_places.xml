@@ -3,11 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text=" Wait a little \n  is loading \n  the events"
+        android:textSize="50dp" />
+
     <ListView
         android:id="@+id/fragment_listview_places"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:translationZ="90dp" />
-
 </RelativeLayout>

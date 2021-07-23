@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
@@ -42,12 +43,6 @@ public class PlacesFragment  extends Fragment {
         String item = (String) adapter.getItem(position);
     }
 
-    protected void profile(String item) {
-        Intent intent = new Intent(getActivity(), OtherProfileActivity.class);
-        intent.putExtra("profileToLoad", item);
-
-        startActivity(intent);
-    }
     private void request(){
         clientAPI = clientAPI.getInstance();
 
@@ -58,7 +53,6 @@ public class PlacesFragment  extends Fragment {
                     teste = new String[r.body().size()];
                     for(int i = 0; i < r.body().size(); i++){
                         teste[i] = r.body().get(i);
-                        Toast.makeText(getActivity(), teste[i], Toast.LENGTH_SHORT).show();
                     }
                     search();
                 }
@@ -81,7 +75,10 @@ public class PlacesFragment  extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
                  Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
-                //profile(item);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                EventFragment st = new EventFragment();
+                st.setEventName(item);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
             }
         });
     }

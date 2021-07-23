@@ -165,7 +165,6 @@ public class FindActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String item = (String) listView.getItemAtPosition(position);
-                            Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
                             profile(item);
                         }
                     });
