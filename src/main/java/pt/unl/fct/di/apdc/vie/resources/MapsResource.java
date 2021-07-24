@@ -164,7 +164,7 @@ public class MapsResource {
 
 	}
 	
-	@GET
+	@POST
 	@Path("/get/{event}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response getEvent(@PathParam("event") String eventName) {
