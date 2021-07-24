@@ -30,6 +30,8 @@ import pt.unl.fct.di.apdc.vie.util.LoginData;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class LoginResource {
 
+	private final String DISABLED = "DISABLED";
+	
 	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
@@ -103,7 +105,7 @@ public class LoginResource {
 			}*/
 			
 			//account disabled
-			if(account.getString("account_state").equals("DISABLED")) { 
+			if(account.getString("account_state").equals(DISABLED)) { 
 				txn.rollback();
 				LOG.warning(data.getUsername() + " tryed to login while the account is disabled.");
 				return Response.status(Status.FORBIDDEN).entity("Disabled account. Try later.").build();
