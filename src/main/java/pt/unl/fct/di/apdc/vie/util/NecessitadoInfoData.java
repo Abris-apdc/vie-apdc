@@ -7,18 +7,35 @@ public class NecessitadoInfoData {
 	private String nrCartao;
 	private String descricao;
 	private String local;
+	private String email;
+	private String phone;
+	private String state;
 	
 	public NecessitadoInfoData() {
 	}
 	
-	public NecessitadoInfoData(String firstName, String lastName, String nrCartao, String descricao, String local) {
+	public NecessitadoInfoData(String firstName, String lastName,
+			String nrCartao, String descricao, String local,
+			String email, String phone, String state) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.nrCartao = nrCartao;
 		this.descricao = descricao;
 		this.local = local;
+		this.email = email;
+		this.phone = phone;
+		this.state = state;
 	}
 	
+	public String getState() {
+		return state;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public String getEmail() {
+		return email;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

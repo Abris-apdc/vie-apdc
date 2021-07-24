@@ -9,9 +9,9 @@ public class OrgAllInfoData {
 	private String address;
 	private String cardID;
 	private String email;
-	private int followers;
+	private long followers;
 	private List<Value<String>> followersList;
-	private int following;
+	private long following;
 	private List<Value<String>> followingList;
 	private String name;
 	private String owner;
@@ -19,7 +19,7 @@ public class OrgAllInfoData {
 	private List<Value<String>> routesList;
 	private String service;
 	private String state;
-	private int warnings;
+	private long warnings;
 	private String phone;
 	private List<Value<String>> requestsList;
 	private List<Value<String>> eventsList;
@@ -27,10 +27,10 @@ public class OrgAllInfoData {
 	public OrgAllInfoData() {
 	}
 	
-	public OrgAllInfoData(String address, String cardID, String email, int followers,
-			List<Value<String>> followersList, int following, List<Value<String>> followingList, 
+	public OrgAllInfoData(String address, String cardID, String email, long followers,
+			List<Value<String>> followersList, long following, List<Value<String>> followingList, 
 			String name, String owner, String role, List<Value<String>> routesList,
-			String service, String state, int warnings, String phone,
+			String service, String state, long warnings, String phone,
 			List<Value<String>> requestsList, List<Value<String>> eventsList) {
 		this.address = address;
 		this.cardID = cardID;
@@ -50,5 +50,58 @@ public class OrgAllInfoData {
 		this.requestsList = requestsList;
 		this.eventsList = eventsList;
 	}
+	
+	public List<Value<String>> getEventsList() {
+		return eventsList;
+	}
+	public List<Value<String>> getRequestsList() {
+		return requestsList;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public long getWarnings() {
+		return warnings;
+	}
+	public String getState() {
+		return state;
+	}
+	public String getService() {
+		return service;
+	}
+	public List<Value<String>> getRoutesList() {
+		return routesList;
+	}
+	public String getRole() {
+		return role;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public String getName() {
+		return name;
+	}
+	public List<Value<String>> getFollowingList() {
+		return followingList;
+	}
+	public long getFollowing() {
+		return following;
+	}
+	public List<Value<String>> getFollowersList() {
+		return followersList;
+	}
+	public long getFollowers() {
+		return followers;
+	}
+	public String getEmails() {
+		return email;
+	}
+	public String getcardID() {
+		return cardID;
+	}
+	public String getAddress() {
+		return address;
+	}
+	
 	
 }

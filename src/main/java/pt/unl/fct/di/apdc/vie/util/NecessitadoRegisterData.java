@@ -8,19 +8,31 @@ public class NecessitadoRegisterData {
 	private String descricao;
 	private String local;
 	private String password;
+	private String email;
+	private String phone;
 	
 	public NecessitadoRegisterData() {
 	}
 	
-	public NecessitadoRegisterData(String firstName, String lastName, String nrCartao, String descricao, String local, String password) {
+	public NecessitadoRegisterData(String firstName, String lastName,
+			String nrCartao, String descricao, String local, String password,
+			String email, String phone) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.nrCartao = nrCartao;
 		this.descricao = descricao;
 		this.local = local;
 		this.password = password;
+		this.email = email;
+		this.phone = phone;
 	}
 	
+	public String getPhone() {
+		return phone;
+	}
+	public String getEmail() {
+		return email;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

@@ -56,6 +56,7 @@ public class RegisterResource {
 				//followers.add( StringValue.of("test"));
 				List<Value<String>> following = new ArrayList<Value<String>>();
 				List<Value<String>> requests = new LinkedList<Value<String>>();
+				List<Value<String>> events = new ArrayList<Value<String>>();
 				//following.add(StringValue.of("test"));
 				
 				List<Value<String>> routes = new ArrayList<Value<String>>();
@@ -84,6 +85,7 @@ public class RegisterResource {
 						.set("account_followers", 0)
 						.set("account_requests_list", requests)
 						.set("account_routes_list", routes)
+						.set("account_events_list", events)
 						.set("account_warnings", 0)
 						.build();
 				txn.add(user);

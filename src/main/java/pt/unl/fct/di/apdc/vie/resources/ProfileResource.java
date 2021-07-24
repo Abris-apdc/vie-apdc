@@ -27,7 +27,9 @@ import com.google.cloud.datastore.StringValue;
 
 import pt.unl.fct.di.apdc.vie.util.AccountData;
 import pt.unl.fct.di.apdc.vie.util.FollowData;
+import pt.unl.fct.di.apdc.vie.util.OrgAllInfoData;
 import pt.unl.fct.di.apdc.vie.util.OrgInfoData;
+import pt.unl.fct.di.apdc.vie.util.UserAllInfoData;
 import pt.unl.fct.di.apdc.vie.util.UserInfoData;
 
 @Path("/profile")
@@ -331,13 +333,56 @@ public class ProfileResource {
 			String role = account.getString("account_role");
 			if(role.equals(ORG)) {
 				//e org
-				
-				
+				OrgAllInfoData info = new OrgAllInfoData(
+						account.getString("account_address"),
+						account.getString("account_cardID"),
+						account.getString("account_email"),
+						account.getLong("account_followers"),
+						account.getList("account_followers_list"),
+						account.getLong("account_following"),
+						account.getList("account_following_list"),
+						account.getString("account_name"),
+						account.getString("account_owner"),
+						account.getString("account_role"),
+						account.getList("account_routes_list"),
+						account.getString("account_service"),
+						account.getString("account_state"),
+						account.getLong("account_warnings"),
+						account.getString("account_phone"),
+						account.getList("account_requests_list"),
+						account.getList("account_events_list")
+						);
+				txn.commit();
+				return Response.ok(g.toJson(info)).build();
 			}
-			else {
-				//  e user/mod/admin/su
-			}
-			long nfollowers = account.getLong("account_followers");
+			//  e user/mod/admin/su
+			UserAllInfoData info = new UserAllInfoData(
+					account.getString("account_address"),
+					account.getString("account_birthDay"),
+					account.getString("account_name"),
+					account.getString("account_firstName"),
+					account.getString("account_lastName"),
+					account.getString("account_email"),
+					account.getString("account_perfil"),
+					account.getString("account_role"),
+					account.getString("account_state"),
+					account.getString("account_gender"),
+					account.getString("account_phone"),
+					account.getLong("account_following"),
+					account.getList("account_following_list"),
+					account.getLong("account_followers"),
+					account.getList("account_followers_list"),
+					account.getList("account_routes_list"),
+					account.getLong("account_warnings"),
+					account.getList("account_requests_list"),
+					account.getString("account_nationality"),
+					account.getList("account_events_list")
+					);
+			
+			txn.commit();
+			return Response.ok(g.toJson(info)).build();
+			
+			/*long nfollowers = account.getLong("account_followers");
 			long nfollowing = account.getLong("account_following");
 			long nwarnings = account.getLong("account_warnings");
 			
@@ -372,7 +417,7 @@ public class ProfileResource {
 			aux.setReqs(reqs);
 			aux.setRoutes(routes);
 			txn.commit();
-			return Response.ok(g.toJson(aux)).build();
+			return Response.ok(g.toJson(aux)).build();*/
 
 		} finally {
 			if(txn.isActive()) {
