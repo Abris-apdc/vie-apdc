@@ -100,9 +100,9 @@ export default function PersistentDrawerLeft() {
             edge="start"
             className={clsx(classes.menuButton, open)}
           >
-            <MenuIcon />
+          <MenuIcon/>
           </IconButton>
-          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48%"}}/></a>
+          <a href="/home"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48.35%"}}/></a>
           <SearchBar/>
         </Toolbar>
       </AppBar>
@@ -116,7 +116,7 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <List>
-          {['Home', 'Login', 'Register', 'About'].map((text) => (
+          {['Home', 'Login', 'Register', 'About Us'].map((text) => (
             <ListItem button key={text} component="a" href={"/"+text}>
               <ListItemText primary={text} />
             </ListItem>

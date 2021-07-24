@@ -14,7 +14,9 @@ import PersistenDrawerLoggedIn from './interface/DrawerLoggedIn';
 import Profile from './interface/Profile';
 import UpdatePassForm from './resources/UpdatePassword';
 import PublicProfile from './interface/PublicProfile';
-import MapContainer from './resources/CreateEvent'
+import MapContainer from './resources/CreateEvent';
+import JoinEvent from './resources/JoinEvent';
+import EventPage from './interface/EventPage';
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
@@ -24,22 +26,47 @@ import MapContainer from './resources/CreateEvent'
             <RedirectHome/>
             {isLoggedIn && <PersistenDrawerLoggedIn/>}
             {!isLoggedIn && <PersistentDrawerRightNotLoggedIn/>}
-            <Route exact path="/home" component={HomePage}/>
-            <Route exact path="/register_user" component={RegisterUser}/>
-            <Route exact path="/register_organization" component={RegisterOrg}/>
-            <Route exact path="/register" component={RegisterSelect}/>
-            <Route exact path="/login" component={LoginForm}/>
-            <Route exact path="/myProfile" component={Profile}/>
-            <Route exact path="/update" component={UpdateForm}/>
-            <Route exact path="/delete" component={DeleteForm}/>
+            {!isLoggedIn && <Route exact path="/home" component={HomePage}/>}
+            {isLoggedIn && <Route exact path="/home" component={RedirectFeed}/>}
+            {isLoggedIn && <Route exact path="/register_user" component={RedirectFeed}/>}
+            {!isLoggedIn && <Route exact path="/register_user" component={RegisterUser}/>}
+            {isLoggedIn && <Route exact path="/register_organization" component={RedirectFeed}/>}
+            {!isLoggedIn && <Route exact path="/register_organization" component={RegisterOrg}/>}
+            {!isLoggedIn && <Route exact path="/register" component={RegisterSelect}/>}
+            {isLoggedIn && <Route exact path="/register" component={RedirectFeed}/>}
+            {!isLoggedIn && <Route exact path="/login" component={LoginForm}/>}
+            {isLoggedIn && <Route exact path="/login" component={RedirectFeed}/>}
+            {!isLoggedIn && <Route exact path="/myProfile" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/myProfile" component={Profile}/>}
+            {isLoggedIn && <Route exact path="/update" component={UpdateForm}/>}
+            {!isLoggedIn && <Route exact path="/update" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/delete" component={DeleteForm}/>}
+            {!isLoggedIn && <Route exact path="/delete" component={RedirectLogin}/>}
             <Route exact path="/About Us" component={AboutUsPage}/>
-            <Route exact path="/logout" component={Logout}/>
-            <Route exact path="/password" component={UpdatePassForm}/>
+            {isLoggedIn && <Route exact path="/logout" component={Logout}/>}
+            {!isLoggedIn && <Route exact path="/logout" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/password" component={UpdatePassForm}/>}
+            {!isLoggedIn && <Route exact path="/password" component={RedirectLogin}/>}
             <Route exact path="/profile/:username/" component={Account}/>
-            <Route exact path="/Add New Event" component={MapContainer}/>
+            {!isLoggedIn && <Route exact path="/Add New Event" component={RedirectLogin}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Add New Event" component={RedirectFeed}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Add New Event" component={MapContainer}/>}
+            {!isLoggedIn && <Route exact path="/Join Event" component={RedirectLogin}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Join Event" component={RedirectFeed}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Join Event" component={JoinEvent}/>}
+            {isLoggedIn && <Route exact path="/event/:event" component={Event}/>}
+            {!isLoggedIn && <Route exact path="/event/:event" component={RedirectLogin}/>}
           </div>
         </Router>
       );
+    }
+
+    function RedirectLogin(){
+      return <Redirect to="/login"/>
+    }
+    
+    function RedirectFeed(){
+      return <Redirect to="/feed"/>
     }
 
     function RedirectHome(){
@@ -86,6 +113,11 @@ import MapContainer from './resources/CreateEvent'
     function Account() {
       const account = useParams();
       return PublicProfile(account);
+    }
+
+    function Event(){
+      const event = useParams();
+      return EventPage(event);
     }
 
     export default App; 

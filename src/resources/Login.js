@@ -67,15 +67,8 @@ function LoginForm(){
     
     const classes = useStyles();
 
-    return <div className="container"  style={{transform: "scale(1.5)"}}>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+    return <div className="container" style={{transform: "scale(1.5)"}}>
+        <br/><br/><br/><br/><br/><br/><br/><br/>
         <div style={{display:"flex", justifyContent:"center"}}>
             <Box bgcolor='#1B3651' width={3/4} textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
                 <form onSubmit={(e) => {e.preventDefault()}}>

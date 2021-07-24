@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft() {
           >
           <MenuIcon/>
           </IconButton>
-          <a href="/feed"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48%"}}/></a>
+          <a href="/feed"><img src={logo} alt="logo" width="55px" style={{position:"fixed", top:"5px", left:"48.35%"}}/></a>
           <SearchBar/>
         </Toolbar>
       </AppBar>
