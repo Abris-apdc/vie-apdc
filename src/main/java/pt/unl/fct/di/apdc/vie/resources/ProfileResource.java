@@ -34,6 +34,8 @@ import pt.unl.fct.di.apdc.vie.util.UserInfoData;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ProfileResource {
 	
+	private static final String ORG = "ORG";
+	
 	private static final Logger LOG = Logger.getLogger(ProfileResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
@@ -326,7 +328,15 @@ public class ProfileResource {
 				txn.rollback();
 				return Response.status(Status.NOT_FOUND).entity("Account does not exist.").build();
 			}
-			
+			String role = account.getString("account_role");
+			if(role.equals(ORG)) {
+				//e org
+				
+				
+			}
+			else {
+				//  e user/mod/admin/su
+			}
 			long nfollowers = account.getLong("account_followers");
 			long nfollowing = account.getLong("account_following");
 			long nwarnings = account.getLong("account_warnings");

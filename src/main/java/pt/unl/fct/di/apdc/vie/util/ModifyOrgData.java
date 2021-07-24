@@ -2,7 +2,7 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class ModifyOrgData {
 
-	private String name;
+	private String email;
 	private String phoneNumber;
 	private String address;
 	private String country;
@@ -16,7 +16,7 @@ public class ModifyOrgData {
 	public ModifyOrgData() {
 	}
 	
-	public ModifyOrgData( String name,
+	public ModifyOrgData( String email,
 	 String phoneNumber,
 	 String address,
 	 String country,
@@ -26,7 +26,7 @@ public class ModifyOrgData {
 	 String owner,
 	 String tokenID) {
 		
-		this.name = name;
+		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.country = country;
@@ -38,8 +38,8 @@ public class ModifyOrgData {
 		
 	}
 	
-	public String getName() {
-		return name;
+	public String getEmail() {
+		return email;
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;

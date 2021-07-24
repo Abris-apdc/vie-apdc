@@ -81,8 +81,8 @@ public class ModifyResource {
 					user = Entity.newBuilder(user).set("account_address", data.getAddress()).build();
 				if (data.getNationality() != null && !data.getNationality().equals(""))
 					user = Entity.newBuilder(user).set("account_nationality", data.getNationality()).build();
-				if (data.getFirstLanguage() != null && !data.getFirstLanguage().equals(""))
-					user = Entity.newBuilder(user).set("account_first_language", data.getFirstLanguage()).build();
+				//if (data.getFirstLanguage() != null && !data.getFirstLanguage().equals(""))
+					//user = Entity.newBuilder(user).set("account_first_language", data.getFirstLanguage()).build();
 				if (data.getDescription() != null && !data.getDescription().equals(""))
 					user = Entity.newBuilder(user).set("account_description", data.getDescription()).build();
 				if (data.getPerfil() != null && !data.getPerfil().equals("")) 
@@ -156,8 +156,8 @@ public class ModifyResource {
 				if (data.getServiceType() != null && !data.getServiceType().equals(""))
 					user = Entity.newBuilder(user).set("account_serviceType", data.getServiceType()).build();
 				
-				if (data.getName() != null && !data.getName().equals(""))
-					user = Entity.newBuilder(user).set("account_name", data.getName()).build();
+				if (data.getEmail() != null && !data.getEmail().equals(""))
+					user = Entity.newBuilder(user).set("account_name", data.getEmail()).build();
 
 				txn.update(user);
 				txn.commit();
