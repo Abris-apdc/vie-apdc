@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import java.util.List;
 
 import pt.unl.fct.di.example.bruh.requests.Delete;
+import pt.unl.fct.di.example.bruh.requests.EventInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,20 +47,20 @@ public class PlacesFragment  extends Fragment {
     private void request(){
         clientAPI = clientAPI.getInstance();
 
-        clientAPI.getRegisterService().gettAllEvents().enqueue(new Callback<List<String>>() {
+        clientAPI.getRegisterService().gettAllEvents().enqueue(new Callback<List<EventInfo>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+            public void onResponse(Call<List<EventInfo>> call, Response<List<EventInfo>> r) {
                 if(r.isSuccessful()) {
                     teste = new String[r.body().size()];
                     for(int i = 0; i < r.body().size(); i++){
-                        teste[i] = r.body().get(i);
+                        teste[i] = r.body().get(i).getEvent();
                     }
                     search();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(Call<List<EventInfo>> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to delete user", Toast.LENGTH_SHORT).show();
             }
         });
@@ -74,7 +75,6 @@ public class PlacesFragment  extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
-                 Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 EventFragment st = new EventFragment();
                 st.setEventName(item);

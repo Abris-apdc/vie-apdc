@@ -7,6 +7,7 @@ import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
 import pt.unl.fct.di.example.bruh.requests.Delete;
 import pt.unl.fct.di.example.bruh.requests.EventData;
+import pt.unl.fct.di.example.bruh.requests.EventInfo;
 import pt.unl.fct.di.example.bruh.requests.Follow;
 import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.IsInEvent;
@@ -90,7 +91,7 @@ public interface RegisterService {
     Call<List<String>> getFollowingList(@Path("username") String username);
 
     @GET("/rest/map/list")
-    Call<List<String>> gettAllEvents();
+    Call<List<EventInfo>> gettAllEvents();
 
     @GET("/rest/event/{event}/list")
     Call<List<String>> getParticipants(@Path("event") String event);
