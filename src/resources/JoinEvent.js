@@ -8,8 +8,6 @@ var events;
 export default function JoinEvent(){
     const [isLoading, setLoading] = useState(true);
 
-    const testArray = [1,2,3];
-
     axios.get("https://amazing-office-313314.appspot.com/rest/map/list")
     .then(function ({data}) {
         events = data;

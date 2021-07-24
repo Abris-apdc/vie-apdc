@@ -1,6 +1,6 @@
 import { Map, GoogleApiWrapper, Marker} from 'google-maps-react';
-import  {Component} from 'react';import 
-{ Box, Button } from "@material-ui/core";
+import  {Component} from 'react';
+import { Box, Button } from "@material-ui/core";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Geocode from "react-geocode";
 

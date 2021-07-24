@@ -10,6 +10,7 @@ import HomePage from './interface/HomePage';
 import LoginForm from './resources/Login';
 import AboutUsPage from './interface/AboutUsPage';
 import UpdateForm from './resources/UpdateUser';
+import UpdateOrgForm from './resources/UpdateOrg';
 import PersistenDrawerLoggedIn from './interface/DrawerLoggedIn';
 import Profile from './interface/Profile';
 import UpdatePassForm from './resources/UpdatePassword';
@@ -38,7 +39,8 @@ import EventPage from './interface/EventPage';
             {isLoggedIn && <Route exact path="/login" component={RedirectFeed}/>}
             {!isLoggedIn && <Route exact path="/myProfile" component={RedirectLogin}/>}
             {isLoggedIn && <Route exact path="/myProfile" component={Profile}/>}
-            {isLoggedIn && <Route exact path="/update" component={UpdateForm}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/update" component={UpdateForm}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/update" component={UpdateOrgForm}/>}
             {!isLoggedIn && <Route exact path="/update" component={RedirectLogin}/>}
             {isLoggedIn && <Route exact path="/delete" component={DeleteForm}/>}
             {!isLoggedIn && <Route exact path="/delete" component={RedirectLogin}/>}
@@ -117,7 +119,7 @@ import EventPage from './interface/EventPage';
 
     function Event(){
       const event = useParams();
-      return EventPage(event);
+      return  <EventPage event={event}/>;
     }
 
     export default App; 
