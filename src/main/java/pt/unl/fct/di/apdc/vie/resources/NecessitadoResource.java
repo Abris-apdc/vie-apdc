@@ -225,7 +225,7 @@ public class NecessitadoResource {
 	
 	@GET
 	@Path("/list")
-	@Consumes(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response list(){
 		Transaction txn = datastore.newTransaction();
@@ -252,7 +252,7 @@ public class NecessitadoResource {
 	
 	@GET
 	@Path("/listPend")
-	@Consumes(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response listPend(){
 		Transaction txn = datastore.newTransaction();
@@ -279,7 +279,7 @@ public class NecessitadoResource {
 	
 	@GET
 	@Path("/listOK")
-	@Consumes(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response listOK(){
 		Transaction txn = datastore.newTransaction();
