@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
+import pt.unl.fct.di.example.bruh.requests.OrgInfo;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -113,9 +114,12 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> r) {
                 if(r.isSuccessful()) {
-                    firstName.setText(r.body().getFirstName());
-                    lastName.setText(r.body().getLastName());
-                    role.setText(r.body().getRole());
+                    if(r.body().getRole().equals("ORG")){
+                        orgRequest();
+                    }else {
+                        firstName.setText(r.body().getFirstName());
+                        lastName.setText(r.body().getLastName());
+                    }   role.setText(r.body().getRole());
 
 
                 }else
@@ -125,6 +129,28 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void orgRequest() {
+
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().orgInfo(username.getText().toString()).enqueue(new Callback<OrgInfo>() {
+            @Override
+            public void onResponse(Call<OrgInfo> call, Response<OrgInfo> r) {
+                if(r.isSuccessful()) {
+
+                    firstName.setText(r.body().getEmail());
+                    lastName.setText(r.body().getAddress());
+                    role.setText(r.body().getRole());
+                }else
+                    Toast.makeText(getActivity(), "Failed to get profile", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<OrgInfo> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get profile", Toast.LENGTH_SHORT).show();
             }
         });
     }
