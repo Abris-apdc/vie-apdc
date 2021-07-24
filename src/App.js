@@ -45,8 +45,7 @@ import EventPage from './interface/EventPage';
             {isLoggedIn && <Route exact path="/delete" component={DeleteForm}/>}
             {!isLoggedIn && <Route exact path="/delete" component={RedirectLogin}/>}
             <Route exact path="/About Us" component={AboutUsPage}/>
-            {isLoggedIn && <Route exact path="/logout" component={Logout}/>}
-            {!isLoggedIn && <Route exact path="/logout" component={RedirectLogin}/>}
+            <Route exact path="/logout" component={Logout}/>
             {isLoggedIn && <Route exact path="/password" component={UpdatePassForm}/>}
             {!isLoggedIn && <Route exact path="/password" component={RedirectLogin}/>}
             <Route exact path="/profile/:username/" component={Account}/>

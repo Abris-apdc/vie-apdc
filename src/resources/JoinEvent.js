@@ -11,6 +11,7 @@ export default function JoinEvent(){
     axios.get("https://amazing-office-313314.appspot.com/rest/map/list")
     .then(function ({data}) {
         events = data;
+        console.log(events);
         setLoading(false);
     });
 
@@ -47,14 +48,13 @@ export default function JoinEvent(){
             {events.map(event => (
                 <div key={event} style={{display:"flex", justifyContent:"center", paddingTop:"5vh"}}>
                     <Box bgcolor='#1B3651' width="25vw" textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
-                        <div style={{color:"white"}}>{event}</div>
+                        <div style={{color:"white"}}>{event.event}</div>
                         <Button
-                            onClick={() => {handleButton(event)}}
+                            onClick={() => {handleButton(event.event)}}
                             variant="contained"
                             color="primary"
                             className={classes.button}
-                            startIcon={<ArrowRightIcon/>}
-                        >
+                            startIcon={<ArrowRightIcon/>}>
                             See Event
                         </Button>
                     </Box>

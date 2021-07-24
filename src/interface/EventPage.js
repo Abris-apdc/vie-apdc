@@ -1,7 +1,10 @@
 import  {Component} from 'react';
-import { Box, CircularProgress, Button} from "@material-ui/core";
+import { Box, CircularProgress, Button, Link} from "@material-ui/core";
 import { Map, GoogleApiWrapper, Marker, InfoWindow} from 'google-maps-react';
 import axios from 'axios';
+import Popup from 'reactjs-popup';
+import './EventStyle.css';
+import 'reactjs-popup/dist/index.css';
 
 const mapStyles = {
     width: '80vh',
@@ -15,6 +18,8 @@ var lng;
 var address;
 var org;
 var duration;
+var participants;
+var hasJoined = false;
 
 export class EventPage extends Component {
 
@@ -34,8 +39,19 @@ export class EventPage extends Component {
             org = data.data.org;
             duration = data.data.duration;
 
-            this.setState({
-                isLoading: false
+            axios.get("https://amazing-office-313314.appspot.com/rest/event/"+this.props.event.event+"/list/")
+            .then( (list) => {
+                participants = list.data;
+                participants.map(user => {
+                    var found = false;
+                    if(user === localStorage.getItem('username') && !found){
+                        hasJoined = true;
+                        found = true;
+                    }
+                })
+                this.setState({
+                    isLoading: false
+                });
             });
         })
     }
@@ -46,6 +62,25 @@ export class EventPage extends Component {
         activeMarker: marker,
         showingInfoWindow: true
     });
+
+    handleRedirect = (user) => {
+        window.location.href = "/profile/"+user;
+    }
+
+    handleJoin = () => {
+        console.log(JSON.stringify({event:this.props.event.event, tokenID:localStorage.getItem('tokenID')}))
+        fetch("https://amazing-office-313314.appspot.com/rest/event/join",
+            {method:"POST", 
+            headers:{ 'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'},
+            body: JSON.stringify({event:this.props.event.event, tokenID:localStorage.getItem('tokenID')})})
+            .then(data=> {if(!data.ok){
+                alert("Something went wrong");
+                console.log(data);
+            }else {
+                window.location.reload();
+            }});
+    }
 
     render(){
         if (this.state.isLoading) {
@@ -92,6 +127,7 @@ export class EventPage extends Component {
                                 display:"flex", 
                                 justifyContent:"center"}}>
                     <Box bgcolor='#1B3651' width="40vw" textAlign="center" p={2} borderRadius="borderRadius" boxShadow={2}>
+                        <br/>
                         <span style={{color:"white", fontSize:"45px"}}><b>{this.props.event.event}</b></span>
                         <br/>
                         <br/>
@@ -101,13 +137,43 @@ export class EventPage extends Component {
                         <br/>
                         <span style={{color:"white", fontSize:"30px"}}><b>Duration: </b>{duration}</span>
                         <br/><br/><br/>
-                        <Button style={{transform:"scale(1.5)"}}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Join Event
-                        </Button>
-                        <br/><br/>
+                        <div style={{width: "100%"}}>
+                            <Popup trigger={
+                                <Button style={{transform:"scale(1.5)", margin: "40px"}}
+                                variant="contained"
+                                color="primary">
+                                See Participants
+                            </Button>
+                            } 
+                            modal>
+                                {close => (
+                                    <div className="modal">
+                                        <button className="close" onClick={close}>
+                                        &times;
+                                        </button>
+                                        <div className="header"> Participants: </div>
+                                        <div className="content">
+                                        {' '}
+                                        {participants.map(user => (
+                                                <Link key={user} onClick={() => this.handleRedirect(user)}>{user}</Link>
+                                        ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </Popup>
+                            {!hasJoined && <Button style={{transform:"scale(1.5)", margin: "40px"}}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => this.handleJoin()}>
+                                Join Event
+                            </Button>}
+                            {hasJoined && <Button style={{transform:"scale(1.5)", margin: "40px"}}
+                                variant="contained"
+                                color="primary"
+                            >
+                                Leave Event
+                            </Button>}
+                        </div>
                     </Box>
                 </div>
             </div>
