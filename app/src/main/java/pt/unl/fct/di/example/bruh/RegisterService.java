@@ -23,9 +23,8 @@ import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import pt.unl.fct.di.example.bruh.requests.Warning;
 import retrofit2.Call;
-import retrofit2.http.Body;
 
-import retrofit2.http.DELETE;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -104,6 +103,9 @@ public interface RegisterService {
 
     @GET("/rest/map/get/{event}")
     Call<EventData> getEventData(@Path("event") String event);
+
+    @GET("/rest/map/list/{orgName}")
+    Call<List<String>> getEventsByOrg(@Path("orgName") String orgName);
 
     @POST("/rest/event/isPart/{event}/")
     Call<String> isInEvent(@Path("event") String event, @Body IsInEvent isInEvent);

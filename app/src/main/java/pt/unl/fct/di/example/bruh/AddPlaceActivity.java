@@ -128,10 +128,10 @@ public class AddPlaceActivity extends AppCompatActivity {
         clientAPI = clientAPI.getInstance();
         int days = Integer.parseInt(newPlaceDescription.getText().toString());
         if (days < 0) {
-            Toast.makeText(getApplicationContext(), "Invalid number of days", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid number of hours", Toast.LENGTH_SHORT).show();
             return;
         }
-        PlaceEvent event = new PlaceEvent(newPlaceName.getText().toString(), lat + ", " + lon, address, name,newPlaceDescription.getText().toString(),token);
+        PlaceEvent event = new PlaceEvent(newPlaceName.getText().toString(), lat + ", " + lon, address, name,newPlaceDescription.getText().toString()+"H",token);
         clientAPI.getRegisterService().addEvent(event).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> r) {

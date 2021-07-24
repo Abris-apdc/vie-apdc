@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,9 @@ public class OtherProfileFragment extends Fragment {
     private static final String FOLLOWING = "Following: ";
     private static final String FOLLOWERS = "Followers: ";
     private String username;
+    private List<String> participants;
     private TextView profile, fn,ln,role;
-    private Button follow;
+    private Button follow, events;
     private TextView following, followers;
     private int nFollowers;
 
@@ -51,13 +53,29 @@ public class OtherProfileFragment extends Fragment {
         following = (TextView) view.findViewById(R.id.other_profile_following);
         followers = (TextView) view.findViewById(R.id.other_profile_followers);
         follow = (Button) view.findViewById(R.id.other_profile_follow);
+        events = (Button) view.findViewById(R.id.other_profile_events);
 
         profile.setText(username);
+        getParticipants();
         followers();
         following();
         isFollowing();
         doRequest();
 
+
+        events.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(participants.size() == 0){
+                    Toast.makeText(getActivity(),"This organisation does not have events." , Toast.LENGTH_SHORT).show();
+                }else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    EventsByOrgFragment st = new EventsByOrgFragment();
+                    st.setValues(participants);
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                }
+            }
+        });
 
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +91,26 @@ public class OtherProfileFragment extends Fragment {
 
         return view;
     }
+
+    private void getParticipants(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getEventsByOrg(username).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    participants = r.body();
+                    String num = Integer.toString(participants.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get user followers", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void followers(){
         clientAPI = clientAPI.getInstance();
 
@@ -231,15 +269,19 @@ public class OtherProfileFragment extends Fragment {
                         fn.setText(r.body().getEmail());
                         ln.setText(r.body().getAddress());
                         role.setText(r.body().getRole());
+                    if(role.getText().toString().equals("ORG")){
+                        events.setVisibility(View.VISIBLE);
+
+                    }
 
 
                 }else
-                    Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Failed to get profile", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<OrgInfo> call, Throwable t) {
-                Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to get profile", Toast.LENGTH_SHORT).show();
             }
         });
     }

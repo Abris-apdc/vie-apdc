@@ -58,7 +58,7 @@ public class EventFragment extends Fragment {
         map = (Button) view.findViewById(R.id.fragment_event_map);
         name.setText(eventName);
         getEventData();
-       // isInEvent();
+        isInEvent();
         getList();
 
         map.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +112,7 @@ public class EventFragment extends Fragment {
                     lat = cords[0];
                     lng = cords[1];
                     coordinates.setText("        Coordinates: \n" + lat+ "\n" + lng);
-                    address.setText("      Address: \n" + r.body().getAddress());
+                    address.setText(r.body().getAddress());
                     duration.setText("Duration: "+ r.body().getDuration());
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
