@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import pt.unl.fct.di.apdc.vie.util.DeleteEventData;
 import pt.unl.fct.di.apdc.vie.util.EventData;
 import pt.unl.fct.di.apdc.vie.util.EventData2;
+import pt.unl.fct.di.apdc.vie.util.EventInfo;
 
 @Path("/map")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -109,9 +110,9 @@ public class MapsResource {
 			QueryResults<Entity> eventsResults = txn.run(eventQuery);
 			
 			
-			List<String> allResults = new ArrayList<>();
+			List<EventInfo> allResults = new ArrayList<>();
 			
-			eventsResults.forEachRemaining(e -> {allResults.add(e.getKey().getName());});
+			eventsResults.forEachRemaining(e -> {allResults.add(new EventInfo(e.getKey().getName(), e.getString("event_coordinates")));});
 				
 			txn.commit();
 			return Response.ok(g.toJson(allResults)).build();

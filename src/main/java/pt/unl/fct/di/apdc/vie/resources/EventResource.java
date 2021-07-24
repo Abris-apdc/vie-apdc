@@ -281,6 +281,38 @@ public class EventResource {
 		}
 	}
 	
+	@GET 
+	@Path("/{account}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getUserEvents(@PathParam("account") String account)  {
+		Transaction txn = datastore.newTransaction();
+		Key userKey = datastore.newKeyFactory().setKind("Account").newKey(account);
+		
+		try {
+
+			Entity user = txn.get(userKey);
+			
+			if(user == null) {
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("User does not exist.").build();
+			}
+			
+			List<Value<String>> events = user.getList("account_events_list");
+			List<String> events1 = new ArrayList<>();
+			for(int i = 0; i < events.size(); i++)
+				events1.add(events.get(i).get());
+			
+			txn.commit();
+			return Response.ok(g.toJson(events1)).build();
+		} finally {
+
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
 	
 
 	
