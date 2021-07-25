@@ -6,6 +6,8 @@
 <img src="logo.png" alt="hi" class="inline" width="300" height="300"/>
 
 Vie é uma aplicação Web e Android. Vie traduz-se para tanto para caminho como para vida em Francês, um duplo significado apropriado para o conceito do nosso produto, através de caminhos mudamos vidas. Na nossa aplicação poderás aceder a percursos solidários e criar os teus próprios percursos. Também podes usar a aplicação para conhecer outras pessoas tal como tu interessadas em voluntariado.
+<img src="routeandroid.png" alt="hi" class="inline" width="200" height="364" />
+<img src="profileandroid.png" alt="hi" class="inline" width="200" height="364" />
 
 # A Equipa
 
