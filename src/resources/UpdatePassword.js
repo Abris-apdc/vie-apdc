@@ -69,14 +69,13 @@ function UpdatePassForm(){
         }else {
             alert("Update Successful")
             console.log(data);
-            window.location.href = "/loggedIn/Profile";
+            window.location.href = "/My Profile";
         }});
 
     }
 
     function createJson(){
-        return JSON.stringify({oldPass:currPassword1, newPass:newPassword1,  
-            confirmation:confirmation1, tokenID:localStorage.getItem('tokenID')})
+        return JSON.stringify({oldPass:currPassword1, newPass:newPassword1, tokenID:localStorage.getItem('tokenID')})
     }
 
     const useStyles = makeStyles((theme) =>

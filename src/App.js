@@ -18,9 +18,13 @@ import PublicProfile from './interface/PublicProfile';
 import MapContainer from './resources/CreateEvent';
 import JoinEvent from './resources/JoinEvent';
 import EventPage from './interface/EventPage';
+import Feed from './interface/Feed';
+import MyEvents from './interface/MyEvents';
+import CreateRoute from './resources/CreateRoute';
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
+
       return (  
         <Router>
           <div className="App">
@@ -37,8 +41,8 @@ import EventPage from './interface/EventPage';
             {isLoggedIn && <Route exact path="/register" component={RedirectFeed}/>}
             {!isLoggedIn && <Route exact path="/login" component={LoginForm}/>}
             {isLoggedIn && <Route exact path="/login" component={RedirectFeed}/>}
-            {!isLoggedIn && <Route exact path="/myProfile" component={RedirectLogin}/>}
-            {isLoggedIn && <Route exact path="/myProfile" component={Profile}/>}
+            {!isLoggedIn && <Route exact path="/My Profile" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/My Profile" component={Profile}/>}
             {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/update" component={UpdateForm}/>}
             {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/update" component={UpdateOrgForm}/>}
             {!isLoggedIn && <Route exact path="/update" component={RedirectLogin}/>}
@@ -52,11 +56,17 @@ import EventPage from './interface/EventPage';
             {!isLoggedIn && <Route exact path="/Add New Event" component={RedirectLogin}/>}
             {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Add New Event" component={RedirectFeed}/>}
             {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Add New Event" component={MapContainer}/>}
-            {!isLoggedIn && <Route exact path="/Join Event" component={RedirectLogin}/>}
-            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Join Event" component={RedirectFeed}/>}
-            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Join Event" component={JoinEvent}/>}
+            {!isLoggedIn && <Route exact path="/Search Events" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/Search Events" component={JoinEvent}/>}
             {isLoggedIn && <Route exact path="/event/:event" component={Event}/>}
             {!isLoggedIn && <Route exact path="/event/:event" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/feed" component={Feed}/>}
+            {!isLoggedIn && <Route exact path="/feed" component={RedirectLogin}/>}
+            {isLoggedIn && <Route exact path="/My Events" component={MyEvents}/>}
+            {!isLoggedIn && <Route exact path="/My Events" component={RedirectLogin}/>}
+            {!isLoggedIn && <Route exact path="/Create New Route" component={RedirectLogin}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Create New Route" component={RedirectFeed}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Create New Route" component={CreateRoute}/>}
           </div>
         </Router>
       );

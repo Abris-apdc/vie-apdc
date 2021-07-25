@@ -80,7 +80,7 @@ function UpdateOrgForm(){
         }else {
             alert("Update Successful")
             console.log(data);
-            window.location.href = "/myProfile";
+            window.location.href = "/My Profile";
         }});
     }
 

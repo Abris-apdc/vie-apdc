@@ -89,7 +89,7 @@ export class MapContainer extends Component {
             .then(data=> {if(!data.ok){
                 alert("Something went wrong");
             }else {
-                window.location.reload();
+                document.location.href = "/event/"+name;
             }});
         }
     }

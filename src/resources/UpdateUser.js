@@ -90,7 +90,7 @@ function UpdateForm(){
         }else {
             alert("Update Successful")
             console.log(data);
-            window.location.href = "/myProfile";
+            window.location.href = "/My Profile";
         }});
         
     }
@@ -156,8 +156,8 @@ function UpdateForm(){
                     <br/>
                     <select name={profile1} onChange={handleChangeProfile}>
                         <option value=""></option>
-                        <option value="Publico">Public</option>
-                        <option value="Privado">Private</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
                     </select>
                 </form>
                 <br/>

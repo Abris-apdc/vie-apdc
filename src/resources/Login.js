@@ -3,7 +3,7 @@ import React from "react"
 import { useState} from "react"
 import './Register.css';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-
+import axios from 'axios';
 
 function LoginForm(){
     const [username1, setUserName] = useState("")
@@ -34,23 +34,28 @@ function LoginForm(){
             alert("All Fields Are Mandatory")
             return
         }
-        fetch("https://amazing-office-313314.appspot.com/rest/login",
+        axios.get("https://amazing-office-313314.appspot.com/rest/isDisable/"+username1)
+        .then(function ({data}) {
+            alert("Account is Disabled")
+        }).catch(err => {
+            fetch("https://amazing-office-313314.appspot.com/rest/login",
             {method:"POST", 
             headers:{ 'Accept': 'application/json, text/plain',
             'Content-Type': 'application/json;charset=UTF-8'},
             body: createJson()
             })
-        .then(response=> {if(!response.ok){
-            alert("Incorrect Username or Password")
-        }else {
-            response.json().then(function(parsedData){
-                localStorage.setItem("tokenID", parsedData.tokenID);
-                localStorage.setItem("username", parsedData.username);
-                localStorage.setItem('role',parsedData.role);
-                localStorage.setItem('hasReloaded', "nop");
-                window.location.href = "/feed";
-            });
-        }});
+            .then(response=> {if(!response.ok){
+                alert("Incorrect Username or Password")
+            }else {
+                response.json().then(function(parsedData){
+                    localStorage.setItem("tokenID", parsedData.tokenID);
+                    localStorage.setItem("username", parsedData.username);
+                    localStorage.setItem('role',parsedData.role);
+                    localStorage.setItem('hasReloaded', "nop");
+                    window.location.href = "/feed";
+                });
+            }});
+        });
     }
 
     function createJson(){

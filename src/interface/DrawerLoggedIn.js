@@ -76,10 +76,10 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function PersistentDrawerLeft() {
-  var isOrg = ['Feed', 'myProfile', 'About Us', 'Join Event'];
+  var isOrg = ['Feed', 'My Profile', 'My Events','Search Events', 'About Us'];
 
   if(localStorage.getItem('role') === "ORG")
-    isOrg = ['Feed', 'myProfile', 'About Us', 'Add New Event'];
+    isOrg = ['Feed', 'My Profile', 'My Events', 'Search Events', 'Add New Event', 'About Us'];
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);

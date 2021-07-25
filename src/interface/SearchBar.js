@@ -10,8 +10,6 @@ export default function SearchBar() {
 
     var [myOptions, setMyOptions] = useState([]);
 
-    const getDataFromAPI = () => {}
-
     function requestAPI(){
         if(localStorage.getItem("hasRequested") === "yes"){
             myOptions = [];
@@ -44,9 +42,8 @@ export default function SearchBar() {
             onChange={(_event, value) => setValue(value)}
             renderInput={(params) => (
                 <TextField {...params}
-                    onChange={getDataFromAPI}
                     variant="filled"
-                    label="Search Box"
+                    label="Search Users"
                     onKeyPress = {handleRedirect}
                     onClick = {requestAPI}
                 />
