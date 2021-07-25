@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -43,6 +45,17 @@ public class HomeFragment  extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             request(googleMap);
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    String tittle = marker.getTitle();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    EventFragment st = new EventFragment();
+                    st.setEventName(tittle);
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                    return true;
+                }
+            });
             if (Build.VERSION.SDK_INT >= 23) {
                 if (getActivity().getApplicationContext().checkSelfPermission("android.permission.ACCESS_FINE_LOCATION") == 0) {
                     fusedLocationProviderClient.getLastLocation().addOnSuccessListener((OnSuccessListener)new OnSuccessListener<Location>(){

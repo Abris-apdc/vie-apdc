@@ -43,7 +43,7 @@ public class EventFragment extends Fragment {
     private TextView name;
     private TextView coordinates, address, duration;
     private String lat, lng;
-    private Button participants, join, map, route;
+    private Button participants, join, map, route, owner;
     private List<String> list;
     private int nParticipants;
     @SuppressLint("WrongViewCast")
@@ -60,10 +60,20 @@ public class EventFragment extends Fragment {
         join = (Button) view.findViewById(R.id.fragment_event_join);
         map = (Button) view.findViewById(R.id.fragment_event_map);
         route = (Button) view.findViewById(R.id.fragment_event_route);
+        owner = (Button) view.findViewById(R.id.fragment_event_owner);
         name.setText(eventName);
+
         getEventData();
         isInEvent();
         getList();
+
+        owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               ownerStuff();
+            }
+        });
+
         route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +113,13 @@ public class EventFragment extends Fragment {
 
         return view;
     }
+    private void ownerStuff(){
+        Intent intent = new Intent(getActivity(), OtherProfileActivity.class);
+        intent.putExtra("profileToLoad", owner.getText().toString());
+
+        startActivity(intent);
+    }
+
     private void addRoute(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Do you want to create a new route or add this event to an existing route?")
@@ -142,11 +159,14 @@ public class EventFragment extends Fragment {
             public void onResponse(Call<EventData> call, Response<EventData> r) {
                 if(r.isSuccessful()) {
                     String[] cords = r.body().getCoordinates().split(", ");
+                    String org = r.body().getOrg();
                     lat = cords[0];
                     lng = cords[1];
                     coordinates.setText("        Coordinates: \n" + lat+ "\n" + lng);
                     address.setText(r.body().getAddress());
                     duration.setText("Duration: "+ r.body().getDuration());
+                    owner.setText(org);
+
                 }else
                     Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
             }
