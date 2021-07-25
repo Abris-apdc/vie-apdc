@@ -117,7 +117,6 @@ public class EventFragment extends Fragment {
                 })
                 .setNegativeButton("Add to Route", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        Toast.makeText(getActivity(), "Add to Route", Toast.LENGTH_SHORT).show();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         RoutesFragment st = new RoutesFragment();
                         st.setEventToAdd(eventName);

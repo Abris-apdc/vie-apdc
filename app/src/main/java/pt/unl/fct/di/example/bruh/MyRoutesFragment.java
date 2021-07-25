@@ -61,10 +61,10 @@ public class MyRoutesFragment extends Fragment {
                     if(r.body().size()>0) {
                         setValues(r.body());
                         search();
-                    }
-                    textView.setText("Choose a route");
-                }else
-                    textView.setText("Ups, no routes");
+                        textView.setText("Choose a route");
+                    }else
+                        textView.setText("Ups, no routes");
+                }
             }
 
             @Override

@@ -31,6 +31,7 @@ public class FavoritesFragment  extends Fragment {
     private ClientAPI clientAPI;
     ListView listView;
     TextView textView;
+    String id, role;
     ArrayAdapter<String> arrayAdapter;
     String[] teste;
 
@@ -40,16 +41,49 @@ public class FavoritesFragment  extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_favorites,container,false);
         listView = (ListView) view.findViewById(R.id.fragment_favorites_list);
         textView = (TextView) view.findViewById(R.id.fragment_favorites_text);
-        request();
+        getStuff();
+        if(role.equals("ORG"))
+            orgRequest();
+        else
+            request();
         return view;
     }
 
+    private void getStuff(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        id = preferences.getString("Authentication_username", "");
+        role = preferences.getString("Authentication_role", "");
+
+    }
+    private void orgRequest(){
+        clientAPI = clientAPI.getInstance();
+
+        clientAPI.getRegisterService().getEventsByOrg(id).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> r) {
+                if(r.isSuccessful()) {
+                    if (r.body().size() > 0) {
+                        teste = new String[r.body().size()];
+                        for (int i = 0; i < r.body().size(); i++) {
+                            teste[i] = r.body().get(i);
+                        }
+                        search();
+                    }else{
+                        textView.setText("     You are not \n    owner of any \n         event");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to get events", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void request(){
 
-        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
-        String id = preferences.getString("Authentication_username", "");
         clientAPI = clientAPI.getInstance();
 
         clientAPI.getRegisterService().getEventsByUser(id).enqueue(new Callback<List<String>>() {
@@ -70,7 +104,7 @@ public class FavoritesFragment  extends Fragment {
 
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Failed to delete user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,7 +124,10 @@ public class FavoritesFragment  extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
             }
         });
-        textView.setText("  Joined events \n     are loaded");
+        if(role.equals("ORG"))
+            textView.setText("  Your events \n     are loaded");
+        else
+            textView.setText("  Joined events \n     are loaded");
     }
 }
 
