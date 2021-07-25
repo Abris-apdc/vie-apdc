@@ -4,10 +4,11 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/fragment_textview_places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text=" Wait a little \n  is loading \n  the events"
+        android:text="  Wait a little \n  is loading \n  the events"
         android:textSize="50dp" />
 
     <ListView

@@ -150,10 +150,8 @@ public class OtherProfileActivity extends AppCompatActivity {
     }
 
     protected void maps(){
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, AddPlaceActivity.class);
 
         startActivity(intent);
     }
-
-
 }

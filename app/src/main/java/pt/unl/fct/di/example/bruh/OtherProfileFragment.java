@@ -210,7 +210,6 @@ public class OtherProfileFragment extends Fragment {
                 if(r.isSuccessful()) {
                     follow.setText(UNFOLLOW);
                     followers.setText(FOLLOWERS + (nFollowers +1));
-                    Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
                 }else {
                   //  Toast.makeText(getActivity(), "Failed to get user profile", Toast.LENGTH_SHORT).show();
 
@@ -221,8 +220,6 @@ public class OtherProfileFragment extends Fragment {
             public void onFailure(Call<String> call, Throwable t) {
                 follow.setText(UNFOLLOW);
                 followers.setText(FOLLOWERS + (nFollowers +1));
-                Toast.makeText(getActivity(), UNFOLLOW, Toast.LENGTH_SHORT).show();
-
             }
         });
     }
@@ -239,7 +236,6 @@ public class OtherProfileFragment extends Fragment {
                 if(r.isSuccessful()) {
                     follow.setText(FOLLOW);
                     followers.setText(FOLLOWERS + (nFollowers));
-                    Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -247,8 +243,6 @@ public class OtherProfileFragment extends Fragment {
             public void onFailure(Call<String> call, Throwable t) {
                 follow.setText(FOLLOW);
                 followers.setText(FOLLOWERS + (nFollowers));
-                Toast.makeText(getActivity(), FOLLOW, Toast.LENGTH_SHORT).show();
-
             }
         });
     }

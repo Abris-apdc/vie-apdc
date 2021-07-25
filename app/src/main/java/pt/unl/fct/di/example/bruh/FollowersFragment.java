@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class FollowersFragment extends Fragment {
 
     ListView listView;
+    TextView textView;
     String[] teste;
     ArrayAdapter<String> arrayAdapter;
 
@@ -29,6 +31,7 @@ public class FollowersFragment extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_followers, container, false);
         listView = (ListView) view.findViewById(R.id.fragment_listview);
+        textView = (TextView) view.findViewById(R.id.fragment_textview_followers);
         search();
 
         return view;
@@ -51,10 +54,10 @@ public class FollowersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
-                // Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
                 profile(item);
             }
         });
+        textView.setText("     Users \n are loaded");
     }
 
     public void setValues(List<String> list){

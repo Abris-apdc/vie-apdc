@@ -63,7 +63,7 @@ public class FavoritesFragment  extends Fragment {
                         }
                         search();
                     }else{
-                        textView.setText("You are not \n joined in any event");
+                        textView.setText("     You are not \n    joined in any \n         event");
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class FavoritesFragment  extends Fragment {
 
     }
     private void search() {
-        textView.setText(" Wait a little \n  is loading \n  the events");
+        textView.setText("  Wait a little \n  is loading \n  the events");
         arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, teste);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,6 +90,7 @@ public class FavoritesFragment  extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
             }
         });
+        textView.setText("  Joined events \n     are loaded");
     }
 }
 

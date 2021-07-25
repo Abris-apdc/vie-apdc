@@ -56,10 +56,14 @@ public class PerfilFragment extends Fragment {
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FollowersFragment st = new FollowersFragment();
-                st.setValues(following_list);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                if(nfollowing == 0)
+                    Toast.makeText(getActivity(), "You do not follow people", Toast.LENGTH_SHORT).show();
+                else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FollowersFragment st = new FollowersFragment();
+                    st.setValues(following_list);
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                }
             }
         });
 
@@ -80,14 +84,10 @@ public class PerfilFragment extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nFollowers == 0)
-                    Toast.makeText(getActivity(), "You do not follow people", Toast.LENGTH_SHORT).show();
-                else {
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    SettingsFragment st = new SettingsFragment();
-                    st.setRole(role.getText().toString());
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
-                }
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                SettingsFragment st = new SettingsFragment();
+                st.setRole(role.getText().toString());
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
             }
         });
 
