@@ -6,6 +6,7 @@ import pt.unl.fct.di.example.bruh.requests.AuthToken;
 import pt.unl.fct.di.example.bruh.requests.ChangePassword;
 import pt.unl.fct.di.example.bruh.requests.ChangeRole;
 import pt.unl.fct.di.example.bruh.requests.Delete;
+import pt.unl.fct.di.example.bruh.requests.DeleteRoute;
 import pt.unl.fct.di.example.bruh.requests.EventData;
 import pt.unl.fct.di.example.bruh.requests.EventInfo;
 import pt.unl.fct.di.example.bruh.requests.Follow;
@@ -137,4 +138,7 @@ public interface RegisterService {
 
     @GET("/rest/route/get/{route}")
     Call<List<EventInfo>> getEventsByRoute(@Path("route") String route);
+
+    @HTTP(method = "DELETE", path = "/rest/route/delete", hasBody = true)
+    Call<String> deleteRoute( @Body DeleteRoute follow);
 }
