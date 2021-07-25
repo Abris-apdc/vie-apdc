@@ -26,6 +26,7 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class FavoritesFragment  extends Fragment {
+
     public static final String SHARED_PREFS = "sharedPrefs";
     private ClientAPI clientAPI;
     ListView listView;
