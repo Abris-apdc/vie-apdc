@@ -9,6 +9,7 @@ import pt.unl.fct.di.example.bruh.requests.Delete;
 import pt.unl.fct.di.example.bruh.requests.EventData;
 import pt.unl.fct.di.example.bruh.requests.EventInfo;
 import pt.unl.fct.di.example.bruh.requests.Follow;
+import pt.unl.fct.di.example.bruh.requests.GetRoutes;
 import pt.unl.fct.di.example.bruh.requests.IsFollowing;
 import pt.unl.fct.di.example.bruh.requests.IsInEvent;
 import pt.unl.fct.di.example.bruh.requests.JoinEvent;
@@ -21,6 +22,8 @@ import pt.unl.fct.di.example.bruh.requests.OrgInfo;
 import pt.unl.fct.di.example.bruh.requests.PlaceEvent;
 import pt.unl.fct.di.example.bruh.requests.Register;
 import pt.unl.fct.di.example.bruh.requests.RegisterOrg;
+import pt.unl.fct.di.example.bruh.requests.RouteData;
+import pt.unl.fct.di.example.bruh.requests.UpdateRoute;
 import pt.unl.fct.di.example.bruh.requests.UserInfo;
 import pt.unl.fct.di.example.bruh.requests.Warning;
 import retrofit2.Call;
@@ -122,4 +125,13 @@ public interface RegisterService {
 
     @PUT("/rest/enable/{username}")
     Call<String> enable(@Path("username") String username, @Body Follow follow);
+
+    @POST("rest/route")
+    Call<String> createRoute(@Body RouteData rd);
+
+    @POST("rest/route/get")
+    Call<List<String>> getRoutes(@Body GetRoutes getRoutes);
+
+    @POST("/rest/route/add/{route}")
+    Call<String> updateRoute(@Path("route") String route, @Body UpdateRoute follow);
 }

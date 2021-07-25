@@ -1,6 +1,9 @@
 package pt.unl.fct.di.example.bruh;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -40,7 +43,7 @@ public class EventFragment extends Fragment {
     private TextView name;
     private TextView coordinates, address, duration;
     private String lat, lng;
-    private Button participants, join, map;
+    private Button participants, join, map, route;
     private List<String> list;
     private int nParticipants;
     @SuppressLint("WrongViewCast")
@@ -56,11 +59,17 @@ public class EventFragment extends Fragment {
         participants = (Button) view.findViewById(R.id.fragment_event_participants);
         join = (Button) view.findViewById(R.id.fragment_event_join);
         map = (Button) view.findViewById(R.id.fragment_event_map);
+        route = (Button) view.findViewById(R.id.fragment_event_route);
         name.setText(eventName);
         getEventData();
         isInEvent();
         getList();
-
+        route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addRoute();
+            }
+        });
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +102,31 @@ public class EventFragment extends Fragment {
         });
 
         return view;
+    }
+    private void addRoute(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Do you want to create a new route or add this event to an existing route?")
+                .setCancelable(false)
+                .setPositiveButton("Create Route", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        AddRouteFragment st = new AddRouteFragment();
+                        st.setLocations(eventName);
+                        fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                    }
+                })
+                .setNegativeButton("Add to Route", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Toast.makeText(getActivity(), "Add to Route", Toast.LENGTH_SHORT).show();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        RoutesFragment st = new RoutesFragment();
+                        st.setEventToAdd(eventName);
+                        fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+                    }
+        });
+
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
     private void map(){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
