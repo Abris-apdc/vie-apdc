@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +20,11 @@ import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Transaction;
 import com.google.cloud.datastore.Value;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.BucketInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.google.gson.Gson;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
@@ -27,6 +33,7 @@ import com.google.cloud.datastore.StringValue;
 
 import pt.unl.fct.di.apdc.vie.util.AccountData;
 import pt.unl.fct.di.apdc.vie.util.FollowData;
+import pt.unl.fct.di.apdc.vie.util.FotoData;
 import pt.unl.fct.di.apdc.vie.util.OrgAllInfoData;
 import pt.unl.fct.di.apdc.vie.util.OrgInfoData;
 import pt.unl.fct.di.apdc.vie.util.UserAllInfoData;
@@ -475,4 +482,28 @@ public class ProfileResource {
 			}
 		}
 	}
+	
+	@PUT
+	@Path("/changeFoto/{username}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response changeFoto(@PathParam("username") String username, FotoData data)  {
+
+		Transaction txn = datastore.newTransaction();
+		
+		try {
+			
+			Storage storage = StorageOptions.getDefaultInstance().getService();
+			Bucket bucket = storage.create(BucketInfo.of("apdc-abris-vie-" + username));
+			
+			/*Blob blob = */bucket.create(username, data.getBytes());
+			
+			return Response.ok().build();
+		} finally {
+			if(txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+				
 }

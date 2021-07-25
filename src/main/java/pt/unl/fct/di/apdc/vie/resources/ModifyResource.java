@@ -1,7 +1,5 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
-import java.util.logging.Logger;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -29,7 +27,7 @@ public class ModifyResource {
 	private static final String SU = "SU";
 	private static final String MOD = "MOD";
 	
-	private static final Logger LOG = Logger.getLogger(ModifyResource.class.getName());
+	//private static final Logger LOG = Logger.getLogger(ModifyResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
 	
