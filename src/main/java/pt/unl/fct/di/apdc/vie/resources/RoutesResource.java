@@ -10,6 +10,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,6 +28,7 @@ import com.google.cloud.datastore.Transaction;
 import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
+import pt.unl.fct.di.apdc.vie.util.DeleteEventData;
 import pt.unl.fct.di.apdc.vie.util.DeleteRouteData;
 import pt.unl.fct.di.apdc.vie.util.GetRoutesData;
 import pt.unl.fct.di.apdc.vie.util.ModifyRouteData;
@@ -273,6 +275,68 @@ public class RoutesResource {
 			}
 		}
 		
+	}
+	
+	@POST
+	@Path("/add/{route}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addEvent(@PathParam("route") String routeName, DeleteEventData data) {
+		Transaction txn = datastore.newTransaction();
+
+		try {
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+
+			Entity token = txn.get(tokenKey);
+			long end = token.getLong("token_end_time");
+
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
+			Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(routeName);
+			Entity route = txn.get(routeKey);
+
+			if(route == null) {
+				return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
+			}
+			
+			Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(data.getName());
+			Entity event = txn.get(eventKey);
+			
+			if(event == null) {
+				return Response.status(Status.NOT_FOUND).entity("Event does not exist.").build();
+			}
+			
+			if(!route.getString("route_owner").equals(token.getString("token_username"))) {
+				return Response.status(Status.FORBIDDEN).entity("You are not the owner.").build();
+			}
+			 
+			List<Value<String>> events = route.getList("route_events_list");
+			List<Value<String>> events1 = new ArrayList<>();
+			for(int i = 0; i < events.size(); i ++) {
+				events1.add(events.get(i));
+			}
+			events1.add(StringValue.of(data.getName()));
+			
+			route = Entity.newBuilder(route)
+					.set("route_events_list", events1)
+					.build();
+			txn.update(route);
+			txn.commit();
+			
+			return Response.ok(g.toJson("Route was updated.")).build();
+
+			
+		} finally {
+
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
 	}
 
 	@DELETE

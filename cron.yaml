@@ -1,4 +1,4 @@
 cron:
 - description: "clean expired tokens"
   url: /rest/clean/
-  schedule: every 24 hours
+  schedule: every 5 minutes
