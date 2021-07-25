@@ -63,8 +63,8 @@ public class RoutesFragment extends Fragment {
                         search();
                     }
                     textView.setText("Choose a route");
-                }
-                textView.setText("Ups, no routes");
+                }else
+                    textView.setText("Ups, no routes");
             }
 
             @Override
@@ -81,8 +81,6 @@ public class RoutesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
-               // profile(item);
-                Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
                 updateRoute(item);
             }
         });

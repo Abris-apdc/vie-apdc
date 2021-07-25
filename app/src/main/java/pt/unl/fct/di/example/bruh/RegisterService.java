@@ -134,4 +134,7 @@ public interface RegisterService {
 
     @POST("/rest/route/add/{route}")
     Call<String> updateRoute(@Path("route") String route, @Body UpdateRoute follow);
+
+    @GET("/rest/route/get/{route}")
+    Call<List<EventInfo>> getEventsByRoute(@Path("route") String route);
 }

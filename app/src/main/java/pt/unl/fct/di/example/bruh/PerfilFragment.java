@@ -33,7 +33,7 @@ public class PerfilFragment extends Fragment {
     private static final String FOLLOWERS = "Followers: ";
     private List<String> list, following_list;
     private TextView firstName, lastName, role, username;
-    private Button edit, followers, following;
+    private Button edit, followers, following,routes;
     private ClientAPI clientAPI;
     private int nFollowers, nfollowing;
 
@@ -49,10 +49,20 @@ public class PerfilFragment extends Fragment {
         edit = (Button) view.findViewById(R.id.activity_perfil_edit);
         followers = (Button) view.findViewById(R.id.activity_perfil_followers);
         following = (Button) view.findViewById(R.id.activity_perfil_following);
+        routes = (Button) view.findViewById(R.id.activity_perfil_routes);
+
         getUserInfo(view);
         followers();
         following();
 
+        routes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                MyRoutesFragment st = new MyRoutesFragment();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+            }
+        });
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
