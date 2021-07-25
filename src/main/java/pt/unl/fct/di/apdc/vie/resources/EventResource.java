@@ -161,6 +161,8 @@ public class EventResource {
 			for(int i = 0;i<participants.size();i++) {
 				if(!participants.get(i).get().equals(logged.getString("token_username"))) {
 					participantsNew.add(participants.get(i));
+				}
+				else {
 					found = true;
 				}
 			}			

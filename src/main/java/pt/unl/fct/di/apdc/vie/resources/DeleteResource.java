@@ -180,12 +180,5 @@ public class DeleteResource {
 			}
 		}
 	}
-	
-	private void removeFollows() {
-		
-	}
-	
-	private void removeEvents() {
-		
-	}
+
 }
