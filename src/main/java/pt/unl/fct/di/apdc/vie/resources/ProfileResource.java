@@ -2,7 +2,6 @@ package pt.unl.fct.di.apdc.vie.resources;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -16,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Transaction;
@@ -31,7 +31,6 @@ import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.ListValue;
 import com.google.cloud.datastore.StringValue;
 
-import pt.unl.fct.di.apdc.vie.util.AccountData;
 import pt.unl.fct.di.apdc.vie.util.FollowData;
 import pt.unl.fct.di.apdc.vie.util.FotoData;
 import pt.unl.fct.di.apdc.vie.util.OrgAllInfoData;
@@ -45,7 +44,7 @@ public class ProfileResource {
 	
 	private static final String ORG = "ORG";
 	
-	private static final Logger LOG = Logger.getLogger(ProfileResource.class.getName());
+	//private static final Logger LOG = Logger.getLogger(ProfileResource.class.getName());
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 	private final Gson g = new Gson();
 	
@@ -495,11 +494,28 @@ public class ProfileResource {
 		
 		try {
 			
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+			Entity token = txn.get(tokenKey);
+			
+			if(token == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
 			Storage storage = StorageOptions.getDefaultInstance().getService();
 			Bucket bucket = storage.create(BucketInfo.of("apdc-abris-vie-" + username));
 			
 			/*Blob blob = */bucket.create(username, data.getBytes());
 			
+			txn.commit();
 			return Response.ok().build();
 		} finally {
 			if(txn.isActive()) {
@@ -508,5 +524,48 @@ public class ProfileResource {
 			}
 		}
 	}
-				
+	
+	@GET
+	@Path("/getFoto/{username}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getFoto(@PathParam("username") String username, FollowData data)  {
+		Transaction txn = datastore.newTransaction();
+
+		try {
+			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
+			Entity token = txn.get(tokenKey);
+			
+			if(token == null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("You are not logged in.").build();
+			}
+			long end = token.getLong("token_end_time");
+			
+			//o token expirou
+			if(end <  System.currentTimeMillis()) {
+				txn.delete(tokenKey);
+				txn.commit();
+				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
+			}
+			
+			Storage storage = StorageOptions.getDefaultInstance().getService();
+			Bucket bucket = storage.get("apdc-abris-vie-" + username, Storage.BucketGetOption.fields(Storage.BucketField.values()));
+			
+			Page<Blob> blobs = bucket.list();
+	        for (Blob blob : blobs.getValues()) {
+	        	if (token.getString("username").equals(blob.getName())) {
+	        		txn.commit();
+	    			return Response.ok(g.toJson(blob.getContent())).build();
+	        	}
+	        }
+	        
+	        txn.rollback();
+	        return Response.status(Status.NOT_FOUND).entity("No photo.").build();
+		} finally {
+			if(txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}			
 }
