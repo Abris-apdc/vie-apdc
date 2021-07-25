@@ -4,10 +4,17 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/fragment_favorites_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Favorite Places"
-        android:textSize="50dp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:text="Joined Events"
+        android:textSize="50dp" />
 
+    <ListView
+        android:id="@+id/fragment_favorites_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:translationZ="90dp" />
 </RelativeLayout>

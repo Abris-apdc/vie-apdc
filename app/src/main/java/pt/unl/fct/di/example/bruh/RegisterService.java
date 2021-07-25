@@ -110,4 +110,7 @@ public interface RegisterService {
 
     @POST("/rest/event/isPart/{event}/")
     Call<String> isInEvent(@Path("event") String event, @Body IsInEvent isInEvent);
+
+    @GET("/rest/event/{username}")
+    Call<List<String>> getEventsByUser(@Path("username") String username);
 }
