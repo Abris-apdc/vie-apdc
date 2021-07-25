@@ -150,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             editor.putString("Authentication_firstName", firstName.getText().toString());
                             editor.putString("Authentication_lastName", lastName.getText().toString());
-                            editor.putString("Authentication_role", "Voluntário");
+                            editor.putString("Authentication_role", "USER");
                             editor.putString("Authentication_username", username.getText().toString());
                             editor.apply();
                             changeScreen();
