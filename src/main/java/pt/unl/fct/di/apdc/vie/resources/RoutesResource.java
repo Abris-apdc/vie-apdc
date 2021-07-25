@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.DeleteEventData;
 import pt.unl.fct.di.apdc.vie.util.DeleteRouteData;
+import pt.unl.fct.di.apdc.vie.util.EventInfo;
 import pt.unl.fct.di.apdc.vie.util.GetRoutesData;
 import pt.unl.fct.di.apdc.vie.util.ModifyRouteData;
 import pt.unl.fct.di.apdc.vie.util.RouteData;
@@ -216,6 +217,45 @@ public class RoutesResource {
 			aux.setEvents(events1);
 			aux.setCoords(coords);
 			
+			
+
+			txn.commit();
+			return Response.ok(g.toJson(aux)).build();
+
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
+	@GET
+	@Path("/get/{route}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getRouteEvents(@PathParam("route") String routeName) {
+		Transaction txn = datastore.newTransaction();
+		try {
+			
+			
+			Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(routeName);
+			Entity route = txn.get(routeKey);	
+			
+			if(route == null) {
+				txn.rollback();
+				return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
+			}
+			
+			List<EventInfo> aux = new ArrayList<>();					
+						
+			List<Value<String>> events = route.getList("route_events_list");
+			for(int i = 0;i<events.size();i++) {
+				String eventName = events.get(i).get();
+				Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(eventName);
+				Entity event = txn.get(eventKey);
+				aux.add(new EventInfo(eventName, event.getString("event_coordinates")));
+				
+			} 		
 			
 
 			txn.commit();

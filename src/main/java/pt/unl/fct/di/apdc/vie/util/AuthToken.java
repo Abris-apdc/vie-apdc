@@ -2,8 +2,8 @@ package pt.unl.fct.di.apdc.vie.util;
 
 public class AuthToken {
 
-	//public static final long EXPIRATION_TIME = 1000*60*60*2; //2h
-	public static final long EXPIRATION_TIME = 1000*60*2; // 2 minutos
+	public static final long EXPIRATION_TIME = 1000*60*60*2; //2h
+	//public static final long EXPIRATION_TIME = 1000*60*2; // 2 minutos
 	
 	private String username;
 	private String tokenID;
