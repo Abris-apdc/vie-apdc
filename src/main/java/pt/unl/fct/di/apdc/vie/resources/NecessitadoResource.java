@@ -1,6 +1,7 @@
 package pt.unl.fct.di.apdc.vie.resources;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -24,6 +25,7 @@ import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.Transaction;
+import com.google.cloud.datastore.Value;
 import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.vie.util.FollowData;
@@ -213,6 +215,28 @@ public class NecessitadoResource {
 			necessitado = Entity.newBuilder(necessitado).set("necessitado_state", "OK").build();
 			
 			txn.update(necessitado);
+			
+			String eventName = "HELP - " + necessitado.getString("necessitado_first_name") + " " + necessitado.getString("necessitado_last_name");
+			
+			Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(eventName);
+			Entity event = txn.get(eventKey);
+			if (event != null) {
+				txn.rollback();
+				return Response.status(Status.FORBIDDEN).entity("Event alredy exists.").build();
+			}
+		
+			List<Value<String>> people = new LinkedList<Value<String>>();
+				
+			event = Entity.newBuilder(eventKey)
+					.set("event_coordinates", necessitado.getString("necessitado_local"))
+					.set("event_address", necessitado.getString("necessitado_local"))
+					.set("event_org", token.getString("token_username"))
+					.set("event_duration", necessitado.getString("necessitado_descricao"))
+					.set("event_participants_list", people)
+					.build();
+			txn.add(event);
+
+			
 			txn.commit();
 			return Response.ok("Updated.").build();
 		} finally {
