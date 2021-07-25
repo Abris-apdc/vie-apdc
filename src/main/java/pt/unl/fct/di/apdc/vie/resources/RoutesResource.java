@@ -33,6 +33,7 @@ import pt.unl.fct.di.apdc.vie.util.DeleteRouteData;
 import pt.unl.fct.di.apdc.vie.util.GetRoutesData;
 import pt.unl.fct.di.apdc.vie.util.ModifyRouteData;
 import pt.unl.fct.di.apdc.vie.util.RouteData;
+import pt.unl.fct.di.apdc.vie.util.RouteInfo;
 
 @Path("/route")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -158,33 +159,67 @@ public class RoutesResource {
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
 			}
-			if(user.getString("account_perfil").equals("Private") && !logged.getString("token_username").equals(data.getUsername())) {
-				txn.rollback();
-				return Response.status(Status.FORBIDDEN).entity("User profile is private.").build();
-			}
-  
 			
 			
 			List<String> routes = new ArrayList<>();
 			
 			List<Value<String>> routes1 = user.getList("account_routes_list");
 			for(int i = 0;i<routes1.size();i++) {
-				String thisRoute = "Name: ";
-				Key routesKey = datastore.newKeyFactory().setKind("Routes").newKey(routes1.get(i).get());
-				thisRoute += routes1.get(i).get();
-				thisRoute += "; Events: ";
-				Entity route = txn.get(routesKey);
-				List<Value<String>> locations = route.getList("route_events_list");
-				for(int j = 0; j < locations.size(); j++) {
-					thisRoute += locations.get(j).get();
-					thisRoute += "; ";
-				}
-				routes.add(thisRoute);
+				routes.add(routes1.get(i).get());
+				
 			} 
 			
 
 			txn.commit();
 			return Response.ok(g.toJson(routes)).build();
+
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+	
+	@POST
+	@Path("/get/{route}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Response getRoute(@PathParam("route") String routeName) {
+		Transaction txn = datastore.newTransaction();
+		try {
+			
+			
+			Key routeKey = datastore.newKeyFactory().setKind("Route").newKey(routeName);
+			Entity route = txn.get(routeKey);	
+			
+			if(route == null) {
+				txn.rollback();
+				return Response.status(Status.NOT_FOUND).entity("Route does not exist.").build();
+			}
+			
+			RouteInfo aux = new RouteInfo(
+					routeName, route.getString("route_owner"), route.getString("route_info"));
+					
+						
+			List<Value<String>> events = route.getList("route_events_list");
+			List<String> events1 = new ArrayList<>();
+			List<String> coords = new ArrayList<>();
+			for(int i = 0;i<events.size();i++) {
+				events1.add(events.get(i).get());
+				Key eventKey = datastore.newKeyFactory().setKind("Event").newKey(events.get(i).get());
+				Entity event = txn.get(eventKey);
+				coords.add(event.getString("event_coordinates"));
+				
+			} 
+			
+			aux.setEvents(events1);
+			aux.setCoords(coords);
+			
+			
+
+			txn.commit();
+			return Response.ok(g.toJson(aux)).build();
 
 		} finally {
 			if (txn.isActive()) {
