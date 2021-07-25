@@ -385,7 +385,8 @@ public class ProfileResource {
 					account.getList("account_requests_list"),
 					account.getString("account_nationality"),
 					account.getList("account_events_list"),
-					account.getString("account_description")
+					account.getString("account_description"),
+					account.getString("account_first_language")
 					);
 			
 			txn.commit();

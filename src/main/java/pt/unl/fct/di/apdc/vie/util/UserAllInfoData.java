@@ -27,6 +27,7 @@ public class UserAllInfoData {
 	private String nationality;
 	private List<Value<String>> eventsList;
 	private String description;
+	private String firstLanguage;
 	
 	public UserAllInfoData() {
 	}
@@ -37,7 +38,7 @@ public class UserAllInfoData {
 			long following, List<Value<String>> followingList, long followers,
 			List<Value<String>> followersList, List<Value<String>> routesList,
 			long warnings, List<Value<String>> requestsList, String nationality,
-			List<Value<String>> eventsList, String description) {
+			List<Value<String>> eventsList, String description, String firstLanguage) {
 		this.address = address;
 		this.birthDay = birthDay;
 		this.name = name;
@@ -59,8 +60,12 @@ public class UserAllInfoData {
 		this.nationality = nationality;
 		this.eventsList = eventsList;
 		this.description = description;
+		this.firstLanguage = firstLanguage;
 	}
 	
+	public String getFirstLanguage() {
+		return firstLanguage;
+	}
 	public String getDescription() {
 		return description;
 	}

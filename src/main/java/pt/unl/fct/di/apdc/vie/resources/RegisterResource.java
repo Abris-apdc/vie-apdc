@@ -70,7 +70,7 @@ public class RegisterResource {
 						.set("account_birthDay", date.toString())
 						.set("account_perfil", "Public")
 						//.set("account_owner", "")
-						//.set("account_cardID", "")
+						.set("account_first_language", "")
 						.set("account_address", "")
 						.set("account_nationality", "")
 						.set("account_role", "USER")
