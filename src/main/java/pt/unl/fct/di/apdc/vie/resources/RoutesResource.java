@@ -146,7 +146,7 @@ public class RoutesResource {
 			
 			if(user == null) {
 				txn.rollback();
-				return Response.status(Status.NOT_FOUND).entity("User doesn't exist.").build();
+				return Response.status(Status.NOT_FOUND).entity("User does not exist.").build();
 			}
 			
 			Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.getTokenID());
@@ -158,7 +158,7 @@ public class RoutesResource {
 				txn.delete(tokenKey);
 				txn.commit();
 				return Response.status(Status.FORBIDDEN).entity("Token expired.").build();
-			}
+			} 
 			
 			
 			List<String> routes = new ArrayList<>();
@@ -182,7 +182,7 @@ public class RoutesResource {
 	}
 	
 	@POST
-	@Path("/get/{route}")
+	@Path("/pull/{route}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response getRoute(@PathParam("route") String routeName) {

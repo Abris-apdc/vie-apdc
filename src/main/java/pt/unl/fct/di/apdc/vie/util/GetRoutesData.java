@@ -13,13 +13,6 @@ public class GetRoutesData {
 		 this.tokenID = tokenID;
 	 }
 
-	public String getTokenID() {
-		return tokenID;
-	}
-
-	public void setTokenID(String tokenID) {
-		this.tokenID = tokenID;
-	}
 
 	public String getUsername() {
 		return username;
@@ -27,6 +20,14 @@ public class GetRoutesData {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getTokenID() {
+		return tokenID;
+	}
+
+	public void setTokenID(String tokenID) {
+		this.tokenID = tokenID;
 	}
 
 }
