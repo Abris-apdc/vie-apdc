@@ -31,11 +31,13 @@ public class OtherProfileRolesFragment  extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private static final String FOLLOW = "Follow";
     private static final String UNFOLLOW = "Unfollow";
+    private static final String ENABLE = "Enable Account";
+    private static final String DISABLE = "Disable Account";
     private static final String FOLLOWING = "Following: ";
     private static final String FOLLOWERS = "Followers: ";
     String username, myRole;
     TextView profile, fn,ln,role;
-    Button changeRole, warning, follow;
+    Button changeRole, warning, follow, disable;
     private TextView following, followers;
     private int nFollowers;
 
@@ -54,12 +56,26 @@ public class OtherProfileRolesFragment  extends Fragment {
         changeRole = (Button) view.findViewById(R.id.other_profile_change_roles);
         warning = (Button) view.findViewById(R.id.other_profile_warning);
         follow = (Button) view.findViewById(R.id.other_profile_follow_roles);
+        disable = (Button) view.findViewById(R.id.other_profile_disable_roles);
         profile.setText(username);
-
+        setRole();
+        isDisable();
         followers();
         following();
         isFollowing();
         doRequest(view);
+
+        disable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (disable.getText().equals(ENABLE)){
+                    enable();
+                } else{
+                    disable();
+                }
+            }
+        });
 
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +104,65 @@ public class OtherProfileRolesFragment  extends Fragment {
         });
 
         return view;
+    }
+    private void isDisable(){
+
+        clientAPI = clientAPI.getInstance();
+        clientAPI.getRegisterService().isDisable(username).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    disable.setText(DISABLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                follow.setText(UNFOLLOW);
+            }
+        });
+    }
+
+    private void disable(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().disable(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    disable.setText(ENABLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                disable.setText(ENABLE);
+            }
+        });
+    }
+
+    private void enable(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String token = preferences.getString("Authentication_Id", "");
+
+        clientAPI = clientAPI.getInstance();
+        Follow f = new Follow(token);
+        clientAPI.getRegisterService().enable(username, f).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> r) {
+                if(r.isSuccessful()) {
+                    disable.setText(DISABLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                disable.setText(DISABLE);
+            }
+        });
     }
 
     private void followers(){
@@ -149,9 +224,15 @@ public class OtherProfileRolesFragment  extends Fragment {
             }
         });
     }
-    private void getRole() {
+    private void setRole(){
         SharedPreferences preferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         myRole = preferences.getString("Authentication_role", "");
+        if(myRole.equals("SU") || myRole.equals("ADMIN")){
+            disable.setVisibility(View.VISIBLE);
+        }
+    }
+    private void getRole() {
+
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         if(myRole.equals("SU")) {
             ChangeRoleSUFragment su = new ChangeRoleSUFragment();

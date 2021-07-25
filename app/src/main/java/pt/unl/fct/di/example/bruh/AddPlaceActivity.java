@@ -127,6 +127,14 @@ public class AddPlaceActivity extends AppCompatActivity {
         String name = preferences.getString("Authentication_firstName", "");
         clientAPI = clientAPI.getInstance();
         int days = Integer.parseInt(newPlaceDescription.getText().toString());
+        if (newPlaceName.getText().toString().equals("")) {
+            Toast.makeText(getApplicationContext(), "Invalid Event name.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (newPlaceAddress.getText().toString().equals("")) {
+            Toast.makeText(getApplicationContext(), "Invalid address.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (days < 0) {
             Toast.makeText(getApplicationContext(), "Invalid number of hours", Toast.LENGTH_SHORT).show();
             return;

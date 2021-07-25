@@ -4,16 +4,16 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"/>
+        android:title="Map Events"/>
 
     <item
         android:id="@+id/nav_favorites"
         android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="Favorites"/>
+        android:title="My Events"/>
     <item
         android:id="@+id/nav_places"
         android:icon="@drawable/ic_baseline_place_24"
-        android:title="Places"/>
+        android:title="All Events"/>
     <item
         android:id="@+id/nav_perfil"
         android:icon="@drawable/ic_baseline_person_24"

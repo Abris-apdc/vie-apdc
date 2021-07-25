@@ -113,4 +113,13 @@ public interface RegisterService {
 
     @GET("/rest/event/{username}")
     Call<List<String>> getEventsByUser(@Path("username") String username);
+
+    @GET("/rest/isDisable/{username}")
+    Call<String> isDisable(@Path("username") String username);
+
+    @PUT("/rest/disable/{username}")
+    Call<String> disable(@Path("username") String username, @Body Follow follow);
+
+    @PUT("/rest/enable/{username}")
+    Call<String> enable(@Path("username") String username, @Body Follow follow);
 }

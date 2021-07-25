@@ -57,7 +57,7 @@ public class FollowersFragment extends Fragment {
                 profile(item);
             }
         });
-        textView.setText("     Users \n are loaded");
+        textView.setText("      Users \n are loaded");
     }
 
     public void setValues(List<String> list){
