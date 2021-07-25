@@ -23,6 +23,7 @@ public class OrgAllInfoData {
 	private String phone;
 	private List<Value<String>> requestsList;
 	private List<Value<String>> eventsList;
+	private String description;
 	
 	public OrgAllInfoData() {
 	}
@@ -31,7 +32,7 @@ public class OrgAllInfoData {
 			List<Value<String>> followersList, long following, List<Value<String>> followingList, 
 			String name, String owner, String role, List<Value<String>> routesList,
 			String service, String state, long warnings, String phone,
-			List<Value<String>> requestsList, List<Value<String>> eventsList) {
+			List<Value<String>> requestsList, List<Value<String>> eventsList, String description) {
 		this.address = address;
 		this.cardID = cardID;
 		this.email = email;
@@ -49,8 +50,12 @@ public class OrgAllInfoData {
 		this.phone = phone;
 		this.requestsList = requestsList;
 		this.eventsList = eventsList;
+		this.description = description;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
 	public List<Value<String>> getEventsList() {
 		return eventsList;
 	}

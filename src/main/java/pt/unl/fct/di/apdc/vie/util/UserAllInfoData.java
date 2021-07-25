@@ -26,6 +26,7 @@ public class UserAllInfoData {
 	private List<Value<String>> requestsList;
 	private String nationality;
 	private List<Value<String>> eventsList;
+	private String description;
 	
 	public UserAllInfoData() {
 	}
@@ -36,7 +37,7 @@ public class UserAllInfoData {
 			long following, List<Value<String>> followingList, long followers,
 			List<Value<String>> followersList, List<Value<String>> routesList,
 			long warnings, List<Value<String>> requestsList, String nationality,
-			List<Value<String>> eventsList) {
+			List<Value<String>> eventsList, String description) {
 		this.address = address;
 		this.birthDay = birthDay;
 		this.name = name;
@@ -57,8 +58,12 @@ public class UserAllInfoData {
 		this.requestsList = requestsList;
 		this.nationality = nationality;
 		this.eventsList = eventsList;
+		this.description = description;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
 	public List<Value<String>> getEventsList() {
 		return eventsList;
 	}

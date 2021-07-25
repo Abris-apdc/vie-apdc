@@ -357,7 +357,8 @@ public class ProfileResource {
 						account.getLong("account_warnings"),
 						account.getString("account_phone"),
 						account.getList("account_requests_list"),
-						account.getList("account_events_list")
+						account.getList("account_events_list"),
+						account.getString("account_description")
 						);
 				txn.commit();
 				return Response.ok(g.toJson(info)).build();
@@ -383,7 +384,8 @@ public class ProfileResource {
 					account.getLong("account_warnings"),
 					account.getList("account_requests_list"),
 					account.getString("account_nationality"),
-					account.getList("account_events_list")
+					account.getList("account_events_list"),
+					account.getString("account_description")
 					);
 			
 			txn.commit();
