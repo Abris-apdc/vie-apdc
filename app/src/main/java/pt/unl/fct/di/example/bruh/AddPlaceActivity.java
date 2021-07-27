@@ -124,7 +124,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     private void send(){
         SharedPreferences preferences = this.getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String token = preferences.getString("Authentication_Id", "");
-        String name = preferences.getString("Authentication_firstName", "");
+        String name = preferences.getString("Authentication_username", "");
         clientAPI = clientAPI.getInstance();
         int days = Integer.parseInt(newPlaceDescription.getText().toString());
         if (newPlaceName.getText().toString().equals("")) {
