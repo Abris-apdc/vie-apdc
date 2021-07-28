@@ -39,7 +39,7 @@
     </string-array>
     <string name="title_activity_add_place">AddPlaceActivity</string>
     <string name="title_activity_perfil_photo">PerfilPhotoActivity</string>
-    <string name="direct_key">AIzaSyDEhoXvw3ZnbsepGxh9fS3VepU-GsbtNv4</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
