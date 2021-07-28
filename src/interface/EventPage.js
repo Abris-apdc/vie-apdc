@@ -22,6 +22,8 @@ var participants = [];
 var hasJoined = false;
 var userRoutes;
 
+var isOrg = localStorage.getItem('role') === 'ORG';
+
 export class EventPage extends Component {
 
     constructor(props) {
@@ -225,7 +227,7 @@ export class EventPage extends Component {
                                 onClick={() => this.handleLeave()}>
                                 Leave Event
                             </Button>}
-                            <Popup trigger={
+                            {!isOrg && <Popup trigger={
                                 <Button style={{transform:"scale(1.4)", margin: "40px", width: "11.5vw"}}
                                 variant="contained"
                                 color="primary">
@@ -272,7 +274,7 @@ export class EventPage extends Component {
                                         </div>
                                     </div>
                                 )}
-                            </Popup>
+                            </Popup>}
                         </div>
                     </Box>
                 </div>

@@ -40,8 +40,10 @@ export default function JoinEvent(){
     </div>;
     }
 
-    function handleRedirect() {
-        document.location.href = "/event/"+value;
+    function handleRedirect(e) {
+		if(e.key === 'Enter'){
+            document.location.href = "/event/"+value;
+        }
     }
 
     return(
