@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function PersistentDrawerLeft() {
-  var isOrg = ['Feed', 'My Profile', 'My Events','Search Events', 'About Us'];
+  var isOrg = ['Feed', 'My Profile', 'My Events','Search Events', 'My Routes', 'About Us'];
 
   if(localStorage.getItem('role') === "ORG")
     isOrg = ['Feed', 'My Profile', 'My Events', 'Search Events', 'Add New Event', 'About Us'];

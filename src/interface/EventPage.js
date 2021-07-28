@@ -20,7 +20,6 @@ var org;
 var duration;
 var participants = [];
 var hasJoined = false;
-var userRoutes;
 
 var isOrg = localStorage.getItem('role') === 'ORG';
 
@@ -46,6 +45,7 @@ export class EventPage extends Component {
             axios.get("https://amazing-office-313314.appspot.com/rest/event/"+this.props.event.event+"/list/")
             .then( (list) => {
                 participants = list.data;
+                console.log(participants)
                 participants.map(user => {
                     var found = false;
                     if(user === localStorage.getItem('username') && !found){
@@ -53,18 +53,9 @@ export class EventPage extends Component {
                         found = true;
                     }
                 })
-                fetch("https://amazing-office-313314.appspot.com/rest/route/get",
-                    {method:"POST", 
-                    headers:{ 'Accept': 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8'},
-                    body: JSON.stringify({  username:localStorage.getItem('username'), 
-                                            tokenID:localStorage.getItem('tokenID')})      
-                    }).then(response=> {response.json().then(function(parsedData){
-                        userRoutes = parsedData;
-                        self.setState({
-                            isLoading: false
-                        });
-                    })})
+                self.setState({
+                    isLoading: false
+                });
             });
         })
     }
@@ -115,21 +106,9 @@ export class EventPage extends Component {
         document.location.href = "/Create New Route"
     }
 
-    handleAddToRoute = (route) => {
-        console.log(route)
-        fetch("https://amazing-office-313314.appspot.com/rest/route/get"+route,
-            {method:"POST", 
-            headers:{ 'Accept': 'application/json, text/plain',
-            'Content-Type': 'application/json;charset=UTF-8'},
-            body: JSON.stringify({  event:this.props.event.event, 
-                                    tokenID:localStorage.getItem('tokenID')})      
-            }).then(response=> {if(!response.ok){
-                console.log("shrug")
-            } else {
-                console.log("yeeeeeeeeeeeee")
-                alert("Sucessfully Added!") 
-                window.location.reload();
-            }})
+    handleGoToAddToRoute = () => {
+        localStorage.setItem('event',this.props.event.event)
+        document.location.href = "/Add to Route"
     }
 
     render(){
@@ -204,7 +183,7 @@ export class EventPage extends Component {
                                         <div className="header"> Participants: </div>
                                         <div className="content">
                                         {' '}
-                                        {participants.length === 0 && <p>No participants yet! Much Empty</p>}
+                                        {participants.length === 0 && <p>No participants yet! Much empty</p>}
                                         {participants.map(user => (
                                                 <div>
                                                     <Link key={user} onClick={() => this.handleRedirect(user)}>{user}</Link>
@@ -243,32 +222,7 @@ export class EventPage extends Component {
                                         <div className="content">
                                         {' '}
                                         <p style={{fontSize:"23px"}}>Do you want to create a new route or add this event to an existing route?</p>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                        <Popup trigger={
-                                            <button>ADD TO ROUTE</button>
-                                        } 
-                                        modal>
-                                            {close => (
-                                                <div className="modal">
-                                                    <button className="close" onClick={close}>
-                                                    &times;
-                                                    </button>
-                                                    <div className="content">
-                                                    {' '}
-                                                    {userRoutes.map(route => (
-                                                            <div>
-                                                                <Link key={route} onClick={() => this.handleAddToRoute(route)}>{route}</Link>
-                                                                <br/>
-                                                            </div>
-                                                    ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </Popup>
+                                        <button onClick={() => this.handleGoToAddToRoute()}>ADD TO ROUTE</button>
                                         &nbsp;&nbsp;&nbsp;
                                         <button onClick={() => this.handleGoToCreateRoute()}>CREATE ROUTE</button>
                                         </div>

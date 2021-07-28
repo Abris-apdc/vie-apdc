@@ -18,7 +18,6 @@ export default function CreateRoute(){
     
     function createJson(){
         const locations = [localStorage.getItem('event')]
-
         return JSON.stringify({ username:localStorage.getItem('username'), 
                                 tokenID:localStorage.getItem('tokenID'),
                                 locations:locations, 
@@ -26,18 +25,21 @@ export default function CreateRoute(){
                                 info:description})
     }
 
-
     function submitRoute(){
+        if(!name.match("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")){
+            alert("Event name can only contain regular letters and numbers")
+            return
+        }
         fetch("https://amazing-office-313314.appspot.com/rest/route",
-            {method:"POST", 
-            headers:{ 'Accept': 'application/json, text/plain',
-            'Content-Type': 'application/json;charset=UTF-8'},
-            body: createJson()
-            }).then(response=> {if(!response.ok){
-                console.log("shrug")
-            } else {
-                document.location.href = "/Routes"
-            }})
+        {method:"POST", 
+        headers:{ 'Accept': 'application/json, text/plain',
+        'Content-Type': 'application/json;charset=UTF-8'},
+        body: createJson()
+        }).then(response=> {if(!response.ok){
+            console.log("shrug")
+        } else {
+            document.location.href = "/event/"+localStorage.getItem('event');
+        }})
     }
 
     const useStyles = makeStyles((theme) =>

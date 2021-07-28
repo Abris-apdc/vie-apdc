@@ -104,7 +104,6 @@ function Profile(){
         if(role === "ORG"){
             axios.get("https://amazing-office-313314.appspot.com/rest/profile/get/"+localStorage.getItem('username'))
             .then(function ({data}) {
-            setLoading(false);
             address = data.address;
             cardID = data.cardID;
             email = data.email;
@@ -117,6 +116,15 @@ function Profile(){
             warnings=data.warnings;
             phone = data.phone;
             description=data.description;
+            axios.get("https://amazing-office-313314.appspot.com/rest/getFollowers/"+localStorage.getItem('username'))
+            .then(function ({data}) {
+                followersList = data;
+                axios.get("https://amazing-office-313314.appspot.com/rest/getFollowing/"+localStorage.getItem('username'))
+            .then(function ({data}) {
+                followingList = data; 
+                setLoading(false);
+            });
+            });
         })
             info =
             <Box bgcolor='#1B3651' width={0.5} textAlign="Left" p={2} borderRadius="borderRadius" boxShadow={2}>
@@ -189,7 +197,7 @@ function Profile(){
                         <div className="header"> Followers: </div>
                         <div className="content">
                         {' '}
-                        {followersList.length === 0 && <p>No followers yet! Much Empty</p>}
+                        {followersList.length === 0 && <p>No followers yet! Much empty</p>}
                         {followersList.map(user => (
                                 <div>
                                     <Link key={user} onClick={() => handleRedirect(user)}>{user}</Link>

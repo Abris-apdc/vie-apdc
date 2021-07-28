@@ -21,6 +21,8 @@ import EventPage from './interface/EventPage';
 import Feed from './interface/Feed';
 import MyEvents from './interface/MyEvents';
 import CreateRoute from './resources/CreateRoute';
+import AddToRoute from './resources/AddToRoute';
+import MyRoutes from './resources/MyRoutes';
 
     function App() {
       var isLoggedIn = localStorage.getItem('tokenID') != null;
@@ -67,6 +69,12 @@ import CreateRoute from './resources/CreateRoute';
             {!isLoggedIn && <Route exact path="/Create New Route" component={RedirectLogin}/>}
             {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Create New Route" component={RedirectFeed}/>}
             {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Create New Route" component={CreateRoute}/>}
+            {!isLoggedIn && <Route exact path="/Add To Route" component={RedirectLogin}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/Add To Route" component={RedirectFeed}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/Add To Route" component={AddToRoute}/>}
+            {!isLoggedIn && <Route exact path="/My Routes" component={RedirectLogin}/>}
+            {isLoggedIn && localStorage.getItem('role') === "ORG" && <Route exact path="/My Routes" component={RedirectFeed}/>}
+            {isLoggedIn && localStorage.getItem('role') !== "ORG" && <Route exact path="/My Routes" component={MyRoutes}/>}
           </div>
         </Router>
       );
