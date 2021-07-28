@@ -50,6 +50,10 @@ public class AddRouteFragment extends Fragment {
         String token = preferences.getString("Authentication_Id", "");
 
         clientAPI = clientAPI.getInstance();
+        if (!routeName.getText().toString().matches("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")) {
+            Toast.makeText(getActivity(), "Incorrect character.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (routeName.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "Invalid route name.", Toast.LENGTH_SHORT).show();
             return;
