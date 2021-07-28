@@ -61,8 +61,14 @@ export class MapContainer extends Component {
     }
 
     onButtonClick() {
-        if(isNaN(duration) || name.toString() === "" || address === undefined){
-            alert("Please correctly fill all fields.");
+        if(address === undefined)
+            alert("Click on the map to select an address")
+
+        else if(!name.match("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$"))
+            alert("Event name can only contain regular letters and numbers")
+
+        else if(isNaN(duration)){
+            alert("Please enter a valid duration (only numbers)");
         }
         else{
             var addressTmp;

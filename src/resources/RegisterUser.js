@@ -86,7 +86,7 @@ function RegisterForm(){
     }
 
     function checkUsername(){
-        return username1.includes(" ");
+        return !username1.match("^\s*([0-9a-zA-Z]+)\s*$");
     }
 
     function registerUser(){
@@ -109,7 +109,7 @@ function RegisterForm(){
             return
         }
         if(checkUsername()){
-            alert("Username cannot contain empty spaces")
+            alert("Username cannot contain empty spaces nor special characters")
             return
         }
 

@@ -105,6 +105,10 @@ function RegisterOrgForm(){
             alert("Pasword do not match")
             return
         }
+        if(!name1.match("^\s*([0-9a-zA-Z]+)\s*$")){
+            alert("Organization name cannot contain empty spaces nor special characters")
+            return
+        }
         
         fetch("https://amazing-office-313314.appspot.com/rest/register/organisation",
             {method:"POST", 
