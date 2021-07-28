@@ -89,10 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 find();
                 Toast.makeText(this, "Searching", Toast.LENGTH_LONG).show();
                 return true;
-            case R.id.maps:
-                maps();
-                Toast.makeText(this, "Maping", Toast.LENGTH_LONG).show();
-                return true;
             case R.id.logout:
                 logout();
                 Toast.makeText(this, "Bye!", Toast.LENGTH_LONG).show();

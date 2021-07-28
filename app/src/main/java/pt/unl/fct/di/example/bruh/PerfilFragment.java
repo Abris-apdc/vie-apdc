@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 import pt.unl.fct.di.example.bruh.requests.OrgInfo;
@@ -35,6 +37,7 @@ public class PerfilFragment extends Fragment {
     private TextView firstName, lastName, role, username;
     private Button edit, followers, following,routes;
     private ClientAPI clientAPI;
+    private FloatingActionButton fab;
     private int nFollowers, nfollowing;
 
     @Nullable
@@ -45,7 +48,7 @@ public class PerfilFragment extends Fragment {
         lastName = (TextView) view.findViewById(R.id.activity_perfil_lastName);
         role = (TextView) view.findViewById(R.id.activity_perfil_role);
         username = (TextView) view.findViewById(R.id.activity_perfil_username);
-
+        fab  = (FloatingActionButton) view.findViewById(R.id.fab);
         edit = (Button) view.findViewById(R.id.activity_perfil_edit);
         followers = (Button) view.findViewById(R.id.activity_perfil_followers);
         following = (Button) view.findViewById(R.id.activity_perfil_following);
@@ -54,7 +57,14 @@ public class PerfilFragment extends Fragment {
         getUserInfo(view);
         followers();
         following();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddPlaceActivity.class);
 
+                startActivity(intent);
+            }
+        });
         routes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,11 +135,13 @@ public class PerfilFragment extends Fragment {
             public void onResponse(Call<UserInfo> call, Response<UserInfo> r) {
                 if(r.isSuccessful()) {
                     if(r.body().getRole().equals("ORG")){
+                        fab.setVisibility(View.VISIBLE);
                         orgRequest();
                     }else {
                         firstName.setText(r.body().getFirstName());
                         lastName.setText(r.body().getLastName());
-                    }   role.setText(r.body().getRole());
+                        role.setText(r.body().getRole());
+                    }
 
 
                 }else

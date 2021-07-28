@@ -3,32 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".RoutesMapActivity">
 
     <fragment
-        android:id="@+id/my_routes_map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/maps_routes_map"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginTop="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_routes_name"
+        app:layout_constraintTop_toBottomOf="@+id/maps_routes_name"
         tools:context=".RoutesMapsFragment" />
 
     <Button
-        android:id="@+id/my_routes_button"
+        android:id="@+id/maps_routes_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
         android:text="Delete route"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_routes_map" />
+        app:layout_constraintTop_toBottomOf="@+id/maps_routes_map" />
 
     <TextView
-        android:id="@+id/my_routes_name"
+        android:id="@+id/maps_routes_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
@@ -39,12 +40,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/maps_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="40dp"
         android:text="See traject"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_routes_map" />
+        app:layout_constraintTop_toBottomOf="@+id/maps_routes_map" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

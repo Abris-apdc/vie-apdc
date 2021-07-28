@@ -87,6 +87,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (!username.getText().toString().matches("^[a-zA-Z0-9]*$")) {
+                    Toast.makeText(getApplicationContext(), "Incorrect character.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (firstName.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
                     return;

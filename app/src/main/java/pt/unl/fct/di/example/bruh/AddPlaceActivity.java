@@ -131,6 +131,10 @@ public class AddPlaceActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Invalid Event name.", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!newPlaceName.getText().toString().matches("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")) {
+            Toast.makeText(getApplicationContext(), "Incorrect character.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (newPlaceAddress.getText().toString().equals("")) {
             Toast.makeText(getApplicationContext(), "Invalid address.", Toast.LENGTH_SHORT).show();
             return;

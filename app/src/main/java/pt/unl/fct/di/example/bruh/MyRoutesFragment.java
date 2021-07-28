@@ -98,9 +98,12 @@ public class MyRoutesFragment extends Fragment {
     }
 
     private void changeScreen(String item){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        RoutesMapsFragment st = new RoutesMapsFragment();
-        st.setTextView(item);
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
+        Intent intent = new Intent(getActivity(), RoutesMapActivity.class);
+        intent.putExtra("routeToLoad", item);
+        startActivity(intent);
+      //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        //RoutesMapsFragment st = new RoutesMapsFragment();
+        //st.setTextView(item);
+        //fragmentManager.beginTransaction().replace(R.id.fragment_container, st).commit();
     }
 }

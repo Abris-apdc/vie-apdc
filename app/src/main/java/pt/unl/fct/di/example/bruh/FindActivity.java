@@ -82,10 +82,6 @@ public class FindActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.search:
                 return true;
-            case R.id.maps_search:
-                maps();
-                Toast.makeText(this, "Maping", Toast.LENGTH_LONG).show();
-                return true;
             case R.id.logout_search:
                 logout();
                 Toast.makeText(this, "Bye!", Toast.LENGTH_LONG).show();

@@ -47,7 +47,10 @@ public class RegisterOrganisationActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-
+                if (!name.getText().toString().matches("^[a-zA-Z0-9]*$")) {
+                    Toast.makeText(getApplicationContext(), "Incorrect character.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (name.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Invalid organisation name.", Toast.LENGTH_SHORT).show();
                     return;
